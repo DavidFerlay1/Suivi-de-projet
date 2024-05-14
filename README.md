@@ -10,8 +10,8 @@ Les fonctionnalités sont séparées en **modules** qui recquièrent des autoris
 
 # Lancer le projet
 
-- Il vous faudra docker installé sur votre machine.
-**docker compose up** à la racine du projet
+Il vous faudra docker installé sur votre machine.
+- **docker compose up** à la racine du projet
   
 **https://localhost** (Le nom de domaine doit être localhost et pas 127.0.0.1) Nginx écoute directement le port 80 donc inutile de le préciser dans l'url
 
