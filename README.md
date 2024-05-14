@@ -3,10 +3,10 @@
 Techs: **React, Symfony, Nginx, Docker**
 
 Outil de suivi de projet vaste (potentiellement un futur ERP). **Sécurité** et **Clean Code**
+L'application suit un **modèle SaaS** dans lequel **chaque client dispose de sa propre base de données**
 Un module RH permet également de **créer et gérer du personnel**, des comptes et implémente une **gestion des roles dynamiques**
-L'application suit un **modèle SaaS** dans lequel chaque client dispose de sa propre base de données
 
-Les fonctionnalités sont séparées en modules qui recquièrent des authorisations
+Les fonctionnalités sont séparées en **modules** qui recquièrent des autorisations
 
 # Lancer le projet
 
