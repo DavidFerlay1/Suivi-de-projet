@@ -13,7 +13,7 @@ Les fonctionnalités sont séparées en modules qui recquièrent des authorisati
 - Il vous faudra docker installé sur votre machine.
 **docker compose up** à la racine du projet
 
-- Installation des dépendances php:
+Installation des dépendances php:
 - **docker exec -it php /bin/bash**
 - **composer install**
 
