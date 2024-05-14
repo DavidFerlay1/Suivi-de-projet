@@ -22,11 +22,9 @@ Installation des dépendances node:
 - **docker exec -it node sh**
 - **npm i**
 
-## Comptes utilisables
+# Comptes utilisables
 
 - Super administrateur: super@gmail.com azerty1234
 - Compte RH: personal@gmail.com azerty1234
 - Compte chef de projet: project@gmail.com azerty1234
-
-
 **NB: Si vous utilisez une fonctionnalité qui nécessite de recevoir un email, vous pouvez accéder au mailcatcher via localhost:1080**
