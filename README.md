@@ -15,6 +15,8 @@ Les fonctionnalités sont séparées en **modules** qui recquièrent des autoris
   
 **https://localhost** (Le nom de domaine doit être localhost et pas 127.0.0.1) Nginx écoute directement le port 80 donc inutile de le préciser dans l'url
 
+**! Le certificat SSL est auto-signé, il se peut donc que votre navigateur ne reconnaisse pas la fiabilité de l'app. Toutefois Nginx effectuera une redirection permanente si vous tentez d'y accéder en http !**
+
 Installation des dépendances php:
 - **docker exec -it php /bin/bash**
 - **composer install**
