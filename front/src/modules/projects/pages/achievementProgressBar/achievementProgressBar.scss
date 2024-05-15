@@ -1,0 +1,19 @@
+.achievement-settings {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .alerts {
+        background: var(--danger);
+        color: white;
+        padding: 3px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+
+        svg {
+            margin-bottom: 3px;
+        }
+        
+    }
+}

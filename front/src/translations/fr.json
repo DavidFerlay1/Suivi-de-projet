@@ -1,0 +1,78 @@
+{
+    "progressWording": {
+        "COUNT": "nombre",
+        "WEIGHT": "poids",
+        "PERCENT": "Pourcentage",
+        "ABSOLUTE": "Valeur",
+        "of": "du",
+        "achievedTasks": "des tâches achevées"
+    },
+
+    "misc": {
+        "title": "Titre",
+        "description": "Description",
+        "edit": "Editer",
+        "progression": "Progression",
+        "confirm": "Confirmer",
+        "cancel": "Annuler",
+        "alert": "Attention !",
+        "facultatif": "Facultatif",
+        "weight": "Poids",
+        "manTime": "Temps homme (en jour)",
+        "yes": "Oui",
+        "no": "Non"
+    },
+
+    "confirmDialogs": {
+        "editProject": "Êtes-vous sûr de fermer la fenêtre d'édition ? Les modifications non enregistrées seront définitivement perdues" 
+    },
+
+    "status": {
+        "inProgress": "En cours",
+        "achieved": "Terminé"
+    },
+
+    "roles": {
+        "EDIT": "Création / Modification",
+        "ACCESS": "Lecture",
+        "DELETE": "Suppression",
+
+        "PERSONAL": "Gestion du personnel",
+        "PROFILE": "Gestion des profils",
+        "ROLE": "Gestion des rôles",
+
+        "PROJECT": "Gestion de projets",
+        "TASK": "Gestion des tâches"
+    },
+
+
+    "routes": {
+        "personal": {
+            "name": "Gestion du personnel"
+        },
+        "project": {
+            "name": "Gestion de projets"
+        },
+        "dashboard": {
+            "name": "Tableau de bord"
+        }
+    },
+
+    "personal": {
+        "editProfile": {
+            "title": "Editer le profil"
+        },
+        "deleteProfile": {
+            "title": "Confirmer la suppression",
+            "confirmMessage": "Êtes-vous sûr(e) de vouloir supprimer l'utilsateur"
+        },
+        "firstname": "Prénom",
+        "lastName": "Nom",
+        "username": "Adresse e-mail",
+        "password": "Mot de passe",
+        "roles": "Rôles",
+        "createAccount": "Créer un compte",
+        "active": "Actif",
+        "noAccount": "Pas de compte"
+    }
+}

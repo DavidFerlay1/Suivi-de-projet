@@ -1,0 +1,24 @@
+.tooltip-wrapper {
+    position: relative;
+    width: fit-content;
+    .icon {
+        color: var(--primary);
+        font-size: 1.5em;
+    }
+
+    .tooltip-bubble {
+        box-shadow: 0 0 10px #666;
+        width: 300px;
+        padding: 10px;
+        background: white;
+        border: 1px solid var(--primary);
+        position: absolute;
+        border-radius: 8px;
+        
+        &.top {
+            top: 0;
+            transform: translateY(-100%);
+        }
+    }
+}
+

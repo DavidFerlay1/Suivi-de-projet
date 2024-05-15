@@ -1,0 +1,28 @@
+.paginator {
+    border-top: 1px solid var(--primary);
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+
+    .pages {
+        display: flex;
+        align-items: center;
+
+        button {
+            padding: 0;
+            margin: 0;
+            height: 36px;
+            width: 36px;
+            border-radius: 50%;
+            transition: all .2s;
+
+            &.selected {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
+}

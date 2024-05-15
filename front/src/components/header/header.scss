@@ -1,0 +1,38 @@
+header {
+    background: var(--primary-dark);
+    height: 60px;
+    margin-bottom: 20px;
+    position: fixed;
+    left: 60px;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: white;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+
+nav {
+    background: var(--primary);
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    display: flex;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+
+    svg {
+        border: 1px solid white;
+        border-radius: 50%;
+        padding: 5px;
+    }
+}

@@ -1,0 +1,69 @@
+version: '3.9'
+
+services:
+  node:
+    image: node:20-alpine3.18
+    container_name: node
+    user: node
+    tty: true
+    working_dir: /app
+    volumes:
+      - ./front:/app
+    command: ['npm', 'start']
+    networks:
+      - frontend
+  nginx:
+    image: nginx:1.25.5-alpine
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - node
+      - php
+      - mailcatcher
+  php:
+    container_name: php
+    build:
+      context: .
+      dockerfile: dockerfile.php
+    ports:
+      - 9000
+    tty: true
+    volumes:
+      - ./back:/home/symf
+    networks:
+      - backend
+    depends_on:
+      - mysql
+    working_dir: /home/symf/app
+  mysql:
+    container_name: mysql
+    image: mysql:8.3.0
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    networks:
+      - backend
+  mailcatcher:
+    container_name: mailcatcher
+    image: schickling/mailcatcher
+    ports:
+      - 1025:1025
+      - 1080:1080
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

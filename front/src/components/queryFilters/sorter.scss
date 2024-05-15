@@ -1,0 +1,9 @@
+.sorter {
+    .icon {
+        color: #666;
+
+        &.selected {
+            color: var(--primary);
+        }
+    }
+}

@@ -1,0 +1,70 @@
+.profileList {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 8px;
+    border-collapse: collapse;
+
+    tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr .3fr;
+        margin-top: 1px;
+
+        &.even {
+            background: #eef5ff;
+        }
+
+        th {
+            box-sizing: border-box;
+            padding: 10px 0;
+
+            &:last-child {
+                border-top-right-radius: 8px;
+            }
+
+            &:first-child {
+                border-top-left-radius: 8px;
+            }
+        }
+
+        td {
+            box-sizing: border-box;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &:last-child {
+            td:last-child {
+                border-bottom-right-radius: 8px;
+            }
+            
+            td:first-child {
+                border-bottom-left-radius: 8px;
+            }
+        }
+    }
+
+    thead {
+        border-bottom: 1px solid #aaa;
+    }
+
+    ul {
+
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        list-style-type: none;
+        justify-content: center;
+
+        li {
+        
+        }
+    }
+}
