@@ -20,9 +20,11 @@ class RoleProfileFixtures extends Fixture
                 'roles' => [
                             'ROLE_MODULE_PERSONAL',
                             'ROLE_PERSONAL_PROFILE_ACCESS', 
+                            'ROLE_PERSONAL_PROFILE_CREATE', 
                             'ROLE_PERSONAL_PROFILE_EDIT', 
                             'ROLE_PERSONAL_PROFILE_DELETE',
                             'ROLE_PERSONAL_ROLE_ACCESS', 
+                            'ROLE_PERSONAL_ROLE_CREATE', 
                             'ROLE_PERSONAL_ROLE_EDIT', 
                             'ROLE_PERSONAL_ROLE_DELETE',
                         ]
@@ -31,12 +33,40 @@ class RoleProfileFixtures extends Fixture
                 'name' => 'Chef de projet',
                 'roles' => [
                     'ROLE_MODULE_PROJECT',
+                    'ROLE_PROJECT_PROJECT_CREATE', 
                     'ROLE_PROJECT_PROJECT_ACCESS', 
                     'ROLE_PROJECT_PROJECT_EDIT', 
                     'ROLE_PROJECT_PROJECT_DELETE',
+                    'ROLE_PROJECT_TASK_CREATE', 
                     'ROLE_PROJECT_TASK_ACCESS', 
                     'ROLE_PROJECT_TASK_EDIT', 
                     'ROLE_PROJECT_TASK_DELETE',
+                    'ROLE_PROJECT_TEAM_CREATE', 
+                    'ROLE_PROJECT_TEAM_ACCESS', 
+                    'ROLE_PROJECT_TEAM_EDIT', 
+                    'ROLE_PROJECT_TEAM_DELETE',
+                ]
+            ],
+            [
+                'name' => 'Administrateur projet',
+                'roles' => [
+                    'ROLE_MODULE_PROJECT',
+                    'ROLE_PROJECT_PROJECT_ACCESS',
+                    'ROLE_PROJECT_TASK_ACCESS',
+                    'ROLE_PROJECT_TASK_CREATE',
+                    'ROLE_PROJECT_TASK_EDIT', 
+                    'ROLE_PROJECT_TASK_DELETE',
+                    'ROLE_PROJECT_TEAM_ACCESS', 
+                    'ROLE_PROJECT_TEAM_EDIT', 
+                ]
+            ],
+            [
+                'name' => 'Contributeur projet',
+                'roles' => [
+                    'ROLE_MODULE_PROJECT',
+                    'ROLE_PROJECT_PROJECT_ACCESS',
+                    'ROLE_PROJECT_TASK_ACCESS',
+                    'ROLE_PROJECT_TASK_EDIT', 
                 ]
             ]
         ];

@@ -5,6 +5,7 @@ import { Credentials, ResetPasswordFormData } from "src/interfaces/FormData";
 import { Project, SubmittableProject } from "src/interfaces/Project";
 import { AuthTokens } from "./useAuth";
 import { SensitiveSafeSubmittablePersonal, SubmittablePersonal } from "src/interfaces/Personal";
+import useQuerySorters from "./useQuerySorters";
 
 export const httpClient = axios.create({
     baseURL: 'http://localhost/api',
@@ -49,6 +50,8 @@ httpClient.interceptors.response.use((response) => {
 })
 
 const useApi = () => {
+
+    const {getSortSettings} = useQuerySorters();
 
     const [projectApi] = useState({
         create: (data: Project) => {
@@ -96,7 +99,8 @@ const useApi = () => {
 
     const [personalApi] = useState({
         getAll: () => {
-            return httpClient.get('/personal');
+            const sortSetting = getSortSettings('personal');
+            return httpClient.get(`/personal?sortBy=${sortSetting.field}&orderBy=${sortSetting.sort}`);
         },
 
         fetchAllRoles: () => {

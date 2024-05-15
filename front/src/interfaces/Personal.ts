@@ -3,7 +3,8 @@ export interface Personal {
     lastName: string,
     firstname: string,
     username: string,
-    hasAccount: boolean
+    hasAccount: boolean,
+    roleProfileIds: string[]
 }
 
 export interface Team {

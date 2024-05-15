@@ -17,10 +17,6 @@ const RoleProfileForm = ({profile}: RoleProfileFormProps) => {
     const [roleForms, setRoleForms] = useState<any>({});
 
     useEffect(() => {
-        console.log(values)
-    }, [values.roles])
-
-    useEffect(() => {
         personalApi.fetchAllRoles().then(r => {
             const flatRoles = r.data;
             const arbo = {};

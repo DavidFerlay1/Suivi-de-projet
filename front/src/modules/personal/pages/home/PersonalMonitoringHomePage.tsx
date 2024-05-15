@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react"
-import {Personal} from '../../../../interfaces/Personal';
+import React, { useEffect} from "react"
 import useApi from "../../../../hooks/useApi";
-import AuthenticatedLayout from "../../../../components/layouts/authLayouts/AuthenticatedLayout";
 import MenuBar from "../../../../components/MenuBar/MenuBar";
 import './personalMonitoringHomePage.scss'
 import { useTranslation } from "react-i18next";
@@ -13,7 +11,7 @@ import ProfileList from "../../components/ProfileList/ProfileList";
 import usePermissions from "../../../../hooks/usePermissions";
 import { useDispatch } from "react-redux";
 import { setProfiles } from "../../../../store/slices/personalSlice";
-import AccessControlledComponent from "../../../../components/accessControledComponent/AccessControlledComponent";
+import { LuPlus } from "react-icons/lu";
 
 const PersonalMonitoringHomePage = () => {
     const dispatch = useDispatch();
@@ -23,7 +21,7 @@ const PersonalMonitoringHomePage = () => {
 
     useEffect(() => {
         const init = async () => {
-            await requirePermissions(['ROLE_PERONAL_PROFILE', 'ROLE_PERONAL_ROLE']);
+            await requirePermissions(['ROLE_PERONAL_PROFILE']);
             try {
                 dispatch(setProfiles(((await personalApi.getAll()).data)));
             } catch (e) {
@@ -37,8 +35,9 @@ const PersonalMonitoringHomePage = () => {
     return (
         <AccessControlledLayout roles={['ROLE_MODULE_PERSONAL']}>
             <MenuBar>
+                <div></div>
                 <div className="menuBar-content">
-                    <ToggleDialog title="Ajouter un personnel" isModal={false}>
+                    <ToggleDialog title="Ajouter un personnel" isModal={false} icon={<LuPlus />}>
                         <PersonalForm />
                     </ToggleDialog>
                     <ToggleDialog title="Gestion des rôles" isModal={false}>

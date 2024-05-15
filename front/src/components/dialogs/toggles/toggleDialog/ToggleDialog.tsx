@@ -7,16 +7,17 @@ type ToggleDialogProps = {
     buttonText?: string,
     isModal: boolean,
     className?: string,
-    confirmClose?: boolean
-    buttonClassName?: string
+    confirmClose?: boolean,
+    buttonClassName?: string,
+    icon?: any
 }
 
-const ToggleDialog = ({children, title, buttonText, isModal, className, confirmClose, buttonClassName}: ToggleDialogProps) => {
+const ToggleDialog = ({children, title, buttonText, isModal, className, confirmClose, buttonClassName, icon}: ToggleDialogProps) => {
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            <button className={buttonClassName ?? ''} onClick={() => setOpen(!open)}>{buttonText || title}</button>
+            <button className={buttonClassName ?? ''} onClick={() => setOpen(!open)}>{icon}{buttonText || title}</button>
             <Dialog confirmClose={confirmClose} title={title} className={className} isOpen={open} setIsOpen={setOpen} isModal={isModal}>
                 {children}
             </Dialog>

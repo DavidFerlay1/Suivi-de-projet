@@ -12,17 +12,22 @@ const usePermissions = () => {
     const {ready, data} = useSelector((state: any) => state.user.permissions);
     const location = useLocation();
 
-    const requirePermissions = useCallback(async (roles: string[]) => {
-        const mapped = [];
-        const perms = ['EDIT', 'ACCESS', 'DELETE'];
+    const requirePermissions = useCallback(async (roles: string[], automap: boolean = true) => {
 
-        for(const role of roles) {
-            for(const perm of perms)
-                mapped.push(`${role}_${perm}`);
+        if(automap) {
+            const mapped = [];
+            const perms = ['EDIT', 'ACCESS', 'DELETE', 'CREATE'];
+
+            for(const role of roles) {
+                for(const perm of perms)
+                    mapped.push(`${role}_${perm}`);
+            }
+
+            roles = mapped;
         }
 
         try {
-            dispatch(initPermissions((await authApi.requirePermissions(mapped)).data));
+            dispatch(initPermissions((await authApi.requirePermissions(roles)).data));
         } catch(e) {
             console.log(e)
         }

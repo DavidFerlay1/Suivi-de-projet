@@ -24,8 +24,8 @@ const RoleOrganizer = ({data, onChange}) => {
                             {Object.keys(data[currentTabIndex][feature]).map(right => {
                                 return (
                                     <>
-                                        <label>{t(`roles.${right}`)}</label>
                                         <input type='checkbox' checked={data[currentTabIndex][feature][right]} onChange={e => onCheck(e.target.checked, `ROLE_${currentTabIndex}_${feature}_${right}`)} />
+                                        <label>{t(`roles.${right}`)}</label>
                                     </>
                                 )
                             })}

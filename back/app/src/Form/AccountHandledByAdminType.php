@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Main\Account;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +18,7 @@ class AccountHandledByAdminType extends AbstractType
             ->add('firstname')
             ->add('lastName')
             ->add('roleProfileIds', CollectionType::class, [
-                'entry_type' => NumberType::class, // Ou tout autre type de champ approprié
+                'entry_type' => IntegerType::class, // Ou tout autre type de champ approprié
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,

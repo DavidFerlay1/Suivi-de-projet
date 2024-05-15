@@ -1,0 +1,10 @@
+parameters:
+  App\Entity\Main\Profile:
+    fields:
+      fb_roles:
+        type: compare
+        field_name: roles
+      fb_state:
+        type: compare
+        field_name: type
+        

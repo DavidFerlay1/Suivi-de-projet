@@ -5,6 +5,8 @@ namespace App\Repository\Main;
 use App\Entity\Main\Profile;
 use App\Entity\Main\TenantDb;
 use App\Trait\PaginableTrait;
+use App\Trait\QueryFiltersTrait;
+use App\Trait\SortableTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,17 +20,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProfileRepository extends ServiceEntityRepository
 {
-
-    use PaginableTrait;
+    use QueryFiltersTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Profile::class);
     }
 
-    public function findAllPaginatedByTenant(TenantDb $db, int|null $page = null) {
-        $qb = $this->createQueryBuilder('p')->where('p.tenant = :tenant')->setParameter('tenant', $db);
-        return $this->paginate($page, $qb)->getQuery()->getResult();
+    public function findFilteredByTenant(TenantDb $db, int|null $page = null, array $options = []) {
+        $qb = $this->createQueryBuilder('entity')->where('entity.tenant = :tenant')->setParameter('tenant', $db);
+        return $this->withQueryFilters($qb, $page, $options['sortSettings'])->getQuery()->getResult();
     }
 
 //    /**

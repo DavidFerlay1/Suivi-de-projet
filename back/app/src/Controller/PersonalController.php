@@ -29,7 +29,7 @@ class PersonalController extends DefaultController
         unset($payload['hasAccount']);
         unset($payload['createAccount']);
 
-        if(!$isAccount)
+        if(!$isAccount && !$createAccount)
             unset($payload['roleProfileIds']);
 
         return $this->autoSubmitWithBehavior(
@@ -59,9 +59,10 @@ class PersonalController extends DefaultController
 
     #[Route('', methods:['GET'])]
     public function getAll(Request $request): JsonResponse {
-
         return $this->jsonResponse(
-            $this->mainEm->getRepository(Profile::class)->findAllPaginatedByTenant($this->getCurrentTenant(), $this->getPage($request)),
+            $this->mainEm->getRepository(Profile::class)->findFilteredByTenant($this->getCurrentTenant(), $this->getPage($request), [
+                'sortSettings' => $this->getSortSettings($request)
+            ]),
             Response::HTTP_OK,
             ['get']
         );

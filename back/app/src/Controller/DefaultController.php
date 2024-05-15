@@ -151,6 +151,19 @@ class DefaultController extends AbstractController
 
         return null;
     }
+
+    protected function getSortSettings(Request $request) {
+        $sortBy = $request->query->get('sortBy');
+        $orderBy = $request->query->get('orderBy');
+
+        if(!$sortBy || !$orderBy)
+            return null;
+
+        return [
+            'sortBy' => $sortBy,
+            'orderBy' => $orderBy
+        ];
+    }
 }
 
 class AutoSubmitBehaviorException extends Exception {

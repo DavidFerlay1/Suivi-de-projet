@@ -6,6 +6,7 @@ import SwitchControl from "../../../../components/formControls/SwitchControl/Swi
 import useApi from "../../../../hooks/useApi"
 import { useDispatch } from "react-redux"
 import { updateProfile } from "../../../../store/slices/personalSlice"
+import Select, { MultiValue } from 'react-select'
 
 type PersonalFormProps = {
     target?: SubmittablePersonal,
@@ -25,6 +26,13 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
     const [roleProfiles, setRoleProfiles] = useState<RoleProfile[]>([]);
     const dispatch = useDispatch();
 
+    const roleProfileValues = useMemo(() => {
+        console.log(target)
+        if(values.roleProfileIds)
+            return roleProfiles.filter(role => values.roleProfileIds.includes(role.id!)).map(role => ({value: role.id!, label: role.name}))
+        return [];
+    }, [values.roleProfileIds, roleProfiles])
+
     const {t} = useTranslation();
     const {personalApi} = useApi();
 
@@ -39,11 +47,10 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
         })
     }
 
-    const onRoleProfilesEdit = (e: ChangeEvent<HTMLSelectElement>) => {
-        const selectedIds = Array.from(e.target.selectedOptions, option => option.value);
+    const onRoleProfilesEdit = (multiValue: MultiValue<{value: string, label: string}>) => {
         setValues({
             ...values,
-            roleProfileIds: selectedIds
+            roleProfileIds: multiValue.map(v => v.value)
         })
     }
 
@@ -94,11 +101,9 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
                     <SwitchControl value={values.createAccount} onChange={onEdit} name="createAccount" />
                 </CatchableField> )
             }
-            {values.hasAccount || values.createAccount && (
+            {(values.hasAccount || values.createAccount) && (
                 <CatchableField label={t('personal.roles')}>
-                    <select multiple={true} onChange={onRoleProfilesEdit} name='roles' value={values.roleProfileIds}>
-                        {roleProfiles.map(role => <option value={role.id} key={role.id}>{t(`roles.${role.name}`)}</option>)}
-                    </select>
+                    <Select value={roleProfileValues} onChange={onRoleProfilesEdit} isMulti={true} options={roleProfiles.map(role => ({value: role.id!, label: role.name}))} />
                 </CatchableField> )
             }
         </Form>

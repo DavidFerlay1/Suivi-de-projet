@@ -2,12 +2,14 @@
 
 namespace App\Trait;
 
+use Doctrine\ORM\QueryBuilder;
+
 trait PaginableTrait {
 
     private $maxPerPage = 10;
     private $countMethod = null;
 
-    protected function paginate(int|null $page, $queryBuilder) {
+    protected function paginate(int|null $page, QueryBuilder $queryBuilder) {
         return $queryBuilder->setFirstResult(($page ? $page -1 : 0) * $this->maxPerPage)->setMaxResults($this->maxPerPage);
     }
 

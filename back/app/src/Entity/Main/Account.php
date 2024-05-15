@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
@@ -37,6 +37,7 @@ class Account extends Profile implements UserInterface, PasswordAuthenticatedUse
     private Collection $requests;
 
     #[ORM\Column]
+    #[Groups('get')]
     private array $roleProfileIds = [];
 
     /**

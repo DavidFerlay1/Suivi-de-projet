@@ -15,8 +15,8 @@ const Sorter = ({field}) => {
 
     return (
         <div className="sorter">
-            <LuArrowBigUp size={30} onClick={() => onClick('ASC')} className={`icon ${selected.field === field ? 'selected' : ''}`} />
-            <LuArrowBigDown size={30} className={`icon ${selected.field === field ? 'selected' : ''}`} onClick={() => onClick('DESC')} />
+            <LuArrowBigUp size={30} onClick={() => onClick('ASC')} className={`icon ${selected.field === field && selected.sort === 'ASC' ? 'selected' : ''}`} />
+            <LuArrowBigDown size={30} className={`icon ${selected.field === field && selected.sort === 'DESC' ? 'selected' : ''}`} onClick={() => onClick('DESC')} />
         </div>
     )
 }

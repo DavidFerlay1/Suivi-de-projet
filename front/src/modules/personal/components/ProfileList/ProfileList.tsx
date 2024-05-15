@@ -2,7 +2,6 @@ import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 
 import './profileList.scss'
 import { Personal, SubmittablePersonal } from "../../../../interfaces/Personal";
 import AccessControlledComponent from "../../../../components/accessControledComponent/AccessControlledComponent";
-import {IoMdTrash} from 'react-icons/io'
 import {LuGraduationCap, LuPencil, LuTrash2, LuUserPlus} from 'react-icons/lu'
 import useApi from "../../../../hooks/useApi";
 import ConfirmDialog from "../../../../components/dialogs/confirmDialog/ConfirmDialog";
@@ -22,7 +21,6 @@ const ProfileList = () => {
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
     const {personalApi} = useApi();
     const {t} = useTranslation();
-    const sortSetting = useSelector((state: any) => state.personal.profilesSortSetting)
     const profiles = useSelector((state: any) => state.personal.profiles);
     const dispatch = useDispatch();
 

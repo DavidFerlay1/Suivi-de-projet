@@ -36,6 +36,15 @@ button {
   transition: all .2s;
   cursor: pointer;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+
+  svg {
+    font-size: 20px;
+    left: 5px;
+  }
 
   &:disabled {
     background-color: #aaa;
@@ -134,7 +143,7 @@ form {
       height: 40px;
       box-sizing: border-box;
       padding: 10px;
-      border: 2px solid var(--primary);
+      border: 1px solid var(--primary);
       border-radius: 6px;
       outline: none;
 

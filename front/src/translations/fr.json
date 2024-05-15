@@ -34,7 +34,7 @@
 
     "roles": {
         "EDIT": "Création / Modification",
-        "ACCESS": "Lecture",
+        "ACCESS": "Consultation",
         "DELETE": "Suppression",
 
         "PERSONAL": "Gestion du personnel",

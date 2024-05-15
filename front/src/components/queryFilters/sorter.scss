@@ -1,6 +1,7 @@
 .sorter {
     .icon {
         color: #666;
+        cursor: pointer;
 
         &.selected {
             color: var(--primary);
