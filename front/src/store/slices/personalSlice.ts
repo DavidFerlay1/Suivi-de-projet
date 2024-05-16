@@ -18,17 +18,18 @@ const personalSlice = createSlice({
         },
 
         updateProfile: (state, action) => {
-            const {data, isNew} = action.payload;
+            const {data, isNew, transformId} = action.payload;
 
-            if(isNew) {
-                state.profiles = [...state.profiles, data];
-            } else {
+            if(!isNew || transformId) {
                 state.profiles = state.profiles.map(p => {
-                    if(p.id === data.id) {
+                    if(p.id === transformId) {
                         return data;
                     }
                     return p;
                 })
+            }
+            else if(isNew) {
+                state.profiles = [...state.profiles, data];
             }
 
             return state;

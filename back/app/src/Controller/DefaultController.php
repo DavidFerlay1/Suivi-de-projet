@@ -36,13 +36,17 @@ class DefaultController extends AbstractController
         $this->serializer = new Serializer($normalizers, $encoders);
     }
 
-    protected function jsonResponse(mixed $data, int $status_code = Response::HTTP_OK, array $groups = []) {
-        return new JsonResponse(json_decode($this->serializer->serialize($data, 'json', ['groups' => $groups])), $status_code);
+    protected function jsonize(mixed $data, array $groups = []) {
+        return json_decode($this->serializer->serialize($data, 'json', ['groups' => $groups]));
     }
 
-    private function createSubmittable(string $class, mixed &$data) {
+    protected function jsonResponse(mixed $data, int $status_code = Response::HTTP_OK, array $groups = []) {
+        return new JsonResponse($this->jsonize($data, $groups), $status_code);
+    }
+
+    private function createSubmittable(string $class, mixed &$data, $em) {
         if(isset($data['id']) && $data['id']) {
-            $entity = $this->em->getRepository($class)->find($data['id']);
+            $entity = $em->getRepository($class)->find($data['id']);
             if(!$entity)
                 throw new EntityNotFoundException("$class with id " . $data['id'] . " was not found");
             unset($data['id']);
@@ -53,11 +57,11 @@ class DefaultController extends AbstractController
         return $entity;
     }
 
-    private function handleSubmittableRequest(string $formType, string $entityType, Request|array $request) {
+    private function handleSubmittableRequest(string $formType, string $entityType, Request|array $request, $em) {
         $data = $request instanceof Request ? $this->getPayload($request) : $request;
         $status = isset($data['id']) ? Response::HTTP_OK : Response::HTTP_CREATED;
 
-        $entity = $this->createSubmittable($entityType, $data);
+        $entity = $this->createSubmittable($entityType, $data, $em);
 
         $form = $this->createForm($formType, $entity);
         $form->submit($data);
@@ -97,7 +101,8 @@ class DefaultController extends AbstractController
      */
     protected function autoSubmitWithBehavior(Request|array $request, string $formType, string $entityType, $options = [], callable $whenValid = null, callable $customResponseHandler = null, callable $execptionInterceptor = null): JsonResponse {
         try {
-            $handler = $this->handleSubmittableRequest($formType, $entityType, $request);
+            $em = isset($options['em']) && $options['em'] === EntityManagerInterface::class ? $this->mainEm : $this->em;
+            $handler = $this->handleSubmittableRequest($formType, $entityType, $request, $em);
             if($handler->isValid()) {
                 if($whenValid) {
                     try {
@@ -111,9 +116,6 @@ class DefaultController extends AbstractController
                 }   
                 else {
                     $entity = $handler->getEntity();
-
-                    $em = isset($options['em']) && $options['em'] === EntityManagerInterface::class ? $this->mainEm : $this->em;
-
                     if($handler->getStatus() === Response::HTTP_CREATED && method_exists($entity, 'setCreatedAt'))
                         $entity->setCreatedAt(new DateTimeImmutable());
                     $em->persist($entity);

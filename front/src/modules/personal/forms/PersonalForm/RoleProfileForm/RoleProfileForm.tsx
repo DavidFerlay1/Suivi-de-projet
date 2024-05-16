@@ -26,11 +26,16 @@ const RoleProfileForm = ({profile}: RoleProfileFormProps) => {
                     if(!(moduleMatch[1] in arbo))
                         arbo[moduleMatch[1]] = {};
                 } else {
-                    const featureRegex = /ROLE_(\w+)_(.*?)_(EDIT|ACCESS|DELETE)/;
+                    const featureRegex = /ROLE_(\w+)_(.*?)_(CREATE|EDIT|ACCESS|DELETE|ASSIGN)/;
                     const matches = flatRole.match(featureRegex);
     
-                    if(!(matches[2] in arbo[matches[1]]))
-                        arbo[matches[1]][matches[2]] = {};
+                    try {
+                        if(!(matches[2] in arbo[matches[1]]))
+                            arbo[matches[1]][matches[2]] = {};
+                    } catch {
+                        //SPECIFIC ROLES
+                    }
+                    
     
                     arbo[matches[1]][matches[2]][matches[3]] = flatRole in values.roles;
                 }            

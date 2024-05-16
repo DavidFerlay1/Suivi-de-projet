@@ -33,16 +33,19 @@
     },
 
     "roles": {
-        "EDIT": "Création / Modification",
+        "EDIT": "Modification",
         "ACCESS": "Consultation",
         "DELETE": "Suppression",
+        "CREATE": "Création",
+        "ASSIGN": "Assignation",
 
         "PERSONAL": "Gestion du personnel",
         "PROFILE": "Gestion des profils",
         "ROLE": "Gestion des rôles",
 
         "PROJECT": "Gestion de projets",
-        "TASK": "Gestion des tâches"
+        "TASK": "Gestion des tâches",
+        "TEAM": "Gestion des équipes"
     },
 
 

@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
-#[UniqueEntity('username', message: 'assert.usernameAlreadyUsed')]
+#[UniqueEntity('username', message: 'assert.usernameAlreadyUsed', groups:['admin'])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 #[InheritanceType('SINGLE_TABLE')]
 #[DiscriminatorColumn(name:"type", type:"string")]
@@ -32,17 +32,17 @@ class Profile
     #[Assert\NotBlank]
     #[Assert\Email]
     #[Groups('get')]
-    #[Assert\NotBlank(groups:['admin'])]
+    #[Assert\NotBlank(groups:['admin', 'transform'])]
     protected ?string $username = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Groups('get')]
-    #[Assert\NotBlank(groups:['admin'])]
+    #[Assert\NotBlank(groups:['admin', 'transform'])]
     protected ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(groups:['admin'])]
+    #[Assert\NotBlank(groups:['admin', 'transform'])]
     #[Groups('get')]
     protected ?string $lastName = null;
 

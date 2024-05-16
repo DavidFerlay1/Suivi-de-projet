@@ -27,7 +27,6 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
     const dispatch = useDispatch();
 
     const roleProfileValues = useMemo(() => {
-        console.log(target)
         if(values.roleProfileIds)
             return roleProfiles.filter(role => values.roleProfileIds.includes(role.id!)).map(role => ({value: role.id!, label: role.name}))
         return [];
@@ -57,15 +56,15 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
     const onSubmit = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const id = (await personalApi.createEditProfile(values)).data;
+            const data = (await personalApi.createEditProfile(values)).data;
             const isNew = values.id === undefined;
-            dispatch(updateProfile({data: {...values, id, hasAccount: values.hasAccount || values.createAccount}, isNew}));
+            const transformId = values.id && values.createAccount ? values.id : undefined;
+            dispatch(updateProfile({data, isNew, transformId}));
             if(handleParentPopupEndEvent)
                 handleParentPopupEndEvent();
         } catch(e) {
             console.log(e);
         }
-        
     }
 
     useEffect(() => {
