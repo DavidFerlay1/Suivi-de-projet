@@ -17,7 +17,7 @@ const ToggleDialog = ({children, title, buttonText, isModal, className, confirmC
 
     return (
         <>
-            <button className={buttonClassName ?? ''} onClick={() => setOpen(!open)}>{icon}{buttonText || title}</button>
+            <button className={buttonClassName ?? ' ' + (icon && 'iconed')} onClick={() => setOpen(!open)}>{icon}{buttonText || title}</button>
             <Dialog confirmClose={confirmClose} title={title} className={className} isOpen={open} setIsOpen={setOpen} isModal={isModal}>
                 {children}
             </Dialog>

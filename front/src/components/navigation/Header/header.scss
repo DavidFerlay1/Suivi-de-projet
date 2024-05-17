@@ -1,0 +1,29 @@
+header {
+    background: var(--primary-dark);
+    height: 60px;
+    margin-bottom: 20px;
+    position: fixed;
+    left: 60px;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: white;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    .breadcrumb-separator {
+        padding: 0 5px;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
+        
+        &:visited {
+            color: white;
+        }
+    }
+}

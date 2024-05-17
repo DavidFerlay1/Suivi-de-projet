@@ -20,7 +20,9 @@
         "weight": "Poids",
         "manTime": "Temps homme (en jour)",
         "yes": "Oui",
-        "no": "Non"
+        "no": "Non",
+        "resetPassword": "Mot de passe oublié ?",
+        "login": "Se connecter"
     },
 
     "confirmDialogs": {
@@ -51,10 +53,19 @@
 
     "routes": {
         "personal": {
-            "name": "Gestion du personnel"
+            "name": "Gestion du personnel",
+            "roles": {
+                "name": "Gestion des rôles"
+            },
+            "profiles": {
+                "name": "Liste des profils"
+            }
         },
         "project": {
-            "name": "Gestion de projets"
+            "name": "Gestion de projets",
+            "list": {
+                "name": "Liste des projets"
+            }
         },
         "dashboard": {
             "name": "Tableau de bord"
@@ -64,6 +75,9 @@
     "personal": {
         "editProfile": {
             "title": "Editer le profil"
+        },
+        "createProfile": {
+            "title": "Créer profil"
         },
         "deleteProfile": {
             "title": "Confirmer la suppression",

@@ -1,22 +1,22 @@
-import { useDispatch, useSelector } from "react-redux"
-import { updateProfilesSortSettings } from "../../store/slices/personalSlice";
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import './sorter.scss';
 import { LuArrowBigDown, LuArrowBigUp } from "react-icons/lu";
+import { PaginationContext } from "../../contexts/PaginationContext";
+import { SortContext } from "../../contexts/SortContext";
 
 const Sorter = ({field}) => {
-
-    const dispatch = useDispatch();
-    const selected = useSelector((state: any) => state.personal.profilesSortSetting);
+    const paginationContext = useContext(PaginationContext);
+    const sortingContext = useContext(SortContext);
 
     const onClick = (sort: string) => {
-        dispatch(updateProfilesSortSettings({field, sort}))
+        sortingContext?.update({field, sort});
+        paginationContext?.update(1);
     }
 
     return (
         <div className="sorter">
-            <LuArrowBigUp size={30} onClick={() => onClick('ASC')} className={`icon ${selected.field === field && selected.sort === 'ASC' ? 'selected' : ''}`} />
-            <LuArrowBigDown size={30} className={`icon ${selected.field === field && selected.sort === 'DESC' ? 'selected' : ''}`} onClick={() => onClick('DESC')} />
+            <LuArrowBigUp size={30} onClick={() => onClick('ASC')} className={`icon ${sortingContext?.current.field === field && sortingContext?.current.sort === 'ASC' ? 'selected' : ''}`} />
+            <LuArrowBigDown size={30} className={`icon ${sortingContext?.current.field === field && sortingContext?.current.sort === 'DESC' ? 'selected' : ''}`} onClick={() => onClick('DESC')} />
         </div>
     )
 }

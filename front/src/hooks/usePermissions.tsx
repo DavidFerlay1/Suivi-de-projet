@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react"
 import useApi from "./useApi";
 import { useDispatch, useSelector } from "react-redux";
-import { initPermissions, revokePermissions } from "src/store/slices/userSlice";
+import { initPermissions, revokePermissions } from "../store/slices/userSlice"
 import { useLocation } from "react-router";
 
 
@@ -15,7 +15,7 @@ const usePermissions = () => {
     const requirePermissions = useCallback(async (roles: string[], automap: boolean = true) => {
 
         if(automap) {
-            const mapped = [];
+            const mapped: string[] = [];
             const perms = ['EDIT', 'ACCESS', 'DELETE', 'CREATE'];
 
             for(const role of roles) {

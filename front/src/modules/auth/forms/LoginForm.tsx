@@ -42,13 +42,13 @@ const LoginForm = () => {
     }
 
     return (
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={onSubmit} submitText={t('misc.login')}>
             <CatchableField label={t('personal.username')}>
                 <input className="field" value={values.username} onChange={onEdit} name="username" />
             </CatchableField>
             <CatchableField label={t('personal.password')} errors={errors}>
                 <input type="password" className="field" value={values.password} onChange={onEdit} name="password" />
-            </CatchableField>      
+            </CatchableField>   
         </Form>
     )
 }

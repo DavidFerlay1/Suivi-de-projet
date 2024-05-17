@@ -1,62 +1,42 @@
-import React, { MouseEventHandler, useCallback, useMemo, useState } from 'react';
-import {PaginationSettings} from '../../interfaces/Api/Paginated';
+import React, { ChangeEvent, FocusEvent, useContext } from 'react';
 import './paginator.scss';
+import { PaginationContext } from '../../contexts/PaginationContext';
+import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
-type PaginatorProps = {
-    data: PaginationSettings,
-    onPageClick: Function
-}
+const Paginator = () => {
+    const paginationContext = useContext(PaginationContext);
 
-type PaginationButtonProps = {
-    pageIndex: number,
-    selected: boolean,
-    onClick?: MouseEventHandler
-}
+    const next = () => {
+        paginationContext?.update(paginationContext.page + 1);
+    }
 
-const Paginator = ({data, onPageClick}: PaginatorProps) => {
+    const previous = () => {
+        paginationContext?.update(paginationContext.page - 1);
+    }
 
-    const [selectedPage, setSelectedPage] = useState(data.page);
+    const onPageChange = (e: ChangeEvent<HTMLInputElement>) => {
 
-    const onButtonClick = useCallback((pageIndex: number) => {
-        if(pageIndex !== selectedPage) {
-            setSelectedPage(pageIndex);
-            onPageClick(pageIndex);
-        }
-    }, [selectedPage]);
+        console.log(isNaN(Number(e.target.value)))
 
-    const paginationData = useMemo(() => {
-        const result: PaginationButtonProps[] = [];
-        let cumul = data.loaded;
-        let pageIndex = data.page - 2;
+        if(!isNaN(Number(e.target.value)))
+            paginationContext?.update(e.target.value);
+    }
 
-        while(cumul < data.total && result.length < 5) {
-            if(pageIndex) {
-                cumul += pageIndex * data.perPage;
-                result.push({pageIndex, selected: pageIndex === selectedPage});
-            }
-
-            pageIndex++;
-        }
-
-        if(!result.length)
-            result.push({pageIndex: data.page, selected: data.page === selectedPage});
-
-        return result;
-
-    }, [data, selectedPage])
-
-    return paginationData.length > 1 && (
-        <div className='paginator'>
-            <div className='pages'>
-                {paginationData.map(data => <PaginationButton key={data.pageIndex} selected={data.selected} pageIndex={data.pageIndex} onClick={() => onButtonClick(data.pageIndex)} />)}
-            </div>
-        </div>
-    )
-}
-
-const PaginationButton = ({pageIndex, onClick, selected}: PaginationButtonProps) => {
+    const onFocus = (e: FocusEvent<HTMLInputElement>) => {
+        e.target.select();
+    }
+    
     return (
-        <button onClick={onClick} className={selected ? "selected" : ''}>{pageIndex}</button>
+        <div className='paginator'>
+            <div className='chevron'>
+                {paginationContext!.page > 1 && <a onClick={previous}><LuChevronLeft /></a>}
+            </div>
+            <input onFocus={onFocus} className='pageLog' value={paginationContext?.page} onChange={onPageChange} />
+            <div className='chevron' onClick={next}>
+                {paginationContext!.status === 'available' && <a onClick={next}><LuChevronRight /></a>}
+            </div>
+            
+        </div>
     )
 }
 

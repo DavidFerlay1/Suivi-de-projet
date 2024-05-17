@@ -1,0 +1,21 @@
+.roleList {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+
+    li {
+        height: 50px;
+        border-bottom: 1px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useCallback, useContext, useEffect, useState } from "react";
 import './profileList.scss'
 import { Personal, SubmittablePersonal } from "../../../../interfaces/Personal";
 import AccessControlledComponent from "../../../../components/accessControledComponent/AccessControlledComponent";
@@ -11,6 +11,10 @@ import PersonalForm from "../../forms/PersonalForm/PersonalForm";
 import { useDispatch, useSelector } from "react-redux";
 import {setProfiles} from '../../../../store/slices/personalSlice';
 import Sorter from "../../../../components/queryFilters/Sorter";
+import { PaginationContext } from "../../../../contexts/PaginationContext";
+import { SortContext } from "../../../../contexts/SortContext";
+import { QueryContext } from "../../../../contexts/QueryContext";
+import Paginator from "../../../../components/Paginator/Paginator";
 
 
 const ProfileList = () => {
@@ -21,13 +25,24 @@ const ProfileList = () => {
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
     const {personalApi} = useApi();
     const {t} = useTranslation();
-    const profiles = useSelector((state: any) => state.personal.profiles);
-    const dispatch = useDispatch();
+    const [profiles, setProfiles] = useState<SubmittablePersonal[]>([]);
+
+    const paginationContext = useContext(PaginationContext);
+    const sortContext = useContext(SortContext);
+    const queryContext = useContext(QueryContext);
+
+    useEffect(() => {
+        // queryContext?.fetch().then(res => setProfiles(res.data)).catch('no way');
+        // queryContext?.fetch().then(res => console.log(res.data));
+        queryContext?.fetch().then((profiles: SubmittablePersonal[]) => {
+            setProfiles(profiles);
+        })
+    }, [paginationContext?.page, sortContext?.current])
 
     const onDeleteConfirm = useCallback(() => {
         if(deletingProfile) {
             personalApi.delete(deletingProfile.id!).then(() => {
-                dispatch(setProfiles([...profiles.filter(({id}) => id !== deletingProfile.id)]))
+                setProfiles([...profiles.filter(({id}) => id !== deletingProfile.id)])
                 setDeletingProfile(undefined);
             }).catch(e => console.log(e));
         }
@@ -67,7 +82,7 @@ const ProfileList = () => {
                 </thead>
                 <tbody>
                     {profiles.map((profile, index) => (
-                        <tr className={index % 2 === 0 ? 'even' : ''} onKeyDown={profile.id} key={profile.id}>
+                        <tr className={index % 2 === 0 ? 'even' : ''} key={profile.id}>
                             <td>{profile.lastName}</td>
                             <td>{profile.firstname}</td>
                             <td>{profile.username}</td>
@@ -77,6 +92,7 @@ const ProfileList = () => {
                     ))}
                 </tbody>
             </table>
+            <Paginator />
             <Dialog title={t('personal.editProfile.title')} isModal={true} isOpen={isEditingPopupOpen} setIsOpen={setIsEditingPopupOpen}>
                 <PersonalForm handleParentPopupEndEvent={closePopupAfterEditing} target={editingProfile} />
             </Dialog>
@@ -103,12 +119,6 @@ const ActionList = ({profile, onEdit, onDelete}: ActionListProps) => {
                     <li><button className="icon-button" onClick={() => onEdit(profile)} ><LuPencil /></button></li>
                 </AccessControlledComponent>
                 
-                {!profile.hasAccount && (
-                    <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_EDIT']}>
-                        <li><button className="icon-button" ><LuUserPlus /></button></li>
-                    </AccessControlledComponent>
-                    
-                )}
                 <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_DELETE']}>
                     <li><button className="icon-button danger" onClick={() => onDelete(profile)}><LuTrash2 /></button></li>
                 </AccessControlledComponent>

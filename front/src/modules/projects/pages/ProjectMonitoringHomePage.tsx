@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Project } from "../../../interfaces/Project";
 import useApi from "../../../hooks/useApi";
 import Paginator from "../../../components/Paginator/Paginator";
-import { PaginationSettings } from "../../../interfaces/Api/Paginated";
 import PaginatedLayout from "../../../components/layouts/PaginatedLayout/PaginatedLayout";
 import ProjectItem from "./ProjectItem/ProjectItem";
 import AccessControlledLayout from "../../../components/layouts/authLayouts/AccessControlledLayout";
@@ -32,7 +31,6 @@ const ProjectMonitoringHomePage = () => {
                     (
                         <>
                             {projects.length ? projects.map(project => <ProjectItem key={project.id} data={project} />) : <span>Aucun projet</span>}
-                            <Paginator onPageClick={updatePageData} data={pagination} />
                         </> 
                     ) : <span>Loading</span>
                 }

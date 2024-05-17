@@ -1,0 +1,39 @@
+nav {
+    background: var(--primary);
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    display: flex;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    flex-direction: column;
+    // gap: 10px;
+    align-items: center;
+    z-index: 100;
+
+    .home-button-wrapper {
+        height: 40px;
+        display: flex;
+        align-items: center;
+
+        svg {
+            cursor: pointer;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    }
+
+    .module-list {
+
+        margin-top: 24px;
+
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+    }
+}

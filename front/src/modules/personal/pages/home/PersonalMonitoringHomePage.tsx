@@ -4,7 +4,6 @@ import MenuBar from "../../../../components/MenuBar/MenuBar";
 import './personalMonitoringHomePage.scss'
 import { useTranslation } from "react-i18next";
 import PersonalForm from "../../forms/PersonalForm/PersonalForm";
-import RoleProfileForm from "../../forms/PersonalForm/RoleProfileForm/RoleProfileForm";
 import ToggleDialog from "../../../../components/dialogs/toggles/toggleDialog/ToggleDialog";
 import AccessControlledLayout from "../../../../components/layouts/authLayouts/AccessControlledLayout";
 import ProfileList from "../../components/ProfileList/ProfileList";
@@ -12,23 +11,19 @@ import usePermissions from "../../../../hooks/usePermissions";
 import { useDispatch } from "react-redux";
 import { setProfiles } from "../../../../store/slices/personalSlice";
 import { LuPlus } from "react-icons/lu";
+import { QueryContext, QueryContextProvider } from "../../../../contexts/QueryContext";
+import QueryContextLayout from "../../../../components/layouts/QueryContextLayout/QueryContextLayout";
+import AccessControlledComponent from "../../../../components/accessControledComponent/AccessControlledComponent";
 
 const PersonalMonitoringHomePage = () => {
-    const dispatch = useDispatch();
     const {personalApi} = useApi();
     const {t} = useTranslation();
     const {requirePermissions} = usePermissions();
 
     useEffect(() => {
         const init = async () => {
-            await requirePermissions(['ROLE_PERONAL_PROFILE']);
-            try {
-                dispatch(setProfiles(((await personalApi.getAll()).data)));
-            } catch (e) {
-                console.log(e);
-            }
+            await requirePermissions(['ROLE_PERSONAL_PROFILE']);
         }
-
         init();
     }, [])
 
@@ -37,15 +32,16 @@ const PersonalMonitoringHomePage = () => {
             <MenuBar>
                 <div></div>
                 <div className="menuBar-content">
-                    <ToggleDialog title="Ajouter un personnel" isModal={false} icon={<LuPlus />}>
-                        <PersonalForm />
-                    </ToggleDialog>
-                    <ToggleDialog title="Gestion des rôles" isModal={false}>
-                        <RoleProfileForm />
-                    </ToggleDialog>
+                    <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_CREATE']}>
+                        <ToggleDialog title={t('personal.createProfile.title')} isModal={false} icon={<LuPlus />}>
+                            <PersonalForm />
+                        </ToggleDialog>
+                    </AccessControlledComponent>
                 </div>
             </MenuBar>
-            <ProfileList />
+            <QueryContextLayout apiFetchCallback={personalApi.getList} defaultSortSetting={{field: 'lastName', sort: 'ASC'}}>
+                <ProfileList />
+            </QueryContextLayout>         
         </AccessControlledLayout>
         
     )

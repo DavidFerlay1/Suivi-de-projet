@@ -1,11 +1,10 @@
 import axios from "axios"
 import { useState } from "react";
-import { Paginated } from "src/interfaces/Api/Paginated";
-import { Credentials, ResetPasswordFormData } from "src/interfaces/FormData";
-import { Project, SubmittableProject } from "src/interfaces/Project";
+import { Credentials, ResetPasswordFormData } from "../interfaces/FormData";
+import { Project, SubmittableProject } from "../interfaces/Project";
 import { AuthTokens } from "./useAuth";
-import { SensitiveSafeSubmittablePersonal, SubmittablePersonal } from "src/interfaces/Personal";
-import useQuerySorters from "./useQuerySorters";
+import { SensitiveSafeSubmittablePersonal, SubmittablePersonal } from "../interfaces/Personal";
+import { SortSetting } from "../interfaces/Api/SortSetting";
 
 export const httpClient = axios.create({
     baseURL: 'http://localhost/api',
@@ -51,16 +50,10 @@ httpClient.interceptors.response.use((response) => {
 
 const useApi = () => {
 
-    const {getSortSettings} = useQuerySorters();
-
     const [projectApi] = useState({
         create: (data: Project) => {
             return httpClient.post('/project', {data: data as SubmittableProject});
         },
-
-        getAll: (page = 1) => {
-            return httpClient.get<Paginated>(`/project?page=${page}`);
-        }
     })
 
     const [authApi] = useState({
@@ -98,9 +91,9 @@ const useApi = () => {
     })
 
     const [personalApi] = useState({
-        getAll: () => {
-            const sortSetting = getSortSettings('personal');
-            return httpClient.get(`/personal?sortBy=${sortSetting.field}&orderBy=${sortSetting.sort}`);
+
+        getList : (page: number, sortSetting: SortSetting) => {
+            return httpClient.get(`/personal?sortBy=${sortSetting.field}&orderBy=${sortSetting.sort}&page=${page}`);
         },
 
         fetchAllRoles: () => {

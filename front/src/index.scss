@@ -39,10 +39,12 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 3px;
+  font-size: .9em;
 
-  svg {
-    font-size: 20px;
+  &.iconed svg {
+    font-size: 18px;
+    margin-left: -8px;
     left: 5px;
   }
 
@@ -72,6 +74,8 @@ button {
   &.terciary {
     color: var(--primary);
     background-color: transparent;
+    border: none;
+    box-shadow: none;
 
     &:disabled {
       color: #aaa;
@@ -116,6 +120,10 @@ form {
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  button {
+    width: fit-content;
+  }
 
   .form-groups {
     display: flex;

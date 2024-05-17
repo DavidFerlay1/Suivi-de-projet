@@ -25,11 +25,12 @@ class ProfileRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Profile::class);
+        $this->maxPerPage = 18;
     }
 
     public function findFilteredByTenant(TenantDb $db, int|null $page = null, array $options = []) {
         $qb = $this->createQueryBuilder('entity')->where('entity.tenant = :tenant')->setParameter('tenant', $db);
-        return $this->withQueryFilters($qb, $page, $options['sortSettings'])->getQuery()->getResult();
+        return $this->withQueryFilters($qb, $page, $options['sortSettings']);
     }
 
 //    /**

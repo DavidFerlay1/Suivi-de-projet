@@ -33,7 +33,9 @@ const Form = ({children, canSubmit = true, onSubmit, submitText = 'Submit'}: For
     return (
         <form onSubmit={submitBehavior}>
             {children}
-            <button disabled={!canSubmit}>{submitText}</button>
+            <div style={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}>
+                <button disabled={!canSubmit}>{submitText}</button>
+            </div>
         </form>
     )
 }
