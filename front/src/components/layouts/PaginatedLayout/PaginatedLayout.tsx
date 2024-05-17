@@ -1,6 +1,6 @@
 import React from "react";
 import './paginatedLayout.scss';
-import Paginator from "../../Paginator/Paginator";
+import Paginator from "../../navigation/Paginator/Paginator";
 
 const PaginatedLayout = ({children}) => {
     return (

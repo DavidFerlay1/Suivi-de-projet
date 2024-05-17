@@ -14,7 +14,7 @@ import Sorter from "../../../../components/queryFilters/Sorter";
 import { PaginationContext } from "../../../../contexts/PaginationContext";
 import { SortContext } from "../../../../contexts/SortContext";
 import { QueryContext } from "../../../../contexts/QueryContext";
-import Paginator from "../../../../components/Paginator/Paginator";
+import Paginator from "../../../../components/navigation/Paginator/Paginator";
 
 
 const ProfileList = () => {

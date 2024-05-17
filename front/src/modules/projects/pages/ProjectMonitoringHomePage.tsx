@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { Project } from "../../../interfaces/Project";
 import useApi from "../../../hooks/useApi";
-import Paginator from "../../../components/Paginator/Paginator";
+import Paginator from "../../../components/navigation/Paginator/Paginator";
 import PaginatedLayout from "../../../components/layouts/PaginatedLayout/PaginatedLayout";
 import ProjectItem from "./ProjectItem/ProjectItem";
 import AccessControlledLayout from "../../../components/layouts/authLayouts/AccessControlledLayout";

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FocusEvent, useContext } from 'react';
 import './paginator.scss';
-import { PaginationContext } from '../../contexts/PaginationContext';
+import { PaginationContext } from '../../../contexts/PaginationContext';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
 const Paginator = () => {
