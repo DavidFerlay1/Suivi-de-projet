@@ -9,6 +9,8 @@ import LoginPage from './modules/auth/pages/LoginPage/LoginPage';
 import ModulePersonalRoutes from './modules/personal/routing/ModulePersonalRoutes';
 import NavigationBars from './components/navigation/NavigationBars/NavigationBars';
 import DashboardPage from './modules/dashboard/pages/DashboardPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -31,6 +33,7 @@ const InnerApp = () => {
         <Route path="/personal/*" element={<ModulePersonalRoutes />} />
         <Route path="" element={<DashboardPage />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   )
 }

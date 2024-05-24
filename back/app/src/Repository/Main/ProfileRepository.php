@@ -4,11 +4,12 @@ namespace App\Repository\Main;
 
 use App\Entity\Main\Profile;
 use App\Entity\Main\TenantDb;
-use App\Trait\PaginableTrait;
-use App\Trait\QueryFiltersTrait;
-use App\Trait\SortableTrait;
+use App\Models\QueryFilters;
+use DefaultRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use QueryFiltersOptions;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -18,19 +19,23 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProfileRepository extends ServiceEntityRepository
+class ProfileRepository extends DefaultRepository
 {
-    use QueryFiltersTrait;
-
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $params)
     {
-        parent::__construct($registry, Profile::class);
-        $this->maxPerPage = 18;
+        parent::__construct($registry, Profile::class, $params);
+        $this->maxPerPage = 16;
     }
 
-    public function findFilteredByTenant(TenantDb $db, int|null $page = null, array $options = []) {
-        $qb = $this->createQueryBuilder('entity')->where('entity.tenant = :tenant')->setParameter('tenant', $db);
-        return $this->withQueryFilters($qb, $page, $options['sortSettings']);
+    public function findFilteredByTenant(TenantDb $db, QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {
+        $qb = $this->createQueryBuilder('entity')
+                        ->where('entity.tenant = :tenant')
+                        ->setParameter('tenant', $db);
+
+        if(count($options->getExcludeValues()))
+            $qb->andWhere($qb->expr()->notIn('entity.username', ':excluded'))->setParameter('excluded', $options->getExcludeValues());
+
+        return $this->getFilteredQueryResultSet(Profile::class, $queryFilters, $qb);
     }
 
 //    /**

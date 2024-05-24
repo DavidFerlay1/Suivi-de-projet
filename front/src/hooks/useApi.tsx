@@ -40,7 +40,7 @@ httpClient.interceptors.response.use((response) => {
                 console.log("CATCH AUTH ERROR FROM HTTP CLIENT")
                 localStorage.removeItem('token');
                 localStorage.removeItem('refresh_token');
-                return Promise.reject(authError);
+                window.location.href = '/auth'
             }
         } 
     }
@@ -55,6 +55,10 @@ const useApi = () => {
             return httpClient.post('/project', {data: data as SubmittableProject});
         },
     })
+
+    const withFilterParams = (uri: string, page: number, sortSetting: SortSetting, searchPattern: string = '') => {
+        return `${uri}?sortBy=${sortSetting.sort}&orderBy=${sortSetting.field}&page=${page}&search=${searchPattern}`
+    }
 
     const [authApi] = useState({
         login: (credentials: Credentials) => {
@@ -92,24 +96,32 @@ const useApi = () => {
 
     const [personalApi] = useState({
 
-        getList : (page: number, sortSetting: SortSetting) => {
-            return httpClient.get(`/personal?sortBy=${sortSetting.field}&orderBy=${sortSetting.sort}&page=${page}`);
+        getList : (page: number, sortSetting: SortSetting, search: string) => {
+            return httpClient.get(withFilterParams('/personal', page, sortSetting, search));
         },
 
         fetchAllRoles: () => {
             return httpClient.get('/personal/roles')
         },
 
+        getRoleProfileSuggestions: (page: number, sortSetting: SortSetting, search: string) => {
+            return httpClient.get(withFilterParams('/personal/roleProfiles/search', page, sortSetting, search))
+        },
+
         getAllRoleProfiles: () => {
             return httpClient.get('/personal/roleProfiles');
         },
 
-        createEditProfile: (data: SubmittablePersonal|SensitiveSafeSubmittablePersonal) => {
-            return httpClient.post('/personal', data);
+        createEditProfile: (data: SubmittablePersonal) => {
+            return httpClient.post('/personal', {...data, roleProfiles: data.roleProfiles.map(roleProfile => roleProfile.id)});
         },
 
         delete: (id: number) => {
             return httpClient.delete(`/personal/${id}`)
+        },
+
+        deleteRoleProfile: (id: string|number) => {
+            return httpClient.delete(`/personal/roleProfile/${id}`)
         }
     })
 

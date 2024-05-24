@@ -1,0 +1,43 @@
+.searchbar-wrapper {
+    position: relative;
+
+    .searchbar {
+        outline: none;
+        height: 40px;
+        border-radius: 8px;
+        border: 2px solid var(--primary);
+        box-sizing: border-box;
+        padding: 5px;
+        width: 20vw;
+    }
+
+    .emptyMessage {
+        color: #666;
+        padding: 5px;
+        display: inline-block;
+        font-size: .9em;
+        text-align: center;
+        width: 100%;
+    }
+
+    .suggestions {
+        position: absolute;
+        bottom: 0;
+        transform: translateY(100%);
+        padding: 0;
+        margin: 0;
+        border-radius: 8px;
+        box-shadow: 0 0 3px black;
+        box-sizing: border-box;
+        width: 100%;
+        background: white;
+        list-style-type: none;
+
+        &> li {
+            border-bottom: 1px solid #666;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+    }
+}
+

@@ -6,12 +6,15 @@ use App\Entity\Tenant\RoleProfile;
 use App\Repository\Main\AccountRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Tenant\AccountRoleProfiles;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Account extends Profile implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -35,9 +38,11 @@ class Account extends Profile implements UserInterface, PasswordAuthenticatedUse
     #[ORM\OneToMany(targetEntity: AccountRequest::class, mappedBy: 'account', orphanRemoval: true)]
     private Collection $requests;
 
-    #[ORM\Column]
-    #[Groups('get')]
-    private array $roleProfileIds = [];
+    /**
+ * @var Collection<int, AccountRoleProfiles>
+     */
+    #[Groups(['get'])]
+    private Collection $roleProfiles;
 
     /**
      * A visual identifier that represents this user.
@@ -142,25 +147,14 @@ class Account extends Profile implements UserInterface, PasswordAuthenticatedUse
         return $this;
     }
 
-    public function getRoleProfileIds(): array
+    public function getRoleProfiles(): Collection
     {
-        return $this->roleProfileIds;
+        return $this->roleProfiles;
     }
 
-    public function setRoleProfileIds(array $roleProfileIds): static
+    public function setRoleProfiles(Collection $roleProfiles): static
     {
-        $this->roleProfileIds = $roleProfileIds;
-
-        return $this;
-    }
-
-    public function addRoleProfileId(int $id): static {
-        $this->roleProfileIds[] = $id;
-        return $this;
-    }
-
-    public function removeProfileId(int $id): static {
-        $this->roleProfileIds = array_diff($this->roleProfileIds, [$id]);
+        $this->roleProfiles = $roleProfiles;
         return $this;
     }
 }

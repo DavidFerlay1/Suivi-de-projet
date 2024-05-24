@@ -6,10 +6,12 @@ use App\Entity\Main\Account;
 use App\Entity\Main\AccountRequest;
 use App\Entity\Main\RefreshToken;
 use App\Entity\Main\REQUEST_TYPE;
+use App\Entity\Tenant\AccountRoleProfiles;
 use App\Entity\Tenant\RoleProfile;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Parameter;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Hakam\MultiTenancyBundle\Doctrine\ORM\TenantEntityManager;
@@ -134,10 +136,25 @@ class AuthService {
     protected function getSelfRoleProfiles() {
         /** @var \App\Entity\Main\Account $account */
         $account = $this->tokenStorage->getToken()->getUser();
-        $qb = $this->em->getRepository(RoleProfile::class)->createQueryBuilder('r');
+        $roleProfileSet = $this->em->getRepository(AccountRoleProfiles::class)->findOneBy(['accountId' => $account->getId()]);
+        if(!$roleProfileSet)
+            return [];
 
-        return $qb
-                            ->where($qb->expr()->in('r.id', $account->getRoleProfileIds()))
-                            ->getQuery()->getResult();
+        return $roleProfileSet->getRoleProfiles();
+    }
+
+    public function deleteRoleProfile(RoleProfile $roleProfile) {
+         /** @var \App\Entity\Main\Account $user */
+         $user = $this->tokenStorage->getToken()->getUser();
+
+         $rsm = new ResultSetMapping();
+
+         $rsm->addEntityResult('App\Entity\Main\Account', "entity");
+         $rsm->addFieldResult('entity', "id", "id");
+
+         $sql = "SELECT * FROM profile entity WHERE entity.type = 'account' AND WHERE JSON_CONTAINS(entity.role_profile_ids, :id) = 1";
+         $query = $this->mainEm->createNativeQuery($sql, $rsm)->setParameters(['id' => $roleProfile->getId()]);
+
+         dd($query->getResult());
     }
 }

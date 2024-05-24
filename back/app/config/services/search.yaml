@@ -1,0 +1,8 @@
+parameters:
+  search:
+    App\Entity\Tenant\RoleProfile:
+      name: LIKE
+    App\Entity\Main\Profile:
+      firstname: LIKE
+      lastName: LIKE
+      username: LIKE

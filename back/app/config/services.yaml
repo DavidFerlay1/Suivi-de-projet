@@ -20,6 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Listeners\ConnectionHandler:
+        tags:
+            - { name: kernel.event_listener, event: security.authentication.success, method: onAuthenticationSuccess }
+
     App\Listeners\TaskStatusHandler:
         tags:
             - {name: 'doctrine.event_listener', event: 'onFlush', priority: 500}
@@ -28,12 +32,20 @@ services:
         tags:
             - {name: 'doctrine.event_listener', event: 'onFlush', priority: 600}
 
-    App\Listeners\ConnectionHandler:
+    App\Listeners\OnAccountLoadSubscriber:
         tags:
-            - { name: kernel.event_listener, event: security.authentication.success, method: onAuthenticationSuccess }
+            - { name: doctrine.event_subscriber}
+
+    App\Listeners\OnAccountDeleteSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber}
+
+    App\Command\InitProjectCommand:
+        tags: ['console.command']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
 imports:
     - {resource: 'services/roles.yaml'}
+    - {resource: 'services/search.yaml'}

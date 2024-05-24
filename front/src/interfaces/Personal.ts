@@ -19,7 +19,7 @@ export interface SubmittablePersonal {
     firstname: string,
     username: string,
     createAccount: boolean,
-    roleProfileIds: string[],
+    roleProfiles: RoleProfile[],
     hasAccount: boolean
 }
 

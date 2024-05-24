@@ -29,7 +29,7 @@
         }
 
         .dialog-header {
-            border-bottom: 1px solid var(--primary);
+            box-shadow: 0 1px 6px #666;
             padding: 0 12px;
             box-sizing: border-box;
             display: flex;
@@ -37,24 +37,25 @@
             justify-content: space-between;
             height: 60px;
             flex-shrink: 0;
+            z-index: 10;
             h3 {
                 margin: 0;
             }
 
-            button {
-                width: 30px;
-                height: 30px;
-                font-size: 30px;
-                padding: 0;
-                border-radius: 50%;
-                border: none;
-                color: var(--primary);
-                background: none;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            }
+            // button {
+            //     width: 30px;
+            //     height: 30px;
+            //     font-size: 30px;
+            //     padding: 0;
+            //     border-radius: 50%;
+            //     border: none;
+            //     color: var(--primary);
+            //     background: none;
+            //     display: flex;
+            //     align-items: center;
+            //     justify-content: center;
+            //     cursor: pointer;
+            // }
         }
 
         .dialog-body {

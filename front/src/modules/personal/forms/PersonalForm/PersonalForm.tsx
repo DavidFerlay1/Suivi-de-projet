@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useState } from "react"
+import React, { ChangeEvent, FormEvent, useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { RoleProfile, SubmittablePersonal } from "../../../../interfaces/Personal"
 import { useTranslation } from "react-i18next"
 import Form, { CatchableField } from "../../../../components/Form/Form"
@@ -6,7 +6,7 @@ import SwitchControl from "../../../../components/formControls/SwitchControl/Swi
 import useApi from "../../../../hooks/useApi"
 import { useDispatch } from "react-redux"
 import { updateProfile } from "../../../../store/slices/personalSlice"
-import Select, { MultiValue } from 'react-select'
+import RoleSelector from "../../pages/RoleMonitoring/components/RoleSelector/RoleSelector"
 
 type PersonalFormProps = {
     target?: SubmittablePersonal,
@@ -14,23 +14,17 @@ type PersonalFormProps = {
 }
 
 const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) => {
-    const [values, setValues] = useState<SubmittablePersonal>(target || {
+    const [values, setValues] = useState<SubmittablePersonal>({
         firstname: '',
         lastName: '',
-        roleProfileIds: [],
+        roleProfiles: [],
         createAccount: false,
         username: '',
         hasAccount: false,
+        ...target
     })
 
-    const [roleProfiles, setRoleProfiles] = useState<RoleProfile[]>([]);
     const dispatch = useDispatch();
-
-    const roleProfileValues = useMemo(() => {
-        if(values.roleProfileIds)
-            return roleProfiles.filter(role => values.roleProfileIds.includes(role.id!)).map(role => ({value: role.id!, label: role.name}))
-        return [];
-    }, [values.roleProfileIds, roleProfiles])
 
     const {t} = useTranslation();
     const {personalApi} = useApi();
@@ -46,16 +40,17 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
         })
     }
 
-    const onRoleProfilesEdit = (multiValue: MultiValue<{value: string, label: string}>) => {
+    const onRoleProfilesEdit = (roleProfiles: RoleProfile[]) => {
         setValues({
             ...values,
-            roleProfileIds: multiValue.map(v => v.value)
-        })
+            roleProfiles
+        });
     }
 
     const onSubmit = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
+            console.log(values)
             const data = (await personalApi.createEditProfile(values)).data;
             const isNew = values.id === undefined;
             const transformId = values.id && values.createAccount ? values.id : undefined;
@@ -66,21 +61,6 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
             console.log(e);
         }
     }
-
-    useEffect(() => {
-        personalApi.getAllRoleProfiles().then(res => {
-            setRoleProfiles(res.data);
-        }).catch(e => console.log(e));
-    }, [])
-
-    useEffect(() => {
-        if(!values.createAccount && !values.hasAccount) {
-            setValues({
-                ...values,
-                roleProfileIds: []
-            })
-        }
-    }, [values.createAccount, values.hasAccount])
 
     return (
         <Form canSubmit={canSubmit} onSubmit={onSubmit}>
@@ -100,11 +80,11 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
                     <SwitchControl value={values.createAccount} onChange={onEdit} name="createAccount" />
                 </CatchableField> )
             }
-            {(values.hasAccount || values.createAccount) && (
-                <CatchableField label={t('personal.roles')}>
-                    <Select value={roleProfileValues} onChange={onRoleProfilesEdit} isMulti={true} options={roleProfiles.map(role => ({value: role.id!, label: role.name}))} />
-                </CatchableField> )
-            }
+                {(values.hasAccount || values.createAccount) ? (
+                    <CatchableField label={t('personal.roles')}>
+                        <RoleSelector value={values.roleProfiles} onChange={onRoleProfilesEdit} />
+                    </CatchableField> ) : <></>
+                }
         </Form>
     )
 }

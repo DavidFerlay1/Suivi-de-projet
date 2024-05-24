@@ -6,14 +6,13 @@ use App\Controller\AutoSubmitBehaviorException;
 use App\DataFixtures\FixtureLoader;
 use App\Entity\Main\Account;
 use App\Entity\Main\TenantDb;
+use App\Entity\Tenant\AccountRoleProfiles;
 use App\Entity\Tenant\RoleProfile;
 use Doctrine\ORM\EntityManagerInterface;
 use Hakam\MultiTenancyBundle\Doctrine\ORM\TenantEntityManager;
 use Hakam\MultiTenancyBundle\Event\SwitchDbEvent;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Process;
 
 class DbService {
@@ -55,9 +54,13 @@ class DbService {
                                             ->setParameter('superadmin', '%ROLE_SUPERADMIN%')
                                             ->getQuery()->getOneOrNullResult();
         
-        $account->addRoleProfileId($superAdminProfile->getId())->setTenant($tenantConfig);
+        $account->setTenant($tenantConfig);
 
         $this->mainEm->persist($account);
         $this->mainEm->flush();
+
+        $roleProfileSet = (new AccountRoleProfiles())->addRoleProfile($superAdminProfile)->setAccountId($account->getId());
+        $this->em->persist($roleProfileSet);
+        $this->em->flush();
     }
 }

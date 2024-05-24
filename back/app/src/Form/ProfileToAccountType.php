@@ -4,7 +4,10 @@ namespace App\Form;
 
 use App\Entity\Main\Account;
 use App\Entity\Main\Profile;
+use App\Entity\Tenant\RoleProfile;
 use Doctrine\ORM\EntityManagerInterface;
+use Hakam\MultiTenancyBundle\Doctrine\ORM\TenantEntityManager;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -17,6 +20,12 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class ProfileToAccountType extends AbstractType
 {
+
+    public function __construct(private TenantEntityManager $em)
+    {
+        
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -27,12 +36,10 @@ class ProfileToAccountType extends AbstractType
             ])
             ->add('firstname')
             ->add('lastName')
-            ->add('roleProfileIds', CollectionType::class, [
-                'entry_type' => IntegerType::class, // Ou tout autre type de champ approprié
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                // Ajoutez d'autres options si nécessaire
+            ->add('roleProfiles', EntityType::class, [
+                'class' => RoleProfile::class,
+                'multiple' => true,
+                'em' => $this->em
             ])
         ;
     }

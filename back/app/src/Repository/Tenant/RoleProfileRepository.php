@@ -3,8 +3,13 @@
 namespace App\Repository\Tenant;
 
 use App\Entity\Tenant\RoleProfile;
+use App\Models\QueryFilters;
+use App\Trait\QueryFiltersTrait;
+use DefaultRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use QueryFiltersOptions;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @extends ServiceEntityRepository<RoleProfile>
@@ -14,35 +19,21 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method RoleProfile[]    findAll()
  * @method RoleProfile[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RoleProfileRepository extends ServiceEntityRepository
+class RoleProfileRepository extends DefaultRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $params)
     {
-        parent::__construct($registry, RoleProfile::class);
+        parent::__construct($registry, RoleProfile::class, $params);
+        $this->maxPerPage = 16;
     }
 
-    //    /**
-    //     * @return RoleProfile[] Returns an array of RoleProfile objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findFilteredByTenant(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {
+        $qb = $this->createQueryBuilder('entity');
+        foreach($options->getExcludeValues() as $index => $excludedRole) {
+            $qb->andWhere("entity.roles NOT LIKE :excluded$index")
+            ->setParameter("excluded$index", "%$excludedRole%");
+        }
 
-    //    public function findOneBySomeField($value): ?RoleProfile
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return $this->getFilteredQueryResultSet(RoleProfile::class, $queryFilters, $qb);
+    }
 }

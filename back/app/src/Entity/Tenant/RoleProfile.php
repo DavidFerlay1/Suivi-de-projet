@@ -16,7 +16,7 @@ class RoleProfile
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['light'])]
+    #[Groups(['light', 'get'])]
     private ?int $id = null;
 
     #[ORM\Column]
@@ -25,7 +25,7 @@ class RoleProfile
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['light'])]
+    #[Groups(['light', 'get'])]
     private ?string $name = null;
 
     #[ORM\Column]

@@ -3,10 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Main\Account;
+use App\Entity\Tenant\AccountRoleProfiles;
 use App\Entity\Tenant\RoleProfile;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Parameter;
 use Hakam\MultiTenancyBundle\Doctrine\ORM\TenantEntityManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -21,36 +20,30 @@ class RoleService {
     }
 
     public function initRoles(Account $account) {
-        $profiles = $this->em->getRepository(RoleProfile::class)->findBy(['id' => $account->getRoleProfileIds()]);
-            
+
+        $roleProfiles = $this->getAccountRoleProfiles($account);
         $roles = ['ROLE_USER'];
-        foreach($profiles as $profile) {
-            $roles = array_merge($roles, $profile->getRoles());
+
+        foreach($roleProfiles as $roleProfile) {
+            $roles = array_merge($roles, $roleProfile->getRoles());
         }
 
         $account->setRoles($roles);
+        $account->setRoleProfiles($roleProfiles);
     }
 
     public function deleteRoleProfile(RoleProfile $roleProfile) {
-        $id = $roleProfile->getId();
-        $qb = $this->mainEm->getRepository(Account::class)->createQueryBuilder('a');
-        $accounts= $qb->where($qb->expr()->in(':profile_id', 'a.roleProfiles'))
-                        ->andWhere('a.tenant = :tenant')
-                        ->setParameters(new ArrayCollection([
-                            new Parameter('profile_id', $id),
-                            new Parameter('tenant', $this->tokenStorage->getToken()->getUser()->getTenant())
-                        ]))
-                        ->getQuery()->getResult();
-        
+        $qb = $this->em->getRepository(AccountRoleProfiles::class)->createQueryBuilder('entity');
 
-        foreach($accounts as $account) {
-            $account->removeProfileId($id);
-            $this->mainEm->persist($account);
+        $accountRoleProfiles = $qb->where($qb->expr()->in(':targetRoleProfile', 'entity.roleProfiles'))
+                                    ->setParameter('targetRoleProfile', $roleProfile)
+                                    ->getQuery()->getResult();
+                          
+        foreach($accountRoleProfiles as $accountRoleProfile) {
+            $accountRoleProfile->removeRoleProfile($roleProfile);
+            $this->em->persist($accountRoleProfile);
         }
 
-        $this->mainEm->flush();
-
-        $this->em->remove($roleProfile);
         $this->em->flush();
     }
 
@@ -60,5 +53,13 @@ class RoleService {
 
     public function getRoleProfiles() {
         return $this->em->getRepository(RoleProfile::class)->findAll();
+    }
+
+    public function getAccountRoleProfiles(Account $account) {
+        $roleSet = $this->em->getRepository(AccountRoleProfiles::class)->findOneBy(['accountId' => $account->getId()]);
+        if(!$roleSet)
+            return [];
+
+        return $roleSet->getRoleProfiles();
     }
 }

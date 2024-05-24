@@ -2,19 +2,24 @@
 
 namespace App\Trait;
 
+use App\Models\QueryFilters;
 use Doctrine\ORM\QueryBuilder;
+use QueryFiltersOptions;
 
 trait QueryFiltersTrait {
     use PaginableTrait;
     use SortableTrait;
+    use SearchableTrait;
 
-    public function withQueryFilters(QueryBuilder $qb, int|null $page, array|null $orderSettings, $alias = 'entity') {
+    public function getFilteredQueryResultSet(string $entityName, QueryFilters $queryFilters, QueryBuilder $qb, string $alias = 'entity', QueryFiltersOptions $options = new QueryFiltersOptions()) {
+        $qb = $this->filterBySearch($entityName, $queryFilters->getSearchPattern(), $qb, $alias);
 
         $totalFetchableCount = $this->getCountWithoutPagination($qb, $alias);
+        $maxResults = $options->getMaxResult() ?? $this->maxPerPage;
 
         return [
-            "lastPage" => intval($totalFetchableCount / $this->maxPerPage) + ($totalFetchableCount % $this->maxPerPage ? 1 : 0),
-            "data" => $this->orderResultBy($orderSettings, $this->paginate($page, $qb))->getQuery()->getResult()
+            'lastPage' => intval($totalFetchableCount / $maxResults) + ($totalFetchableCount % $maxResults ? 1 : 0),
+            'data' => $this->orderResultBy($queryFilters->getSortSetting(), $this->paginate($queryFilters->getPage(), $qb, $options))->getQuery()->getResult()
         ];
     }
 

@@ -8,6 +8,11 @@
         "achievedTasks": "des tâches achevées"
     },
 
+    "searchbar": {
+        "typeToSearch": "Ecrivez pour chercher par mot clé",
+        "noResult": "Aucun résultat pour votre recherche"
+    },
+
     "misc": {
         "title": "Titre",
         "description": "Description",
@@ -91,5 +96,12 @@
         "createAccount": "Créer un compte",
         "active": "Actif",
         "noAccount": "Pas de compte"
+    },
+
+    "roleProfile": {
+        "editTitle": "Edition de rôle",
+        "deleteTitle": "Suppression de rôle",
+        "deleteConfirm1": "Êtes-vous sûr(e) de vouloir supprimer le rôle",
+        "deleteConfirm2": "Cela retirera les privilèges associés aux utilisateurs auxquel il est assigné"
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Main\TenantDb;
+use App\Models\QueryFilters;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,7 +61,6 @@ class DefaultController extends AbstractController
     private function handleSubmittableRequest(string $formType, string $entityType, Request|array $request, $em) {
         $data = $request instanceof Request ? $this->getPayload($request) : $request;
         $status = isset($data['id']) ? Response::HTTP_OK : Response::HTTP_CREATED;
-
         $entity = $this->createSubmittable($entityType, $data, $em);
 
         $form = $this->createForm($formType, $entity);
@@ -142,6 +142,19 @@ class DefaultController extends AbstractController
             return null;
 
         return $page;
+    }
+
+    protected function getSearch(Request $request) {
+        $search = $request->get('search');
+
+        if(!$search)
+            return '';
+
+        return $search;
+    }
+
+    protected function getQueryFilters(Request $request) {
+        return new QueryFilters($this->getPage($request), $this->getSortSettings($request), $this->getSearch($request));
     }
 
     protected function getCurrentTenant(): TenantDb {

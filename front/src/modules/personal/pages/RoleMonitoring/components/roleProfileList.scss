@@ -2,8 +2,9 @@
     margin: 0;
     padding: 0;
     list-style-type: none;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2vw;
 
     li {
         height: 50px;

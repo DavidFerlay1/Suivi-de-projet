@@ -5,6 +5,7 @@ import { IoMdCloseCircle, IoMdCloseCircleOutline, IoMdTime } from "react-icons/i
 import { createPortal } from 'react-dom';
 import ConfirmDialog from "../confirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+import { LuCross, LuX } from "react-icons/lu";
 
 type DialogProps = {
     isOpen: boolean,
@@ -45,7 +46,7 @@ const Dialog = ({setIsOpen, isOpen, children, title, isModal, renderFooter, clas
                                     <h3>
                                         {title}
                                     </h3>
-                                    <button onClick={() => closePopup(false)}><IoMdCloseCircleOutline/></button>
+                                    <button className="danger icon-button" onClick={() => closePopup(false)}><LuX /></button>
                                 </div>
                                 <div className="dialog-body">
                                     {children}

@@ -1,8 +1,12 @@
+:root {
+    --switch-height: 26px;
+}
+
 .switch {
-    height: 20px;
-    width: 40px;
+    height: var(--switch-height);
+    width: calc(var(--switch-height) + var(--switch-height));
     background: red;
-    border-radius: 10px;
+    border-radius: var(--switch-height);
     display: flex;
     align-items: center;
     padding: 0;
@@ -21,7 +25,7 @@
     &.checked {
         background: var(--primary);
         .ball {
-            transform: translateX(18px);
+            transform: translateX(24px);
         }
     }
 
@@ -34,8 +38,8 @@
     }
 
     .ball {
-        height: 18px;
-        width: 18px;
+        height: calc(var(--switch-height) - 2px);
+        width: calc(var(--switch-height) - 2px);
         border-radius: 50%;
         display: inline-block;
         background-color: white;

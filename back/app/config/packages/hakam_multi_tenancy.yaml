@@ -11,13 +11,15 @@ hakam_multi_tenancy:
     tenant_migration_path: migrations/Tenant
   tenant_entity_manager:                                        # tenant entity manger configuration , which is used to manage tenant entities
     dql:
-          string_functions:
-            test_string: App\DQL\StringFunction
-            second_string: App\DQL\SecondStringFunction
-          numeric_functions:
-            test_numeric: App\DQL\NumericFunction
-          datetime_functions:
-            test_datetime: App\DQL\DatetimeFunction
+        string_functions:
+          test_string: App\DQL\StringFunction
+          second_string: App\DQL\SecondStringFunction
+          JSON_SEARCH: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonSearch
+          JSON_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonContains
+        numeric_functions:
+          test_numeric: App\DQL\NumericFunction
+        datetime_functions:
+          test_datetime: App\DQL\DatetimeFunction
     mapping:
       type:   attribute                           # mapping type default annotation
       dir:   '%kernel.project_dir%/src/Entity/Tenant'           # directory of tenant entities, it could be different from main directory
