@@ -20,6 +20,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\LocatorService:
+        arguments:
+            $locator: "@service_container"
+
+    App\Service\AuthService:
+        tags: ['app.service_auth']
+        public: true
+
     App\Listeners\ConnectionHandler:
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onAuthenticationSuccess }
@@ -49,3 +57,4 @@ services:
 imports:
     - {resource: 'services/roles.yaml'}
     - {resource: 'services/search.yaml'}
+    - {resource: 'services/filters.yaml'}

@@ -56,8 +56,20 @@ const useApi = () => {
         },
     })
 
-    const withFilterParams = (uri: string, page: number, sortSetting: SortSetting, searchPattern: string = '') => {
-        return `${uri}?sortBy=${sortSetting.sort}&orderBy=${sortSetting.field}&page=${page}&search=${searchPattern}`
+    const withFilterParams = (uri: string, page: number, sortSetting: SortSetting, searchPattern: string = '', filters = {}) => {
+        let finalUri = `${uri}?sortBy=${sortSetting.sort}&orderBy=${sortSetting.field}&page=${page}&search=${searchPattern}`
+
+        const filterKeys = Object.keys(filters);
+        if(filterKeys.length) {
+            for(const filter of filterKeys) {
+                finalUri += `&${filter}=${filters[filter]}`
+            }
+        }
+
+        console.log(filters);
+        
+        return finalUri;
+        
     }
 
     const [authApi] = useState({
@@ -96,16 +108,16 @@ const useApi = () => {
 
     const [personalApi] = useState({
 
-        getList : (page: number, sortSetting: SortSetting, search: string) => {
-            return httpClient.get(withFilterParams('/personal', page, sortSetting, search));
+        getList : (page: number, sortSetting: SortSetting, search: string, filters: object) => {
+            return httpClient.get(withFilterParams('/personal', page, sortSetting, search, filters));
         },
 
         fetchAllRoles: () => {
             return httpClient.get('/personal/roles')
         },
 
-        getRoleProfileSuggestions: (page: number, sortSetting: SortSetting, search: string) => {
-            return httpClient.get(withFilterParams('/personal/roleProfiles/search', page, sortSetting, search))
+        getRoleProfileSuggestions: (page: number, sortSetting: SortSetting, search: string, filters: object) => {
+            return httpClient.get(withFilterParams('/personal/roleProfiles/search', page, sortSetting, search, filters))
         },
 
         getAllRoleProfiles: () => {

@@ -6,15 +6,16 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Service\LocatorService;
 
 abstract class DefaultRepository extends ServiceEntityRepository {
 
     use QueryFiltersTrait;
 
-    public function __construct(ManagerRegistry $registry, string $entityName, ParameterBagInterface $params)
+    public function __construct(ManagerRegistry $registry, string $entityName, ParameterBagInterface $params, LocatorService $locator)
     {
         parent::__construct($registry, $entityName);
-        $this->init($params);
+        $this->initParamAccesses($params, $locator);
     }
 
     public function findWithQueryFilters(QueryFilters $queryFilters, QueryBuilder|null $qb = null, string $alias = 'entity', QueryFiltersOptions $options = new QueryFiltersOptions()) {

@@ -1,8 +1,8 @@
-import React, { ChangeEvent, FormEvent, useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import './profileList.scss'
-import { Personal, SubmittablePersonal } from "../../../../interfaces/Personal";
+import { SubmittablePersonal } from "../../../../interfaces/Personal";
 import AccessControlledComponent from "../../../../components/accessControledComponent/AccessControlledComponent";
-import {LuGraduationCap, LuPencil, LuPlus, LuTrash2, LuUserPlus} from 'react-icons/lu'
+import { LuPencil, LuPlus, LuTrash2} from 'react-icons/lu'
 import useApi from "../../../../hooks/useApi";
 import ConfirmDialog from "../../../../components/dialogs/confirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
@@ -13,11 +13,11 @@ import { PaginationContext } from "../../../../contexts/PaginationContext";
 import { SortContext } from "../../../../contexts/SortContext";
 import { QueryContext } from "../../../../contexts/QueryContext";
 import Paginator from "../../../../components/navigation/Paginator/Paginator";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import MenuBar from "../../../../components/MenuBar/MenuBar";
-import ToggleDialog from "../../../../components/dialogs/toggles/toggleDialog/ToggleDialog";
 import QueryContextLayout from "../../../../components/layouts/QueryContextLayout/QueryContextLayout";
 import Searchbar from "../../../../components/searchbar/Searchbar";
+import PersonalFilters from "../../../../components/filters/PersonalFilters";
 
 
 const ProfileList = () => {
@@ -30,15 +30,13 @@ const ProfileList = () => {
     const {t} = useTranslation();
     const [profiles, setProfiles] = useState<SubmittablePersonal[]>([]);
 
-    const paginationContext = useContext(PaginationContext);
-    const sortContext = useContext(SortContext);
     const queryContext = useContext(QueryContext);
 
     useEffect(() => {
         queryContext?.fetch().then((profiles: SubmittablePersonal[]) => {
             setProfiles(profiles);
         })
-    }, [paginationContext?.page, sortContext?.current])
+    }, [queryContext?.page, queryContext?.sortSettings, queryContext?.filters])
 
     const onDeleteConfirm = useCallback(async () => {
         if(deletingProfile) {
@@ -99,6 +97,7 @@ const ProfileList = () => {
                 <QueryContextLayout defaultSortSetting={{field: 'lastName', sort: 'ASC'}} apiFetchCallback={personalApi.getList}>
                     <Searchbar renderItem={searchItem} />
                 </QueryContextLayout>
+                <PersonalFilters />
                 <div className="menuBar-content">
                     <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_CREATE']}>
                         <button onClick={onCreateClick}><LuPlus/>{t('personal.createProfile.title')}</button>

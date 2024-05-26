@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Main\Account;
 use App\Entity\Main\AccountRequest;
+use App\Entity\Main\Profile;
 use App\Entity\Main\RefreshToken;
 use App\Entity\Main\REQUEST_TYPE;
 use App\Entity\Tenant\AccountRoleProfiles;
@@ -12,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\QueryBuilder;
 use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Hakam\MultiTenancyBundle\Doctrine\ORM\TenantEntityManager;
@@ -157,4 +159,40 @@ class AuthService {
 
          dd($query->getResult());
     }
+
+    /** QB_FILTER */
+    public function filterProfilesByRoleProfiles(QueryBuilder $qb, array $roleProfileIds, string $alias = 'entity') {
+        $subQb = $this->em->getRepository(AccountRoleProfiles::class)->createQueryBuilder('setting');
+        $subQb->leftJoin('setting.roleProfiles', 'roleProfile')->where($subQb->expr()->in('roleProfile.id', ':roleProfileIds'))->setParameter("roleProfileIds", $roleProfileIds);
+
+        $configs = $subQb->getQuery()->getResult();
+        if(count($configs))
+            return $qb->andWhere($qb->expr()->in("$alias.id", array_map(fn($conf) => $conf->getAccountId(), $configs)));
+
+        return $qb->andWhere("$alias.id IS NULL");
+    }
+
+    /** QB_FILTER */
+    public function filterProfilesByState(QueryBuilder $qb, array $states, string $alias = 'entity') {
+
+        $associations = [
+            "profile" => "$alias INSTANCE OF App\Entity\Main\Profile AND $alias NOT INSTANCE OF App\Entity\Main\Account",
+            "account" => "$alias INSTANCE OF App\Entity\Main\Account"
+        ];
+
+        if(!count(array_intersect(array_keys($associations), $states)))
+            return $qb;
+        
+        $orX = $qb->expr()->orX();
+
+        foreach($states as $state) {
+            if(array_key_exists($state, $associations)) {
+                $orX->add($associations[$state]);
+            }
+        }
+
+        $qb->andWhere($orX);
+
+        return $qb;
+    } 
 }

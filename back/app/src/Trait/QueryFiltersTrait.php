@@ -3,6 +3,7 @@
 namespace App\Trait;
 
 use App\Models\QueryFilters;
+use App\Trait\FiltersTrait as TraitFiltersTrait;
 use Doctrine\ORM\QueryBuilder;
 use QueryFiltersOptions;
 
@@ -10,9 +11,10 @@ trait QueryFiltersTrait {
     use PaginableTrait;
     use SortableTrait;
     use SearchableTrait;
+    use TraitFiltersTrait;
 
     public function getFilteredQueryResultSet(string $entityName, QueryFilters $queryFilters, QueryBuilder $qb, string $alias = 'entity', QueryFiltersOptions $options = new QueryFiltersOptions()) {
-        $qb = $this->filterBySearch($entityName, $queryFilters->getSearchPattern(), $qb, $alias);
+        $qb = $this->filterBySearch($entityName, $queryFilters->getSearchPattern(), $this->applyFilters($entityName, $qb, $queryFilters, $alias), $alias);
 
         $totalFetchableCount = $this->getCountWithoutPagination($qb, $alias);
         $maxResults = $options->getMaxResult() ?? $this->maxPerPage;

@@ -4,8 +4,9 @@ import { QueryContextProvider } from "../../../contexts/QueryContext"
 import { SortContextProvider } from "../../../contexts/SortContext"
 import { SortSetting } from "../../../interfaces/Api/SortSetting";
 import { SearchContextProvider } from "../../../contexts/SearchContext";
+import { FiltersContextProvider } from "../../../contexts/FiltersContext";
 
-export type QueryFunction = (page: number, sortSetting: SortSetting, search: string) => Promise<any>;
+export type QueryFunction = (page: number, sortSetting: SortSetting, search: string, filters: object) => Promise<any>;
 
 type QueryContextLayoutProps = {
     children: ReactNode|ReactNode[],
@@ -18,9 +19,11 @@ const QueryContextLayout = ({children, defaultSortSetting, apiFetchCallback}: Qu
         <PaginationContextProvider>
             <SortContextProvider defaultSetting={defaultSortSetting}>
                 <SearchContextProvider>
-                    <QueryContextProvider apiFetchCallback={apiFetchCallback}>
-                        {children}
-                    </QueryContextProvider>
+                    <FiltersContextProvider>
+                        <QueryContextProvider apiFetchCallback={apiFetchCallback}>
+                            {children}
+                        </QueryContextProvider>
+                    </FiltersContextProvider>
                 </SearchContextProvider> 
             </SortContextProvider>
         </PaginationContextProvider>

@@ -33,10 +33,10 @@ const BreadCrumb = () => {
 
     return (
         <div>{breadCrumbData.map((data, index) => (
-                <>
+                <span key={index}>
                     {data.uri ? <Link to={data.uri}>{data.name}</Link> : <span>{data.name}</span>}
                     {index < breadCrumbData.length - 1 ? <span className='breadcrumb-separator'>></span> : null}
-                </>
+                </span>
                 
             ))}
         </div>

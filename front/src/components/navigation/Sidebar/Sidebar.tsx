@@ -17,8 +17,8 @@ const Sidebar = () => {
                 <LuHome key='HOME' size={26} color='white' onClick={() => navigate('/')} />
             </div>
             <div className="module-list">
-                {availableModules.map(module => (
-                    <ModuleMenuItem module={module} />
+                {availableModules.map((module, index) => (
+                    <ModuleMenuItem key={index} module={module} />
                 ))}
             </div>
             

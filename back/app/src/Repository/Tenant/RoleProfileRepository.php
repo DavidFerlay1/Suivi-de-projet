@@ -4,6 +4,7 @@ namespace App\Repository\Tenant;
 
 use App\Entity\Tenant\RoleProfile;
 use App\Models\QueryFilters;
+use App\Service\LocatorService;
 use App\Trait\QueryFiltersTrait;
 use DefaultRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -21,9 +22,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class RoleProfileRepository extends DefaultRepository
 {
-    public function __construct(ManagerRegistry $registry, ParameterBagInterface $params)
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $params, LocatorService $locatorService)
     {
-        parent::__construct($registry, RoleProfile::class, $params);
+        parent::__construct($registry, RoleProfile::class, $params, $locatorService);
         $this->maxPerPage = 16;
     }
 

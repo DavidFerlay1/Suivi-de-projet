@@ -1,10 +1,15 @@
 parameters:
-  App\Entity\Main\Profile:
-    fields:
-      fb_roles:
-        type: compare
-        field_name: roles
+  filters:
+    App\Entity\Main\Profile:
+      fb_roleProfiles:
+        field_name: roleProfiles
+        mod: delegate
+        delegated_service: App\Service\AuthService
+        delegated_method: filterProfilesByRoleProfiles
       fb_state:
         type: compare
         field_name: type
+        mod: delegate
+        delegated_service: App\Service\AuthService
+        delegated_method: filterProfilesByState
         

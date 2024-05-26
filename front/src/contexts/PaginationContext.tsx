@@ -34,7 +34,7 @@ const PaginationContextProvider = ({children}: PaginationContextProviderProps) =
     }
 
     const updateMax = (page: number) => {
-        setState({...state, lastPage: page});
+        setState({...state, lastPage: page || 1});
     }
 
     const status = useMemo(() => {

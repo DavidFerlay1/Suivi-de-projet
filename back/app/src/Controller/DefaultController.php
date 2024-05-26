@@ -153,8 +153,12 @@ class DefaultController extends AbstractController
         return $search;
     }
 
+    public function getFilters(Request $request) {
+        return array_filter($request->query->all(), fn($key) => strpos($key, 'fb_') === 0, ARRAY_FILTER_USE_KEY);
+    }
+
     protected function getQueryFilters(Request $request) {
-        return new QueryFilters($this->getPage($request), $this->getSortSettings($request), $this->getSearch($request));
+        return new QueryFilters($this->getPage($request), $this->getSortSettings($request), $this->getSearch($request), $this->getFilters($request));
     }
 
     protected function getCurrentTenant(): TenantDb {

@@ -14,10 +14,6 @@ const RoleSelector = ({value, onChange}) => {
         loadOptions('').then(result => setDefaultOptions(result));
     }, [])
 
-    useEffect(() => {
-        console.log(value)
-    }, [value])
-
     const onValuechange = (value: MultiValue<{label: string, value: string}>) => {
         onChange(value.map(val => ({id: val.value, name: val.label})))
     }

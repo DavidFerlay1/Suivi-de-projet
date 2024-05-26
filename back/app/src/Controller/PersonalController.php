@@ -92,7 +92,7 @@ class PersonalController extends DefaultController
     public function getAll(Request $request): JsonResponse {
         /** @var \App\Entity\Main\Account $currentUser */
         $currentUser = $this->getUser();
-
+        
         return $this->jsonResponse(
             $this->mainEm->getRepository(Profile::class)->findFilteredByTenant($this->getCurrentTenant(), $this->getQueryFilters($request),
                 (new QueryFiltersOptions())->setExcludeValues([$currentUser->getUsername(), 'super@gmail.com'])
