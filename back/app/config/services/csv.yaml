@@ -1,0 +1,47 @@
+parameters:
+  csv:
+    export:
+      App\Entity\Main\Profile:
+        fields:
+          username:
+            mod: default
+            h_name: Email
+          lastName:
+            mod: default
+            h_name: Nom
+          firstname:
+            mod: default
+            h_name: Prénom
+          hasAccount:
+            mod: delegate
+            delegated_service: App\Service\AuthService
+            delegated_method: isAccount
+            h_name: Etat
+          roles:
+            mod: delegate
+            delegated_service: App\Service\AuthService
+            delegated_method: getRoleProfilesForCSVExport
+            h_name: Rôles
+    import:
+      App\Entity\Main\Profile:
+        fields:
+          username:
+            integrity_check: identifier
+            h_name: Email
+            setter: default
+          lastName:
+            integrity_check: noEmpty
+            h_name: Nom
+            setter: default
+          firstname:
+            integrity_check: noEmpty
+            h_name: Prénom
+            setter: default
+          hasAccount:
+            integrity_check: boolean
+            h_name: Compte
+            setter: default
+        manage_inheritance:
+          method: predicate
+          predicate: "Compte 1"
+          alt_class: App\Entity\Main\Account

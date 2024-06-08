@@ -8,3 +8,16 @@ php bin/console cache:clear
 dockill
 dockill
 exit
+php bin/console d:d:c
+php bin/console app:init-project
+php bin/console d:m:m
+php bin/console app:init-project
+php bin/console d:m:m
+php bin/console d:d:c
+php bin/console d:m:m
+php bin/console app:init-project
+php bin/console d:d:c
+php bin/console d:m:m
+php bin/console app:init-project
+exi
+exit

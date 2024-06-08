@@ -14,6 +14,7 @@ trait QueryFiltersTrait {
     use TraitFiltersTrait;
 
     public function getFilteredQueryResultSet(string $entityName, QueryFilters $queryFilters, QueryBuilder $qb, string $alias = 'entity', QueryFiltersOptions $options = new QueryFiltersOptions()) {
+        
         $qb = $this->filterBySearch($entityName, $queryFilters->getSearchPattern(), $this->applyFilters($entityName, $qb, $queryFilters, $alias), $alias);
 
         $totalFetchableCount = $this->getCountWithoutPagination($qb, $alias);

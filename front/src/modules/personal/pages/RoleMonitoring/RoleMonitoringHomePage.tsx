@@ -23,7 +23,9 @@ const RoleMonitoringHomePage = () => {
 
     return (
         <AccessControlledLayout roles={['ROLE_PERSONAL_ROLE_ACCESS']}>
-
+            <QueryContextLayout defaultSortSetting={{field: 'name', sort: 'ASC'}} apiFetchCallback={personalApi.getAllRoleProfiles}>
+                <RoleProfileList />
+            </QueryContextLayout>
         </AccessControlledLayout>
     )
 }

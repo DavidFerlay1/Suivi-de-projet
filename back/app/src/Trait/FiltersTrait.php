@@ -6,11 +6,14 @@ use App\Models\QueryFilters;
 use App\Trait\ParamAccessorTrait;
 use Doctrine\ORM\QueryBuilder;
 
+use function PHPUnit\Framework\isEmpty;
+
 trait FiltersTrait {
 
     use ParamAccessorTrait;
 
     public function applyFilters(string $entityName, QueryBuilder $queryBuilder, QueryFilters $queryFilters, string $alias = 'entity') {
+    
         if(!count($queryFilters->getFilters()))
             return $queryBuilder;
 
@@ -24,8 +27,9 @@ trait FiltersTrait {
             if(isset($settings[$key])) {
                 $currentSettings = $settings[$key];
                 $filteredValues = explode(';', $filterExpression);
-                if(!$filteredValues[0])
-                    return;
+
+                if($filteredValues[0] === '')
+                    return $queryBuilder;
 
                 $field = $currentSettings['field_name'];
 
@@ -36,7 +40,7 @@ trait FiltersTrait {
                     case 'delegate':
                         $queryBuilder = $this->locator->getService($currentSettings['delegated_service'])->{$currentSettings['delegated_method']}($queryBuilder, $filteredValues);
                         break;
-                    default: return;
+                    default: break;
                 }
             }
         }

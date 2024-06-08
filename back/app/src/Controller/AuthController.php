@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Main\Account;
 use App\Entity\Main\AccountRequest;
 use App\Entity\Main\REQUEST_TYPE;
+use App\Entity\Tenant\RoleProfile;
 use App\Form\AccountType;
 use App\Form\ResetPasswordRequestType;
 use App\Form\ResetPasswordType;

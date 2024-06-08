@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import useApi from "../../../../../hooks/useApi";
 import { RoleProfile } from "../../../../../interfaces/Personal";
 import RoleOrganizer from "./RoleOrganizer";
+import Form, { CatchableField } from "../../../../../components/Form/Form";
+import { useTranslation } from "react-i18next";
+import Dialog from "../../../../../components/dialogs/dialog/Dialog";
+import RoleSelector from "../../../pages/RoleMonitoring/components/RoleSelector/RoleSelector";
 
 type RoleProfileFormProps = {
-    profile?: RoleProfile
+    profile?: RoleProfile,
+    onSuccess: Function
 }
 
-const RoleProfileForm = ({profile}: RoleProfileFormProps) => {
+const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
 
     const {personalApi} = useApi();
     const [values, setValues] = useState<RoleProfile>(profile || {
@@ -15,6 +20,9 @@ const RoleProfileForm = ({profile}: RoleProfileFormProps) => {
         roles: []
     })
     const [roleForms, setRoleForms] = useState<any>({});
+    const {t} = useTranslation();
+
+    const [fromModelPopupOpen, setFromModelPopupOpen] = useState(false);
 
     useEffect(() => {
         personalApi.fetchAllRoles().then(r => {
@@ -35,15 +43,16 @@ const RoleProfileForm = ({profile}: RoleProfileFormProps) => {
                     } catch {
                         //SPECIFIC ROLES
                     }
-                    
+
+                    console.log(profile?.roles, flatRole)
     
-                    arbo[matches[1]][matches[2]][matches[3]] = flatRole in values.roles;
+                    arbo[matches[1]][matches[2]][matches[3]] = values.roles.includes(flatRole);
                 }            
             }
             setRoleForms(arbo);
 
         }).catch(e => console.log(e));
-    }, [])
+    }, [profile, values.roles])
 
     const onRoleChange = (value: boolean, role: string) => {
         setValues({
@@ -64,10 +73,47 @@ const RoleProfileForm = ({profile}: RoleProfileFormProps) => {
         })
     }   
 
+    const setRolesFromModel = async (roleProfile: RoleProfile) => {
+        if(roleProfile.id == '0') {
+            setValues({
+                ...values,
+                roles: []
+            });
+        } else {
+            const roles = (await personalApi.fetchRoleProfileRoles(roleProfile)).data;
+            setValues({
+                ...values,
+                roles
+            });
+        }
+        
+        setFromModelPopupOpen(false)
+    }
+
+    const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setValues({
+            ...values,
+            name: e.target.value
+        })
+    }
+
+    const onSubmit = () => {
+        personalApi.createEditRoleProfile(values).then(() => {
+            onSuccess();
+        })
+    }
+
     return (
-        <div>
+        <Form submitText={t('roleProfile.submit')} onSubmit={onSubmit} canSubmit={values.name.length > 0}>  
+            <CatchableField label={t('roleProfile.name')}>
+                <input className="field" type="text" name='lastName' value={values.name} onChange={onNameChange} />
+            </CatchableField>
+            <button type="button" onClick={() => setFromModelPopupOpen(true)}>{t('roleProfile.fromModel')}</button>
+            <Dialog title={t('roleProfile.fromModel')} isModal={false} isOpen={fromModelPopupOpen} setIsOpen={setFromModelPopupOpen}>
+                <RoleSelector onChange={setRolesFromModel} value={{name: 'Test', id: '0', roles: []}} />
+            </Dialog>
             <RoleOrganizer data={roleForms} onChange={onRoleChange} />
-        </div>
+        </Form>
     )
 }
 

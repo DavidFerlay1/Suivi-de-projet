@@ -3,8 +3,14 @@
 namespace App\Repository\Tenant;
 
 use App\Entity\Tenant\AccountRoleProfiles;
+use App\Entity\Tenant\RoleProfile;
+use App\Models\QueryFilters;
+use App\Service\LocatorService;
+use DefaultRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use QueryFiltersOptions;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @extends ServiceEntityRepository<AccountRoleProfiles>
@@ -14,11 +20,18 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AccountRoleProfiles[]    findAll()
  * @method AccountRoleProfiles[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccountRoleProfilesRepository extends ServiceEntityRepository
+class AccountRoleProfilesRepository extends DefaultRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $params, LocatorService $locatorService)
     {
-        parent::__construct($registry, AccountRoleProfiles::class);
+        parent::__construct($registry, AccountRoleProfiles::class, $params, $locatorService);
+    }
+
+    public function findFilteredByTenant(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {
+        $qb = $this->createQueryBuilder('entity')
+            ->select('entity');
+
+        return $this->getFilteredQueryResultSet(AccountRoleProfiles::class, $queryFilters, $qb);
     }
 
     //    /**

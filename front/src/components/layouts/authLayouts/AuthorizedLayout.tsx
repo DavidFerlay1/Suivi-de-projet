@@ -16,7 +16,7 @@ const AuthorizedLayout = ({roles, children}: AuthorizedLayoutProps) => {
     useEffect(() => {
         authApi.controlAccess(roles).then(res => {
             try {
-                if(res.data)
+                if(res.data === 'granted')
                     setAccess(true);
                 else
                     navigate("/");

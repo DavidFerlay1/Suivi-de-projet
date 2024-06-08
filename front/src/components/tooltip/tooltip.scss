@@ -7,13 +7,15 @@
     }
 
     .tooltip-bubble {
-        box-shadow: 0 0 10px #666;
+        box-shadow: 0 0 5px #666;
         width: 300px;
         padding: 10px;
         background: white;
-        border: 1px solid var(--primary);
+        // border: 1px solid var(--primary);
         position: absolute;
         border-radius: 8px;
+        z-index: 100;
+        color: #666;
         
         &.top {
             top: 0;

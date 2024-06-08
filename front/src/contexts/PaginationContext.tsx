@@ -2,6 +2,7 @@ import React, { ReactNode, createContext, useContext, useEffect, useMemo, useSta
 
 type PaginationContextValue = {
     page: number,
+    maxPage: number,
     status: 'processing' | 'available' | 'fullloaded',
     update: Function,
     updateMax: Function
@@ -44,7 +45,7 @@ const PaginationContextProvider = ({children}: PaginationContextProviderProps) =
     }, [state])
 
     return (
-        <PaginationContext.Provider value={{page: state.page, status, update, updateMax}}>
+        <PaginationContext.Provider value={{page: state.page, status, update, updateMax, maxPage: state.lastPage}}>
             {children}
         </PaginationContext.Provider>
     )

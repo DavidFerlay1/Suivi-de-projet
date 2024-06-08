@@ -27,7 +27,16 @@
         "yes": "Oui",
         "no": "Non",
         "resetPassword": "Mot de passe oublié ?",
-        "login": "Se connecter"
+        "login": "Se connecter",
+        "withAccount": "Actif",
+        "withoutAccount": "Pas de compte",
+        "reinit": "Réinitialiser"
+    },
+
+    "filters": {
+        "title": "Filtrer par valeurs",
+        "apply": "Appliquer",
+        "reset": "Réinitialiser"
     },
 
     "confirmDialogs": {
@@ -95,13 +104,54 @@
         "roles": "Rôles",
         "createAccount": "Créer un compte",
         "active": "Actif",
-        "noAccount": "Pas de compte"
+        "noAccount": "Pas de compte",
+        "state": "État"
     },
 
     "roleProfile": {
+        "name": "Nom",
+        "submit": "Enregistrer",
+        "createTitle": "Créer un rôle",
         "editTitle": "Edition de rôle",
         "deleteTitle": "Suppression de rôle",
         "deleteConfirm1": "Êtes-vous sûr(e) de vouloir supprimer le rôle",
-        "deleteConfirm2": "Cela retirera les privilèges associés aux utilisateurs auxquel il est assigné"
+        "deleteConfirm2": "Cela retirera les privilèges associés aux utilisateurs auxquel il est assigné",
+        "createSuccess": "Création terminée",
+        "editSuccess": "Modification terminée",
+        "immutable": "Les rôles par défaut ne peuvent pas être modifiés ni supprimés.",
+        "isImmutable": "Inclus dans l'application",
+        "isntImmutable": "Personnalisés",
+        "fromModel": "Copier un modèle",
+        "filters": {
+            "byAssign": "Par comptes assignés"
+        }
+    },
+
+    "csv": {
+        "export": "Export CSV",
+        "import": "Import CSV",
+        "getmodel": "Télécharger modèle",
+        "checkIntegrity": "Vérifier les données",
+        "checkReport": "Voir le rapport",
+        "errors": {
+            "input": "Erreurs de valeurs",
+            "extra_fields": "Champs inconnus",
+            "missing_fields": "Champs manquants",
+            "line": "Ligne",
+            "reportTitle": "Rapport d'erreur de l'import"
+        },
+        "formatTitle": "Format de données attendu",
+        "validData": "Votre fichier est valide et prêt à être importé",
+        "importSuccess": "Profils importés avec succès"
+    },
+
+    "assert": {
+        "csv": {
+            "emptyCsv": "ERREUR: Le fichier ne contient aucune ligne"
+        },
+        "userAlreadyExists": "est déjà utilisée pour un compte existant",
+        "invalidEmail": "n'est pas un format d'adresse email valide",
+        "invalidValue": "ne correspond pas au format de données attendu",
+        "emptyValue": "Cette valeur ne doit pas être vide"
     }
 }

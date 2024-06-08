@@ -83,12 +83,16 @@ class AuthService {
     }
 
     public function handleAccountCreationByAdmin(Account $account) {
-        $passwordLength = 12;
-        $account->setRawPassword(substr(bin2hex(openssl_random_pseudo_bytes(($passwordLength + 1) / 2)), 0, $passwordLength));
-        $this->hashPassword($account);
+        $this->generateRandomPassword($account);
         $this->mainEm->persist($account);
         $this->mainEm->flush();
         $this->mailService->sendAccountCreatedByAdminConfirmation($account);
+    }
+
+    public function generateRandomPassword(Account $account) {
+        $passwordLength = 12;
+        $account->setRawPassword(substr(bin2hex(openssl_random_pseudo_bytes(($passwordLength + 1) / 2)), 0, $passwordLength));
+        $this->hashPassword($account);
     }
 
     public function isGranted(array $roles) {
@@ -156,8 +160,6 @@ class AuthService {
 
          $sql = "SELECT * FROM profile entity WHERE entity.type = 'account' AND WHERE JSON_CONTAINS(entity.role_profile_ids, :id) = 1";
          $query = $this->mainEm->createNativeQuery($sql, $rsm)->setParameters(['id' => $roleProfile->getId()]);
-
-         dd($query->getResult());
     }
 
     /** QB_FILTER */
@@ -195,4 +197,30 @@ class AuthService {
 
         return $qb;
     } 
+
+    public function filterProfilesByAssignedAccounts(QueryBuilder $qb, array $accountIds, string $alias = 'entity') {
+        $subQb = $this->em->getRepository(AccountRoleProfiles::class)->createQueryBuilder('accountRoleProfile')->select('roleProfiles')
+                    ->innerJoin('accountRoleProfile.roleProfiles', 'roleProfiles');
+        $subQb->where($subQb->expr()->in('accountRoleProfile.accountId', $accountIds));
+
+        return $qb->andWhere($qb->expr()->in($alias, $subQb->getDQL()));
+    }
+
+    /** CSV PREDICATE */
+    public function isAccount(Profile $profile) {
+        return $profile instanceof Account;
+    }
+
+    /** CSV */
+    public function getRoleProfilesForCSVExport(Profile $profile) {
+
+        $assocs = $this->em->getRepository(AccountRoleProfiles::class)->findBy(['accountId' => $profile->getId()]);
+        $roleProfiles = [];
+
+        foreach($assocs as $assoc) {
+            $roleProfiles = array_merge($roleProfiles, $assoc->getRoleProfiles()->toArray());
+        }
+
+        return implode(", ", array_map(fn(RoleProfile $roleProfile) => $roleProfile->getName(), $roleProfiles));
+    }
 }

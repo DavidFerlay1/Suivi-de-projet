@@ -2,10 +2,7 @@
 
 namespace App\Entity\Tenant;
 
-use App\Entity\Main\Account;
 use App\Repository\Tenant\RoleProfileRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,7 +26,14 @@ class RoleProfile
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['light', 'get'])]
     private ?bool $immutable = null;
+
+    #[ORM\Column]
+    private ?bool $settable = null;
+
+    #[ORM\Column]
+    private ?bool $listable = null;
 
     public function getId(): ?int
     {
@@ -68,6 +72,30 @@ class RoleProfile
     public function setImmutable(bool $immutable): static
     {
         $this->immutable = $immutable;
+
+        return $this;
+    }
+
+    public function isSettable(): ?bool
+    {
+        return $this->settable;
+    }
+
+    public function setSettable(bool $settable): static
+    {
+        $this->settable = $settable;
+
+        return $this;
+    }
+
+    public function isListable(): ?bool
+    {
+        return $this->listable;
+    }
+
+    public function setListable(bool $listable): static
+    {
+        $this->listable = $listable;
 
         return $this;
     }

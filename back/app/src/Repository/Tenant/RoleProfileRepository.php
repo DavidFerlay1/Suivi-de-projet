@@ -29,10 +29,11 @@ class RoleProfileRepository extends DefaultRepository
     }
 
     public function findFilteredByTenant(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {
-        $qb = $this->createQueryBuilder('entity');
-        foreach($options->getExcludeValues() as $index => $excludedRole) {
-            $qb->andWhere("entity.roles NOT LIKE :excluded$index")
-            ->setParameter("excluded$index", "%$excludedRole%");
+        $qb = $this->createQueryBuilder('entity')
+                ->andWhere('entity.listable = 1');
+
+        foreach($options->getPredicates() as $predicate) {
+            $qb->andWhere("entity.$predicate");
         }
 
         return $this->getFilteredQueryResultSet(RoleProfile::class, $queryFilters, $qb);

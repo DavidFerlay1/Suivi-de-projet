@@ -1,0 +1,23 @@
+.filter-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+
+    .indicator {
+        background: red;
+        height: 16px;
+        width: 16px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: .7em;
+        position: absolute;
+        top: 0;
+        left: 16px;
+        box-shadow: 0 0 1px #222;
+    }
+}

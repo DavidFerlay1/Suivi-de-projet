@@ -3,6 +3,7 @@
 namespace App\Entity\Main;
 
 use App\Repository\Main\ProfileRepository;
+use App\Service\CsvService;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
@@ -31,19 +32,19 @@ class Profile
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups('get')]
+    #[Groups(['get', CsvService::CSV_HANDLED])]
     #[Assert\NotBlank(groups:['admin', 'transform'])]
     protected ?string $username = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups('get')]
+    #[Groups(['get', CsvService::CSV_HANDLED])]
     #[Assert\NotBlank(groups:['admin', 'transform'])]
     protected ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(groups:['admin', 'transform'])]
-    #[Groups('get')]
+    #[Groups(['get', CsvService::CSV_HANDLED])]
     protected ?string $lastName = null;
 
     #[ORM\ManyToOne(inversedBy: 'profiles')]
@@ -51,7 +52,7 @@ class Profile
     protected ?TenantDb $tenant = null;
 
     #[ORM\Column]
-    #[Groups('get')]
+    #[Groups(['get', CsvService::CSV_HANDLED])]
     private ?bool $hasAccount = null;
 
     public function getId(): ?int

@@ -5,7 +5,7 @@ import { initPermissions, revokePermissions } from "../store/slices/userSlice"
 import { useLocation } from "react-router";
 
 
-const usePermissions = () => {
+const  usePermissions = () => {
 
     const {authApi} = useApi();
     const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const usePermissions = () => {
             return permissions.includes(permissions);
 
         for(const permission of permissions) {
-            if(!permission.includes(permission))
+            if(!data.includes(permission))
                 return false;
         }
         

@@ -76,6 +76,11 @@
     }
 }
 
+.filter-menu {
+    display: flex;
+    gap: 8px;
+}
+
 .suggestion {
     display: flex;
     justify-content: space-between;

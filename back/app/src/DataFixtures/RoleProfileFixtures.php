@@ -13,7 +13,9 @@ class RoleProfileFixtures extends Fixture
         $data = [
             [
                 'name' => 'Super administrateur',
-                'roles' => ['ROLE_SUPERADMIN']
+                'roles' => ['ROLE_SUPERADMIN'],
+                'listable' => false,
+                'settable' => false
             ],
             [
                 'name' => 'Ressources humaines',
@@ -27,7 +29,9 @@ class RoleProfileFixtures extends Fixture
                             'ROLE_PERSONAL_ROLE_CREATE', 
                             'ROLE_PERSONAL_ROLE_EDIT', 
                             'ROLE_PERSONAL_ROLE_DELETE',
-                        ]
+                ],
+                'settable' => true,
+                'listable' => true
             ],
             [
                 'name' => 'Chef de projet',
@@ -45,7 +49,9 @@ class RoleProfileFixtures extends Fixture
                     'ROLE_PROJECT_TEAM_ACCESS', 
                     'ROLE_PROJECT_TEAM_EDIT', 
                     'ROLE_PROJECT_TEAM_DELETE',
-                ]
+                ],
+                'settable' => true,
+                'listable' => true
             ],
             [
                 'name' => 'Administrateur projet',
@@ -58,7 +64,9 @@ class RoleProfileFixtures extends Fixture
                     'ROLE_PROJECT_TASK_DELETE',
                     'ROLE_PROJECT_TEAM_ACCESS', 
                     'ROLE_PROJECT_TEAM_EDIT', 
-                ]
+                ],
+                'settable' => true,
+                'listable' => true
             ],
             [
                 'name' => 'Contributeur projet',
@@ -67,12 +75,20 @@ class RoleProfileFixtures extends Fixture
                     'ROLE_PROJECT_PROJECT_ACCESS',
                     'ROLE_PROJECT_TASK_ACCESS',
                     'ROLE_PROJECT_TASK_EDIT', 
-                ]
+                ],
+                'settable' => true,
+                'listable' => true
+            ],
+            [
+                'name' => 'Import CSV',
+                'roles' => [],
+                'settable' => false,
+                'listable' => true
             ]
         ];
 
         foreach($data as $d) {
-            $manager->persist((new RoleProfile())->setName($d['name'])->setRoles($d['roles'])->setImmutable(true));
+            $manager->persist((new RoleProfile())->setName($d['name'])->setRoles($d['roles'])->setImmutable(true)->setListable($d['listable'])->setSettable($d['settable']));
         }
 
         $manager->flush();

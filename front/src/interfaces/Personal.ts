@@ -33,5 +33,6 @@ export interface SensitiveSafeSubmittablePersonal {
 export interface RoleProfile {
     id?: string,
     name: string,
-    roles: string[]
+    roles: string[],
+    immutable?: boolean
 }

@@ -1,0 +1,13 @@
+.file-group {
+    input {
+        width: 0;
+        height: 0;
+        visibility: hidden;
+    }
+
+    > div {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+}

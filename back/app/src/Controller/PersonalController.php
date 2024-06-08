@@ -7,19 +7,23 @@ use App\Entity\Main\Profile;
 use App\Entity\Tenant\AccountRoleProfiles;
 use App\Entity\Tenant\RoleProfile;
 use App\Form\AccountHandledByAdminType;
-use App\Form\AccountType;
 use App\Form\ProfileToAccountType;
 use App\Form\ProfileType;
 use App\Form\RoleProfileType;
 use App\Models\QueryFilters;
 use App\Service\AuthService;
+use App\Service\CsvService;
+use App\Service\MailService;
 use App\Service\RoleService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use QueryFiltersOptions;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/personal')]
 class PersonalController extends DefaultController
@@ -109,29 +113,11 @@ class PersonalController extends DefaultController
         return new JsonResponse('ok', Response::HTTP_OK);
     }
 
-
-    #[Route('/roleProfiles', methods:['POST'])]
-    public function createUpdateRoleProfile(Request $request): JsonResponse {
-        return $this->autoSubmitWithBehavior(
-            $request,
-            RoleProfileType::class,
-            RoleProfile::class,
-            [],
-            function ($submissionData) {
-                $this->em->persist($submissionData->getEntity());
-                $this->em->flush();
-            }
-        );
-    }
-
     #[Route('/roleProfiles', methods:['GET'])]
     public function getAllRoleProfiles(Request $request): JsonResponse {
         return $this->jsonResponse(
             $this->em->getRepository(RoleProfile::class)
-                ->findFilteredByTenant(
-                    $this->getQueryFilters($request), 
-                    (new QueryFiltersOptions())->setExcludeValues(['ROLE_SUPERADMIN'])
-                )
+                ->findFilteredByTenant($this->getQueryFilters($request))
         );
     }
 
@@ -143,21 +129,91 @@ class PersonalController extends DefaultController
         return
             $this->jsonResponse(
                 $this->em->getRepository(RoleProfile::class)
-                            ->findFilteredByTenant(
-                                $queryFilters,
-                                (new QueryFiltersOptions())->setExcludeValues(['ROLE_SUPERADMIN'])->setMaxResult(10)
-                        )
+                            ->findFilteredByTenant($queryFilters,
+                                new QueryFiltersOptions())
                 );
 
-    }
-
-    #[Route('/roleProfile/{id}', methods: ['DELETE'])]
-    public function deleteRoleProfile(RoleProfile $roleProfile, AuthService $authService): JsonResponse {
-        $authService->deleteRoleProfile($roleProfile);
     }
 
     #[Route('/roles', methods:['GET'])]
     public function getAllRoles(RoleService $roleService): JsonResponse {
         return $this->jsonResponse($roleService->getRoles());
+    }
+
+    #[Route('/csv', methods: ['GET'])]
+    public function exportAsCSV(CsvService $csvService) {
+        $personal = $this->mainEm->getRepository(Profile::class)->findAll();
+        return $csvService->export(Profile::class, $personal);
+    }
+
+    #[Route('/csv/model', methods: ['GET'])]
+    public function getCSVModel(CsvService $csvService) {
+        return $csvService->generateCSV($csvService->createModel(Profile::class, 'import'));
+    }
+
+    #[Route('/csv/import/integrity', methods: ['POST'])]
+    public function checkCSVIntegrity(Request $request, CsvService $csvService) {
+
+        $file = $request->files->get('file');
+
+        if(!$file)
+            return new JsonResponse('assert.nullFile', Response::HTTP_BAD_REQUEST);
+
+        if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            try {
+                return new JsonResponse($csvService->checkCSVImportIntegrity(Profile::class, $csvService->deserialize($file)));
+            } catch(Exception $e) {
+                return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            }
+            
+        } else {
+            return new JsonResponse('assert.badFileFormat', Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/csv', methods: ['POST'])]
+    public function importFromCsv(Request $request, CsvService $csvService, AuthService $authService, MailService $mailService) {
+        $file = $request->files->get('file');
+
+        // dd("jajuste");
+
+        if(!$file)
+            return new JsonResponse('assert.nullFile', Response::HTTP_BAD_REQUEST);
+
+        if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            try {
+                $profiles = $csvService->normalize(Profile::class, $csvService->deserialize($file));
+                $importCSVRole = $this->em->getRepository(RoleProfile::class)->findOneBy(['settable' => false, 'listable' => true]);
+                $newAccountIds = [];
+                /** @var \App\Entity\Main\Profile $profile */
+                foreach($profiles as $profile) {
+                    $profile->setTenant($this->getCurrentTenant());
+                    if($profile instanceof Account) {
+                        $authService->generateRandomPassword($profile);
+                        $mailService->sendAccountCreatedByAdminConfirmation($profile);
+                    }
+                    
+                    $this->mainEm->persist($profile);
+                    $this->mainEm->flush();
+
+                    if($profile instanceof Account) {
+                        $newAccountIds[] = $profile->getId();
+                    }
+                }
+
+                foreach($newAccountIds as $id) {
+                    $this->em->persist((new AccountRoleProfiles())->setAccountId($id)->addRoleProfile($importCSVRole));
+                }
+                
+                $this->em->flush();
+
+                return new JsonResponse('ok', Response::HTTP_CREATED);
+            } catch(Exception $e) {
+                return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            }
+            
+        } else {
+            return new JsonResponse('assert.badFileFormat', Response::HTTP_BAD_REQUEST);
+        }
     }
 }

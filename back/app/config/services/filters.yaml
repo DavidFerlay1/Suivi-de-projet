@@ -7,9 +7,16 @@ parameters:
         delegated_service: App\Service\AuthService
         delegated_method: filterProfilesByRoleProfiles
       fb_state:
-        type: compare
         field_name: type
         mod: delegate
         delegated_service: App\Service\AuthService
         delegated_method: filterProfilesByState
-        
+    App\Entity\Tenant\RoleProfile:
+      fb_assignedAccounts:
+        field_name: assignedAccounts
+        mod: delegate
+        delegated_service: App\Service\AuthService
+        delegated_method: filterProfilesByAssignedAccounts
+      fb_immutable:
+        field_name: immutable
+        mod: default

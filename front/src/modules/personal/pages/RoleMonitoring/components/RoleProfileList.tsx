@@ -10,6 +10,12 @@ import Dialog from '../../../../../components/dialogs/dialog/Dialog'
 import { useTranslation } from 'react-i18next';
 import ConfirmDialog from '../../../../../components/dialogs/confirmDialog/ConfirmDialog';
 import useApi from '../../../../../hooks/useApi';
+import MenuBar from '../../../../../components/MenuBar/MenuBar';
+import Searchbar from '../../../../../components/searchbar/Searchbar';
+import { LuFilter, LuPlus } from 'react-icons/lu';
+import RoleProfileForm from '../../../forms/PersonalForm/RoleProfileForm/RoleProfileForm';
+import { toast } from 'react-toastify';
+import RoleProfileFilters from '../../../../../components/filters/RoleProfileFilters/RoleProfileFilters';
 
 // type RoleProfileItemProps = {
 //     roleProfile: RoleProfile
@@ -30,15 +36,17 @@ const RoleProfileList = () => {
         queryContext?.fetch().then((res: RoleProfile[]) => {
             setRoleProfiles(res);
         })
-    }, [queryContext?.page, queryContext?.sortSettings])
+    }, [queryContext?.page, queryContext?.sortSettings, queryContext?.filters])
 
     const onRoleProfileDeleteClick = (roleProfile: RoleProfile) => {
         setTargetRoleProfile(roleProfile);
         setDeleteDialogOpen(true);
     }
 
-    const onRoleProfileEditClick = (roleProfiles: RoleProfile) => {
-
+    const onRoleProfileEditClick = async (roleProfile: RoleProfile) => {
+        roleProfile.roles = (await personalApi.fetchRoleProfileRoles(roleProfile)).data; 
+        setTargetRoleProfile(roleProfile);
+        setEditDialogOpen(true);
     }
 
     const deleteRoleProfile = () => {
@@ -46,16 +54,47 @@ const RoleProfileList = () => {
             personalApi.deleteRoleProfile(targetRoleProfile.id)
     }
 
+    const renderSearchbarItem = (item: RoleProfile) => {
+        return <div>{item.name}</div>
+    }
+
+    const afterCreateEditRoleProfile = () => {
+        queryContext?.fetch().then((roleProfiles: RoleProfile[]) => {
+            setRoleProfiles(roleProfiles);
+            setEditDialogOpen(false);
+            toast(t(`roleProfile.${targetRoleProfile?.id ? 'edit' : 'create'}Success`), {type: 'success'});
+            setTargetRoleProfile({name: '', roles: []});
+        })
+    }
+
+    const onCreateProfileOpen = () => {
+        setTargetRoleProfile({
+            name: '',
+            roles: []
+        });
+        setEditDialogOpen(true);
+    }
+
     return (
         <AccessControlledComponent roles={['ROLE_PERSONAL_ROLE_ACCESS']}>
-            <span>Tri par nom</span><Sorter field="name" />
+            <MenuBar>
+                <div style={{display: 'flex', gap: 8, alignItems: 'center'}}>
+                    <Searchbar renderItem={renderSearchbarItem} />
+                    <RoleProfileFilters />
+                </div>
+                <div>
+                    <span>Tri par nom</span>
+                    <Sorter field="name" />
+                </div>
+                <button onClick={onCreateProfileOpen}><LuPlus /> {t('roleProfile.createTitle')}</button>
+            </MenuBar>
             <div className='roleList'>
                 {roleProfiles.map(roleProfile => <RoleProfileItem onDeleteClick={onRoleProfileDeleteClick} onEditClick={onRoleProfileEditClick} roleProfile={roleProfile} />)}
             </div>
             <Paginator />
             <AccessControlledComponent roles={['ROLE_PERSONAL_ROLE_EDIT']}>
-                <Dialog title={t('roleProfile.editTitle')} isModal={true} setIsOpen={setEditDialogOpen} isOpen={editDialogOpen}>
-                    Bonsoir !
+                <Dialog className='huge' title={targetRoleProfile && targetRoleProfile.id ? targetRoleProfile.name : t('roleProfile.createTitle')} isModal={true} setIsOpen={setEditDialogOpen} isOpen={editDialogOpen}>
+                    <RoleProfileForm onSuccess={afterCreateEditRoleProfile} profile={targetRoleProfile} />
                 </Dialog>
             </AccessControlledComponent>
             <AccessControlledComponent roles={['ROLE_PERSONAL_ROLE_DELETE']}>
@@ -66,21 +105,5 @@ const RoleProfileList = () => {
         </AccessControlledComponent>
     )
 }
-
-// const RoleProfileItem = ({roleProfile}: RoleProfileItemProps) => {
-//     return (
-//         <li>
-//             {roleProfile.name}
-//             <div className='actions'>
-//                 <AccessControlledComponent roles={['ROLE_PERSONAL_ROLE_EDIT']}>
-//                     <li><button className="icon-button"><LuPencil /></button></li>
-//                 </AccessControlledComponent>
-//                 <AccessControlledComponent roles={['ROLE_PERSONAL_ROLE_DELETE']}>
-//                     <li><button className="icon-button danger"><LuTrash2 /></button></li>
-//                 </AccessControlledComponent>
-//             </div>
-//         </li>
-//     )
-// } 
 
 export default RoleProfileList;

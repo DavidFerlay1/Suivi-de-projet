@@ -60,6 +60,7 @@ class DefaultController extends AbstractController
 
     private function handleSubmittableRequest(string $formType, string $entityType, Request|array $request, $em) {
         $data = $request instanceof Request ? $this->getPayload($request) : $request;
+
         $status = isset($data['id']) ? Response::HTTP_OK : Response::HTTP_CREATED;
         $entity = $this->createSubmittable($entityType, $data, $em);
 

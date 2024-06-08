@@ -2,22 +2,22 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import './profileList.scss'
 import { SubmittablePersonal } from "../../../../interfaces/Personal";
 import AccessControlledComponent from "../../../../components/accessControledComponent/AccessControlledComponent";
-import { LuPencil, LuPlus, LuTrash2} from 'react-icons/lu'
+import { LuFile, LuFileDown, LuFileUp, LuPencil, LuPlus, LuTrash2} from 'react-icons/lu'
 import useApi from "../../../../hooks/useApi";
 import ConfirmDialog from "../../../../components/dialogs/confirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../../../components/dialogs/dialog/Dialog";
 import PersonalForm from "../../forms/PersonalForm/PersonalForm";
 import Sorter from "../../../../components/queryFilters/Sorter";
-import { PaginationContext } from "../../../../contexts/PaginationContext";
-import { SortContext } from "../../../../contexts/SortContext";
 import { QueryContext } from "../../../../contexts/QueryContext";
 import Paginator from "../../../../components/navigation/Paginator/Paginator";
 import { toast } from 'react-toastify';
 import MenuBar from "../../../../components/MenuBar/MenuBar";
 import QueryContextLayout from "../../../../components/layouts/QueryContextLayout/QueryContextLayout";
 import Searchbar from "../../../../components/searchbar/Searchbar";
-import PersonalFilters from "../../../../components/filters/PersonalFilters";
+import PersonalFilters from "../../../../components/filters/PersonalFilters/PersonalFilters";
+import {downloadBlob} from '../../../../services/Utils';
+import PersonalCSVImport from "../PersonalCSVImport/PersonalCSVImport";
 
 
 const ProfileList = () => {
@@ -29,6 +29,7 @@ const ProfileList = () => {
     const {personalApi} = useApi();
     const {t} = useTranslation();
     const [profiles, setProfiles] = useState<SubmittablePersonal[]>([]);
+    const [isCSVImportOpen, setIsCSVImportOpen] = useState(false);
 
     const queryContext = useContext(QueryContext);
 
@@ -91,16 +92,38 @@ const ProfileList = () => {
         )
     }
 
+    const onCsvExportClick = async () => {
+        const blob = await personalApi.exportCSV();
+        downloadBlob(new Blob([blob.data]), 'personnel.csv');
+    }
+
+    const onImportSuccess = () => {
+        queryContext?.fetch().then((profiles: SubmittablePersonal[]) => {
+            setProfiles(profiles);
+            toast(t('csv.importSuccess'), {type: 'success'});
+            setIsCSVImportOpen(false);
+        });
+    }
+
     return profiles && (
         <>
             <MenuBar>
-                <QueryContextLayout defaultSortSetting={{field: 'lastName', sort: 'ASC'}} apiFetchCallback={personalApi.getList}>
-                    <Searchbar renderItem={searchItem} />
-                </QueryContextLayout>
-                <PersonalFilters />
+                <div className="filter-menu">
+                    <QueryContextLayout defaultSortSetting={{field: 'lastName', sort: 'ASC'}} apiFetchCallback={personalApi.getList}>
+                        <Searchbar renderItem={searchItem} />
+                    </QueryContextLayout>
+                    <PersonalFilters />
+                </div>
+                
                 <div className="menuBar-content">
+                    <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_CREATE', 'ROLE_PERSONAL_PROFILE_EDIT']}>
+                        <button className="icon-attached" onClick={() => setIsCSVImportOpen(true)}><LuFileUp />{t('csv.import')}</button>
+                    </AccessControlledComponent>
+                    <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_ACCESS']}>
+                        <button className="icon-attached" onClick={onCsvExportClick}><LuFileDown />{t('csv.export')}</button>
+                    </AccessControlledComponent>
                     <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_CREATE']}>
-                        <button onClick={onCreateClick}><LuPlus/>{t('personal.createProfile.title')}</button>
+                        <button className="icon-attached" onClick={onCreateClick}><LuPlus/>{t('personal.createProfile.title')}</button>
                     </AccessControlledComponent>
                 </div>
             </MenuBar>
@@ -129,6 +152,9 @@ const ProfileList = () => {
             <Paginator />
             <Dialog title={t('personal.editProfile.title')} isModal={true} isOpen={isEditingPopupOpen} setIsOpen={setIsEditingPopupOpen}>
                 <PersonalForm handleParentPopupEndEvent={handleParentPopupEndEvent} target={editingProfile} />
+            </Dialog>
+            <Dialog title={t('csv.import')} isModal={true} isOpen={isCSVImportOpen} setIsOpen={setIsCSVImportOpen}>
+                <PersonalCSVImport onImportSuccess={onImportSuccess} />
             </Dialog>
             <ConfirmDialog isModal={true} title={t('personal.deleteProfile.title')} onCancel={onDeleteCancel} onConfirm={onDeleteConfirm} isOpen={isDeletePopupOpen} setIsOpen={setIsDeletePopupOpen}>
                 <span>{t('personal.deleteProfile.confirmMessage')} {deletingProfile?.firstname} {deletingProfile?.lastName} ?</span>

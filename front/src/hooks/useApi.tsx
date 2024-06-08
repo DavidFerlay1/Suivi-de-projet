@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Credentials, ResetPasswordFormData } from "../interfaces/FormData";
 import { Project, SubmittableProject } from "../interfaces/Project";
 import { AuthTokens } from "./useAuth";
-import { SensitiveSafeSubmittablePersonal, SubmittablePersonal } from "../interfaces/Personal";
+import { RoleProfile, SensitiveSafeSubmittablePersonal, SubmittablePersonal } from "../interfaces/Personal";
 import { SortSetting } from "../interfaces/Api/SortSetting";
 
 export const httpClient = axios.create({
@@ -65,8 +65,6 @@ const useApi = () => {
                 finalUri += `&${filter}=${filters[filter]}`
             }
         }
-
-        console.log(filters);
         
         return finalUri;
         
@@ -116,12 +114,16 @@ const useApi = () => {
             return httpClient.get('/personal/roles')
         },
 
+        fetchRoleProfileRoles: (roleProfile: RoleProfile) => {
+            return httpClient.get(`/personal/roleProfiles/getRoles/${roleProfile.id}`);
+        },
+
         getRoleProfileSuggestions: (page: number, sortSetting: SortSetting, search: string, filters: object) => {
             return httpClient.get(withFilterParams('/personal/roleProfiles/search', page, sortSetting, search, filters))
         },
 
-        getAllRoleProfiles: () => {
-            return httpClient.get('/personal/roleProfiles');
+        getAllRoleProfiles: (page: number, sortSetting: SortSetting, search: string, filters: object) => {
+            return httpClient.get(withFilterParams('/personal/roleProfiles', page, sortSetting, search, filters));
         },
 
         createEditProfile: (data: SubmittablePersonal) => {
@@ -132,8 +134,37 @@ const useApi = () => {
             return httpClient.delete(`/personal/${id}`)
         },
 
+        createEditRoleProfile: (roleProfile: RoleProfile) => {
+            console.log('PEROFILE', roleProfile)
+            return httpClient.post('/personal/roleProfiles', {...roleProfile});
+        },
+ 
         deleteRoleProfile: (id: string|number) => {
-            return httpClient.delete(`/personal/roleProfile/${id}`)
+            return httpClient.delete(`/personal/roleProfiles/${id}`)
+        },
+
+        importCSV: (formData: FormData) => {
+            return httpClient.post('/personal/csv', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+        },
+
+        exportCSV: () => {
+            return httpClient.get('/personal/csv', {responseType: 'blob'});
+        },
+
+        getCSVModel: () => {
+            return httpClient.get('/personal/csv/model', {responseType: 'blob'});
+        },
+
+        checkCSVIntegrity: (formData: FormData) => {
+            return httpClient.post('/personal/csv/import/integrity', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
         }
     })
 

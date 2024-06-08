@@ -58,3 +58,4 @@ imports:
     - {resource: 'services/roles.yaml'}
     - {resource: 'services/search.yaml'}
     - {resource: 'services/filters.yaml'}
+    - {resource: 'services/csv.yaml'}

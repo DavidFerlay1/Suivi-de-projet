@@ -9,7 +9,7 @@ type AccessControlledComponentProps = {
 const AccessControlledComponent = ({children, roles}: AccessControlledComponentProps) => {
     const {hasPermissions} = usePermissions();
 
-    return hasPermissions(roles) && <>{children}</>
+    return hasPermissions(roles) ? <>{children}</> : null
 }
 
 export default AccessControlledComponent;
