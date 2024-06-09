@@ -5,6 +5,7 @@ import { Project, SubmittableProject } from "../interfaces/Project";
 import { AuthTokens } from "./useAuth";
 import { RoleProfile, SensitiveSafeSubmittablePersonal, SubmittablePersonal } from "../interfaces/Personal";
 import { SortSetting } from "../interfaces/Api/SortSetting";
+import { Team } from "src/interfaces/Team";
 
 export const httpClient = axios.create({
     baseURL: 'http://localhost/api',
@@ -168,7 +169,21 @@ const useApi = () => {
         }
     })
 
-    return {projectApi, authApi, personalApi};
+    const [teamApi] = useState({
+        getList: (page: number, sortSetting: SortSetting, search: string, filters: object) => {
+            return httpClient.get(withFilterParams('/project/team', page, sortSetting, search, filters));
+        },
+
+        editOrCreate: (team: Team) => {
+
+            const data = {...team, memberIds: team.members.map(m => m.id)} as any;
+            delete data.members;
+
+            return httpClient.post('/project/team', {...data});
+        }
+    })
+
+    return {projectApi, authApi, personalApi, teamApi};
 }
 
 export default useApi;

@@ -150,16 +150,20 @@ class AuthService {
     }
 
     public function deleteRoleProfile(RoleProfile $roleProfile) {
-         /** @var \App\Entity\Main\Account $user */
-         $user = $this->tokenStorage->getToken()->getUser();
+         $accountRoleProfiles = $this->em->getRepository(AccountRoleProfiles::class)
+                                        ->createQueryBuilder('accountRoleProfile')
+                                        ->select('accountRoleProfile')
+                                        ->innerJoin('accountRoleProfile.roleProfiles', 'roleProfile')
+                                        ->where('roleProfile = :target')->setParameter('target', $roleProfile)
+                                        ->getQuery()->getResult();
 
-         $rsm = new ResultSetMapping();
+        foreach($accountRoleProfiles as $accountRoleProfile) {
+            $accountRoleProfile->removeRoleProfile($roleProfile);
+            $this->em->persist($accountRoleProfile);
+        }
 
-         $rsm->addEntityResult('App\Entity\Main\Account', "entity");
-         $rsm->addFieldResult('entity', "id", "id");
-
-         $sql = "SELECT * FROM profile entity WHERE entity.type = 'account' AND WHERE JSON_CONTAINS(entity.role_profile_ids, :id) = 1";
-         $query = $this->mainEm->createNativeQuery($sql, $rsm)->setParameters(['id' => $roleProfile->getId()]);
+        $this->em->remove($roleProfile);
+        $this->em->flush();
     }
 
     /** QB_FILTER */
@@ -198,6 +202,7 @@ class AuthService {
         return $qb;
     } 
 
+    /** QB_FILTER */
     public function filterProfilesByAssignedAccounts(QueryBuilder $qb, array $accountIds, string $alias = 'entity') {
         $subQb = $this->em->getRepository(AccountRoleProfiles::class)->createQueryBuilder('accountRoleProfile')->select('roleProfiles')
                     ->innerJoin('accountRoleProfile.roleProfiles', 'roleProfiles');

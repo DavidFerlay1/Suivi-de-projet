@@ -77,7 +77,6 @@ class PersonalController extends DefaultController
 
                 if($hasAccount || $createAccount) {      
                     $roleProfileSet = $this->em->getRepository(AccountRoleProfiles::class)->findOneBy(['accountId' => $submissionData->getEntity()->getId()]);
-                    // dd($created->getRoleProfiles());
                     if(!$roleProfileSet)
                         $roleProfileSet = (new AccountRoleProfiles())->setAccountId($submissionData->getEntity()->getId());
 
@@ -174,8 +173,6 @@ class PersonalController extends DefaultController
     #[Route('/csv', methods: ['POST'])]
     public function importFromCsv(Request $request, CsvService $csvService, AuthService $authService, MailService $mailService) {
         $file = $request->files->get('file');
-
-        // dd("jajuste");
 
         if(!$file)
             return new JsonResponse('assert.nullFile', Response::HTTP_BAD_REQUEST);

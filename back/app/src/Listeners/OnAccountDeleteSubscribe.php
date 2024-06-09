@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Entity\Main\Account;
 use App\Entity\Tenant\AccountRoleProfiles;
+use App\Entity\Tenant\Team;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Events;
@@ -26,10 +27,19 @@ class OnAccountDeleteSubscriber implements EventSubscriber {
             return;
 
         $roleProfileSet = $this->em->getRepository(AccountRoleProfiles::class)->findOneBy(['accountId' => $entity->getId()]);
+        $qb = $this->em->getRepository(Team::class)->createQueryBuilder('team');
+        $qb->where($qb->expr()->in(':accountId', 'team.memberIds'))->setParameter('accountId', $entity->getId());
+
+        foreach($qb->getQuery()->getResult() as $team) {
+            $team->removeMemberId($entity->getId());
+            $this->em->persist($team);
+        }
+
         if($roleProfileSet) {
             $this->em->remove($roleProfileSet);
-            $this->em->flush();
         }
+
+        $this->em->flush();
     }
 }
 

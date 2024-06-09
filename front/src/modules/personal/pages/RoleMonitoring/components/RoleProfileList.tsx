@@ -49,9 +49,14 @@ const RoleProfileList = () => {
         setEditDialogOpen(true);
     }
 
-    const deleteRoleProfile = () => {
-        if(targetRoleProfile)
-            personalApi.deleteRoleProfile(targetRoleProfile.id)
+    const deleteRoleProfile = async () => {
+        if(targetRoleProfile && targetRoleProfile.id) {
+            await personalApi.deleteRoleProfile(targetRoleProfile.id);
+            const refreshedList = await queryContext?.fetch();
+            setRoleProfiles(refreshedList);
+            toast(t('roleProfile.deleteSuccess'), {type: 'success'});
+        }
+
     }
 
     const renderSearchbarItem = (item: RoleProfile) => {

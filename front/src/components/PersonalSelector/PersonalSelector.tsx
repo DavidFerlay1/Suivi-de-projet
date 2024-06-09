@@ -7,9 +7,10 @@ import useApi from "../../hooks/useApi";
 type PersonalSelectorProps = {
     value: SubmittablePersonal|SubmittablePersonal[],
     onChange: Function
+    additionalFilters?: any
 }
 
-const PersonalSelector = ({value, onChange}: PersonalSelectorProps) => {
+const PersonalSelector = ({value, onChange, additionalFilters = {}}: PersonalSelectorProps) => {
     const [defaultOptions, setDefaultOptions] = useState<SubmittablePersonal[]>([]);
 
     const {personalApi} = useApi();
@@ -21,7 +22,7 @@ const PersonalSelector = ({value, onChange}: PersonalSelectorProps) => {
     }, [])
 
     const fetchData = async (text: string) => {
-        const data = (await personalApi.getList(1, {field: 'lastName', sort: 'ASC'}, text, {})).data.data;
+        const data = (await personalApi.getList(1, {field: 'lastName', sort: 'ASC'}, text, additionalFilters)).data.data;
         console.log(data);
         return data.map((personal: SubmittablePersonal) => ({
             value: personal.id,
@@ -34,13 +35,18 @@ const PersonalSelector = ({value, onChange}: PersonalSelectorProps) => {
         fetchData(inputValue).then(options => callback(options));
     }
 
-    return Array.isArray(value) ? <MultiPersonalSelector loadOptions={loadOptions} value={value} onChange={onChange} defaultOptions={defaultOptions} /> : <SinglePersonalSelector loadOptions={loadOptions} value={value} onChange={onChange} defaultOptions={defaultOptions} />
+    return Array.isArray(value) ? <MultiPersonalSelector loadOptions={loadOptions} value={value.map(value => ({...value, value: value.id, label: `${value.lastName.toUpperCase()} ${value.firstname}`}))} onChange={onChange} defaultOptions={defaultOptions} /> : <SinglePersonalSelector loadOptions={loadOptions} value={value} onChange={onChange} defaultOptions={defaultOptions} />
 }
 
 const MultiPersonalSelector = ({value, onChange, defaultOptions, loadOptions}) => {
 
     const onValuechange = (val) => {
-        onChange(val.map(data => data as SubmittablePersonal));
+        onChange(val.map(data => {
+            const clone = {...data};
+            delete clone.value;
+            delete clone.label;
+            return clone;
+        }));
     }
 
     return (

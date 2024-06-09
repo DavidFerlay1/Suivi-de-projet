@@ -24,11 +24,6 @@ class RoleProfileController extends DefaultController
         return $this->jsonResponse($roleProfile->getRoles(), Response::HTTP_OK);
     }
 
-    #[Route('/{id}', methods: ['DELETE'])]
-    public function deleteRoleProfile(RoleProfile $roleProfile, AuthService $authService): JsonResponse {
-        $authService->deleteRoleProfile($roleProfile);
-    }
-
     #[Route('', methods:['POST'])]
     public function createUpdate(Request $request) {
 
@@ -44,7 +39,8 @@ class RoleProfileController extends DefaultController
             [],
             function ($submitHandler) {
                  /** @var \App\Entity\Tenant\RoleProfile $roleProfile */
-                 $roleProfile = $submitHandler->getEntity();
+                $roleProfile = $submitHandler->getEntity();
+                $roleProfile->setRoles(array_values($roleProfile->getRoles()));
 
                 if($roleProfile->isImmutable())
                     throw new AutoSubmitBehaviorException('role is immutable');
@@ -65,21 +61,14 @@ class RoleProfileController extends DefaultController
         );
     } 
 
-    #[Route('/byAccounts', methods:['GET'])]
-    public function getByAccounts(Request $request) {
-        // $accountRoleProfiles = $this->em->getRepository(AccountRoleProfiles::class)->findFilteredByTenant(
-        //     $this->getQueryFilters($request), 
-        // );
+    #[Route('/{id}', methods:['DELETE'])]
+    public function delete(RoleProfile $roleProfile, AuthService $authService) {
+        if(!$roleProfile)
+            return new JsonResponse("bad params", Response::HTTP_BAD_REQUEST);
 
-        // $roleProfiles = [];
+        $authService->deleteRoleProfile($roleProfile);
 
-        // foreach($accountRoleProfiles as $accountRoleProfile) {
-        //     foreach($accountRoleProfile->getRoleProfiles() as $roleProfile) {
-        //         if(in_array($roleProfile, $roleProfiles))
-        //             $roleProfiles[] = $roleProfile;
-        //     }
-        // }
-
-        // return $this->jsonResponse($roleProfiles, Response::HTTP_OK, ['get']);
+        return new JsonResponse('ok', Response::HTTP_OK);
+                                    
     }
 }

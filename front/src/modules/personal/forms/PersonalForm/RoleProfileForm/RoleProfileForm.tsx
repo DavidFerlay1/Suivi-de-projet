@@ -1,11 +1,12 @@
 import React, { ChangeEvent, useEffect, useState } from "react"
 import useApi from "../../../../../hooks/useApi";
-import { RoleProfile } from "../../../../../interfaces/Personal";
+import { RoleProfile, SubmittablePersonal } from "../../../../../interfaces/Personal";
 import RoleOrganizer from "./RoleOrganizer";
 import Form, { CatchableField } from "../../../../../components/Form/Form";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../../../../components/dialogs/dialog/Dialog";
 import RoleSelector from "../../../pages/RoleMonitoring/components/RoleSelector/RoleSelector";
+import PersonalSelector from "../../../../../components/PersonalSelector/PersonalSelector";
 
 type RoleProfileFormProps = {
     profile?: RoleProfile,
@@ -43,10 +44,14 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
                     } catch {
                         //SPECIFIC ROLES
                     }
-
-                    console.log(profile?.roles, flatRole)
     
-                    arbo[matches[1]][matches[2]][matches[3]] = values.roles.includes(flatRole);
+                    console.log(values);
+                    try {
+                        arbo[matches[1]][matches[2]][matches[3]] = values.roles.includes(flatRole);
+                    } catch {
+                        console.log(values);
+                    }
+                    
                 }            
             }
             setRoleForms(arbo);

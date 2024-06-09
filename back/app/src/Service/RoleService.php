@@ -22,13 +22,6 @@ class RoleService {
     public function initRoles(Account $account) {
 
         $roleProfiles = $this->getAccountRoleProfiles($account);
-        $roles = ['ROLE_USER'];
-
-        foreach($roleProfiles as $roleProfile) {
-            $roles = array_merge($roles, $roleProfile->getRoles());
-        }
-
-        $account->setRoles($roles);
         $account->setRoleProfiles($roleProfiles);
     }
 

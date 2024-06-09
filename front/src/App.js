@@ -11,6 +11,7 @@ import NavigationBars from './components/navigation/NavigationBars/NavigationBar
 import DashboardPage from './modules/dashboard/pages/DashboardPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ModuleProjectRoutes from './modules/projects/routing/ModuleProjectRoutes';
 
 
 function App() {
@@ -28,21 +29,13 @@ const InnerApp = () => {
     <BrowserRouter>
       <NavigationBars />
       <Routes>
-        <Route path="/project" element={<ModuleProjectMonitoring />} />
+        <Route path="/project/*" element={<ModuleProjectRoutes />} />
         <Route path="/auth/*" element={<ModuleAuthentication />} />
         <Route path="/personal/*" element={<ModulePersonalRoutes />} />
         <Route path="" element={<DashboardPage />} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>
-  )
-}
-
-const ModuleProjectMonitoring = () => {
-  return (
-    <Routes>
-      <Route path="*" element={<ProjectMonitoringHomePage />}/>
-    </Routes>
   )
 }
 

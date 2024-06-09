@@ -48,6 +48,18 @@ services:
         tags:
             - { name: doctrine.event_subscriber}
 
+    App\Listeners\OnRoleProfilePersist:
+        tags:
+            - {name: doctrine.event_subscriber}
+
+    App\Listeners\OnRoleProfileDelete:
+        tags:
+            - {name: doctrine.event_subscriber}
+
+    App\Listeners\OnAccountRoleProfilePersist:
+        tags:
+            - {name: doctrine.event_subscriber}
+
     App\Command\InitProjectCommand:
         tags: ['console.command']
 

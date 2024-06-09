@@ -27,7 +27,7 @@ class AccountRoleProfilesRepository extends DefaultRepository
         parent::__construct($registry, AccountRoleProfiles::class, $params, $locatorService);
     }
 
-    public function findFilteredByTenant(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {
+    public function getFilteredList(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {
         $qb = $this->createQueryBuilder('entity')
             ->select('entity');
 

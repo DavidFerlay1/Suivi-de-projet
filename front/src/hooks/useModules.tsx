@@ -53,6 +53,12 @@ const useModules = () => {
                     uri: '/list',
                     requiredRoles: ['ROLE_PROJECT_PROJECT_ACCESS'],
                     icon: <LuList />
+                },
+                {
+                    title: "routes.project.team.name",
+                    uri: '/team',
+                    requiredRoles: ['ROLE_PROJECT_TEAM_ACCESS'],
+                    icon: <LuUsers />
                 }
             ]
         }

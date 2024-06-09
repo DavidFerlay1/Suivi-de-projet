@@ -7,12 +7,6 @@ export interface Personal {
     roleProfileIds: string[]
 }
 
-export interface Team {
-    id?: number,
-    name: string,
-    members: Personal[]
-}
-
 export interface SubmittablePersonal {
     id?: number,
     lastName: string,

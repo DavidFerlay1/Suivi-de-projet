@@ -79,6 +79,9 @@
             "name": "Gestion de projets",
             "list": {
                 "name": "Liste des projets"
+            },
+            "team": {
+                "name": "Gestion des équipes"
             }
         },
         "dashboard": {
@@ -118,6 +121,7 @@
         "deleteConfirm2": "Cela retirera les privilèges associés aux utilisateurs auxquel il est assigné",
         "createSuccess": "Création terminée",
         "editSuccess": "Modification terminée",
+        "deleteSuccess": "Suppression terminée",
         "immutable": "Les rôles par défaut ne peuvent pas être modifiés ni supprimés.",
         "isImmutable": "Inclus dans l'application",
         "isntImmutable": "Personnalisés",

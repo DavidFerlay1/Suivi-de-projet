@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,12 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     "proxy" => Profile::class,
     "account" => Account::class 
 ])]
+#[Table(name: 'erp_main.profile')]
 class Profile
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('get')]
+    #[Groups(['get', 'light'])]
     protected ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -38,13 +40,13 @@ class Profile
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['get', CsvService::CSV_HANDLED])]
+    #[Groups(['get', CsvService::CSV_HANDLED, 'light'])]
     #[Assert\NotBlank(groups:['admin', 'transform'])]
     protected ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(groups:['admin', 'transform'])]
-    #[Groups(['get', CsvService::CSV_HANDLED])]
+    #[Groups(['get', CsvService::CSV_HANDLED, 'light'])]
     protected ?string $lastName = null;
 
     #[ORM\ManyToOne(inversedBy: 'profiles')]

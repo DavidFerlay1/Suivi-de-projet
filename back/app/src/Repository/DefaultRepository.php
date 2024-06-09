@@ -24,4 +24,6 @@ abstract class DefaultRepository extends ServiceEntityRepository {
 
         return $this->getFilteredQueryResultSet($this->getEntityName(), $queryFilters, $qb, $alias, $options);
     }
+
+    // public abstract function getFilteredList(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions());
 }
