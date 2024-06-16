@@ -63,7 +63,6 @@ class BindedProfileConstraintValidator extends ConstraintValidator {
 
     public function validate(mixed $value, Constraint $constraint)
     {
-
         /** @var \App\Entity\Main\Account $currentUser */
         $currentUser = $this->security->getUser();
 

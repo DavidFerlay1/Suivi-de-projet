@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FocusEvent, useContext } from 'react';
 import './paginator.scss';
-import { PaginationContext } from '../../../contexts/PaginationContext';
+import { PaginationContext } from '@contexts/PaginationContext';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
 const Paginator = () => {
@@ -15,8 +15,6 @@ const Paginator = () => {
     }
 
     const onPageChange = (e: ChangeEvent<HTMLInputElement>) => {
-
-        console.log(isNaN(Number(e.target.value)))
 
         if(!isNaN(Number(e.target.value)))
             paginationContext?.update(e.target.value);

@@ -30,7 +30,9 @@
         "login": "Se connecter",
         "withAccount": "Actif",
         "withoutAccount": "Pas de compte",
-        "reinit": "Réinitialiser"
+        "reinit": "Réinitialiser",
+        "member": "membre",
+        "configure": "Configurer"
     },
 
     "filters": {
@@ -131,6 +133,10 @@
         }
     },
 
+    "team": {
+        "name": "Nom de l'équipe"
+    },
+
     "csv": {
         "export": "Export CSV",
         "import": "Import CSV",
@@ -156,6 +162,7 @@
         "userAlreadyExists": "est déjà utilisée pour un compte existant",
         "invalidEmail": "n'est pas un format d'adresse email valide",
         "invalidValue": "ne correspond pas au format de données attendu",
-        "emptyValue": "Cette valeur ne doit pas être vide"
+        "emptyValue": "Cette valeur ne doit pas être vide",
+        "illegalMember": "Un des compte assigné à l'équipe n'est pas valide. Assurez vous que les comptes sélectionnés aient l'accès au module \"Gestion des Projet\""
     }
 }

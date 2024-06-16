@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import './moduleMenuItem.scss';
-import { ModuleData } from "../../../../hooks/useModules";
+import { ModuleData } from "@hooks/useModules";
 import { useTranslation } from "react-i18next";
 
 type ModuleMenuItemProps = {

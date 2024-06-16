@@ -3,7 +3,7 @@
 namespace App\Trait;
 
 use Doctrine\ORM\QueryBuilder;
-use QueryFiltersOptions;
+use App\Models\QueryFiltersOptions;
 
 trait PaginableTrait {
 

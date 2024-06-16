@@ -5,7 +5,7 @@ namespace App\Trait;
 use App\Models\QueryFilters;
 use App\Trait\FiltersTrait as TraitFiltersTrait;
 use Doctrine\ORM\QueryBuilder;
-use QueryFiltersOptions;
+use App\Models\QueryFiltersOptions;
 
 trait QueryFiltersTrait {
     use PaginableTrait;

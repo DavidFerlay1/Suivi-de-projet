@@ -1,12 +1,13 @@
 import React, { ChangeEvent, FormEvent, useMemo, useState } from "react"
-import { RoleProfile, SubmittablePersonal } from "../../../../interfaces/Personal"
+import { RoleProfile, SubmittablePersonal } from "@interfaces/Personal"
 import { useTranslation } from "react-i18next"
-import Form, { CatchableField } from "../../../../components/Form/Form"
-import SwitchControl from "../../../../components/formControls/SwitchControl/SwitchControl"
-import useApi from "../../../../hooks/useApi"
+import Form, { CatchableField } from "@components/Form/Form"
+import SwitchControl from "@components/formControls/SwitchControl/SwitchControl"
+import useApi from "@hooks/useApi"
 import { useDispatch } from "react-redux"
-import { updateProfile } from "../../../../store/slices/personalSlice"
-import RoleSelector from "../../pages/RoleMonitoring/components/RoleSelector/RoleSelector"
+import { updateProfile } from "@store/slices/personalSlice"
+import RoleSelector from "@modules/personal/pages/RoleMonitoring/components/RoleSelector/RoleSelector"
+
 
 type PersonalFormProps = {
     target?: SubmittablePersonal,

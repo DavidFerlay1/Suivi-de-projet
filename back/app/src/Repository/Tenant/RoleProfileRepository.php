@@ -9,7 +9,7 @@ use App\Trait\QueryFiltersTrait;
 use DefaultRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use QueryFiltersOptions;
+use App\Models\QueryFiltersOptions;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**

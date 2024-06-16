@@ -1,13 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SubmittablePersonal } from "../../interfaces/Personal";
 import AsyncSelector from 'react-select/async';
-import { QueryContext } from "../../contexts/QueryContext";
 import useApi from "../../hooks/useApi";
 
 type PersonalSelectorProps = {
     value: SubmittablePersonal|SubmittablePersonal[],
     onChange: Function
     additionalFilters?: any
+}
+
+type SinglePersonalSelectorProps = {
+    value: SubmittablePersonal,
+    onChange: any,
+    defaultOptions: SubmittablePersonal[],
+    loadOptions: any
+}
+
+type MultiPersonalSelectorProps = {
+    value: SubmittablePersonal[],
+    onChange: any,
+    defaultOptions: SubmittablePersonal[],
+    loadOptions: any
 }
 
 const PersonalSelector = ({value, onChange, additionalFilters = {}}: PersonalSelectorProps) => {
@@ -22,7 +35,7 @@ const PersonalSelector = ({value, onChange, additionalFilters = {}}: PersonalSel
     }, [])
 
     const fetchData = async (text: string) => {
-        const data = (await personalApi.getList(1, {field: 'lastName', sort: 'ASC'}, text, additionalFilters)).data.data;
+        const data = (await personalApi.getList({page: 1, sortSettings: {field: 'lastName', sort: 'ASC'}, search: text, filters: additionalFilters})).data.data;
         console.log(data);
         return data.map((personal: SubmittablePersonal) => ({
             value: personal.id,
@@ -31,16 +44,16 @@ const PersonalSelector = ({value, onChange, additionalFilters = {}}: PersonalSel
         }))
     }
 
-    const loadOptions = (inputValue, callback) => {
+    const loadOptions = (inputValue: string, callback: Function) => {
         fetchData(inputValue).then(options => callback(options));
     }
 
     return Array.isArray(value) ? <MultiPersonalSelector loadOptions={loadOptions} value={value.map(value => ({...value, value: value.id, label: `${value.lastName.toUpperCase()} ${value.firstname}`}))} onChange={onChange} defaultOptions={defaultOptions} /> : <SinglePersonalSelector loadOptions={loadOptions} value={value} onChange={onChange} defaultOptions={defaultOptions} />
 }
 
-const MultiPersonalSelector = ({value, onChange, defaultOptions, loadOptions}) => {
+const MultiPersonalSelector = ({value, onChange, defaultOptions, loadOptions}: MultiPersonalSelectorProps) => {
 
-    const onValuechange = (val) => {
+    const onValuechange = (val: any []) => {
         onChange(val.map(data => {
             const clone = {...data};
             delete clone.value;
@@ -54,11 +67,7 @@ const MultiPersonalSelector = ({value, onChange, defaultOptions, loadOptions}) =
     )
 }
 
-const SinglePersonalSelector = ({value, onChange, defaultOptions, loadOptions}) => {
-
-    const onValuechange = (val) => {
-        onChange(val as SubmittablePersonal);
-    }
+const SinglePersonalSelector = ({value, onChange, defaultOptions, loadOptions}: SinglePersonalSelectorProps) => {
 
     return (
         <AsyncSelector isMulti={false} loadOptions={loadOptions} defaultOptions={defaultOptions} onChange={onChange} value={value} cacheOptions={true} />

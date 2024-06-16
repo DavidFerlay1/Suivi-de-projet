@@ -1,6 +1,6 @@
-import React, { ChangeEvent, ChangeEventHandler, useEffect, useMemo, useState } from "react";
-import { Project, ProjectInterfaceType, ProjectStatus, ProjectTask } from "../../../interfaces/Project"
-import ProgressBar from "../../../components/progressBar/ProgressBar";
+import React, { ChangeEvent, useMemo, useState } from "react";
+import { Project, ProjectStatus, ProjectTask } from "@interfaces/Project"
+import ProgressBar from "@components/progressBar/ProgressBar";
 import { useTranslation } from "react-i18next";
 import './achievementProgressBar.scss'
 import { IoMdWarning } from "react-icons/io";
@@ -54,8 +54,6 @@ const AchievementProgressBar = ({target}: AchievementProgressBarProps) => {
             return {value: target.tasks.filter(task => task.status === ProjectStatus.ACHIVIED).length, total};
         }
 
-        const ignored = [];
-
         return {
             value: target.tasks
                 .filter(task => task.status === ProjectStatus.ACHIVIED)
@@ -78,10 +76,10 @@ const AchievementProgressBar = ({target}: AchievementProgressBarProps) => {
             {target.tasks.length ? 
                 <div className="achievement-settings">
                     <select onChange={onSettingChange} name='type' value={settings.type}>
-                        {Object.keys(AchievementProgressType).map(key => <option key={key} value={AchievementProgressType[key]}>{t(`progressWording.${key}`)}</option>)}
+                        {Object.keys(AchievementProgressType).map((key: 'PERCENT' | 'ABSOLUTE') => <option key={key} value={AchievementProgressType[key]}>{t(`progressWording.${key}`)}</option>)}
                     </select>{t('progressWording.of')} 
                     <select onChange={onSettingChange} name='unit' value={settings.unit}>
-                        {Object.keys(AchievementProgressUnit).map(key => <option key={key} value={AchievementProgressUnit[key]}>{t(`progressWording.${key}`)}</option>)}
+                        {Object.keys(AchievementProgressUnit).map((key: 'COUNT'|'WEIGHT') => <option key={key} value={AchievementProgressUnit[key]}>{t(`progressWording.${key}`)}</option>)}
                     </select>{t('progressWording.achievedTasks')} 
                     <div className="alerts">
                         <IoMdWarning />

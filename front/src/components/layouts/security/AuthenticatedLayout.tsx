@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "@hooks/useAuth";
 type AuthenticatedLayoutProps = {
     children: ReactNode|ReactNode[]
 }
@@ -26,7 +26,7 @@ const AuthenticatedLayout = ({children}: AuthenticatedLayoutProps) => {
         accessControl();
     }, [])
 
-    return authState && <>{children}</>
+    return authState ? <>{children}</> : null
 }
 
 export default AuthenticatedLayout;

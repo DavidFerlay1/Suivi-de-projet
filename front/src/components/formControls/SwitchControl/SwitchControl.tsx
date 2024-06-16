@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, ElementRef, useCallback, useEffect, useRef, useState } from "react"
+import React, { ChangeEventHandler, useCallback, useRef} from "react"
 import "./switchControl.scss"
 
 type SwitchControlProps = {

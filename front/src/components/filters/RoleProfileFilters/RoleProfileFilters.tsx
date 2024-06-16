@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DefaultFilters from "../DefaultFilters/DefaultFilters";
-import Form, { CatchableField } from "../../Form/Form";
+import Form, { CatchableField } from "@components/Form/Form";
 import PersonalSelector from "../../PersonalSelector/PersonalSelector";
-import { FiltersContext } from "../../../contexts/FiltersContext";
-import { SubmittablePersonal } from "../../../interfaces/Personal";
+import { FiltersContext } from "@contexts/FiltersContext";
+import { SubmittablePersonal } from "@interfaces/Personal";
 import Select from 'react-select';
 
 type RoleProfileFiltersType = {
@@ -48,10 +48,10 @@ const RoleProfileFilters = () => {
         })
     }
 
-    const onImmutableChange = (value) => {
+    const onImmutableChange = (value: any) => {
         setFilters({
             ...filters,
-            fb_immutable: value.map(v => v.value)
+            fb_immutable: value.map((v: any) => v.value)
         })
     }
 

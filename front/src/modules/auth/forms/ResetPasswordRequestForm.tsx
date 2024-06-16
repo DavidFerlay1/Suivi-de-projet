@@ -1,7 +1,7 @@
 import React,{ FormEvent, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next";
-import {isEmail} from '../../../services/Utils';
-import useApi from "../../../hooks/useApi";
+import {isEmail} from '@services/Utils';
+import useApi from "@hooks/useApi";
 
 const ResetPasswordRequestForm = () => {
 

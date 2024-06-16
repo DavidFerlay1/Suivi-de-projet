@@ -4,7 +4,11 @@ import { LuArrowBigDown, LuArrowBigUp } from "react-icons/lu";
 import { PaginationContext } from "../../contexts/PaginationContext";
 import { SortContext } from "../../contexts/SortContext";
 
-const Sorter = ({field}) => {
+type SorterProps = {
+    field: string
+}
+
+const Sorter = ({field}: SorterProps) => {
     const paginationContext = useContext(PaginationContext);
     const sortingContext = useContext(SortContext);
 

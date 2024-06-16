@@ -3,9 +3,14 @@
 namespace App\Repository\Tenant;
 
 use App\Entity\Tenant\Project;
+use App\Models\QueryFilters;
+use App\Models\QueryFiltersOptions;
+use App\Service\LocatorService;
 use App\Trait\PaginableTrait;
+use DefaultRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @extends ServiceEntityRepository<Project>
@@ -15,22 +20,22 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Project[]    findAll()
  * @method Project[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProjectRepository extends ServiceEntityRepository
+class ProjectRepository extends DefaultRepository
 {
 
     use PaginableTrait;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $params, LocatorService $locatorService)
     {
-        parent::__construct($registry, Project::class);
-        $this->initPaginationSettings(10);
+        parent::__construct($registry, Project::class, $params, $locatorService);
     }
 
-    public function findAllPaginated(int|null $page = null) {
-        $qb = $this->paginate($page, $this->createQueryBuilder('p'));
-        $count = $this->count();
 
-        return $this->standardize($qb->getQuery()->getResult(), $count, $page);
+    public function getFilteredList(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {
+        $qb = $this->createQueryBuilder('entity')
+            ->select('entity');
+
+        return $this->getFilteredQueryResultSet(Project::class, $queryFilters, $qb);
     }
 
 //    /**

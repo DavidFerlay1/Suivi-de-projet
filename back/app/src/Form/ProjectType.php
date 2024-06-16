@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Tenant\Achievable;
 use App\Entity\Tenant\Project;
 use App\Entity\Tenant\Tag;
+use App\Entity\Tenant\Team;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,6 +39,11 @@ class ProjectType extends AbstractType
                 'choice_label' => 'id',
                 'multiple' => true,
             ])
+            ->add('affectedTeams', EntityType::class, [
+                'class' => Team::class,
+                'multiple' => true
+            ])
+            ->add('affectedIndividualProfileIds', )
         ;
     }
 

@@ -1,24 +1,23 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import './profileList.scss'
-import { SubmittablePersonal } from "../../../../interfaces/Personal";
-import AccessControlledComponent from "../../../../components/accessControledComponent/AccessControlledComponent";
-import { LuFile, LuFileDown, LuFileUp, LuPencil, LuPlus, LuTrash2} from 'react-icons/lu'
-import useApi from "../../../../hooks/useApi";
-import ConfirmDialog from "../../../../components/dialogs/confirmDialog/ConfirmDialog";
+import { SubmittablePersonal } from "@interfaces/Personal";
+import { LuFileDown, LuFileUp, LuPencil, LuPlus, LuTrash2} from 'react-icons/lu'
+import useApi from "@hooks/useApi";
+import ConfirmDialog from "@components/dialogs/confirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
-import Dialog from "../../../../components/dialogs/dialog/Dialog";
-import PersonalForm from "../../forms/PersonalForm/PersonalForm";
-import Sorter from "../../../../components/queryFilters/Sorter";
-import { QueryContext } from "../../../../contexts/QueryContext";
-import Paginator from "../../../../components/navigation/Paginator/Paginator";
+import Dialog from "@components/dialogs/dialog/Dialog";
+import PersonalForm from "@components/Form/forms/PersonalForm/PersonalForm";
+import Sorter from "@components/queryFilters/Sorter";
+import { QueryContext } from "@contexts/QueryContext";
+import Paginator from "@components/navigation/Paginator/Paginator";
 import { toast } from 'react-toastify';
-import MenuBar from "../../../../components/MenuBar/MenuBar";
-import QueryContextLayout from "../../../../components/layouts/QueryContextLayout/QueryContextLayout";
-import Searchbar from "../../../../components/searchbar/Searchbar";
-import PersonalFilters from "../../../../components/filters/PersonalFilters/PersonalFilters";
-import {downloadBlob} from '../../../../services/Utils';
+import MenuBar from "@components/MenuBar/MenuBar";
+import QueryContextLayout from "@components/layouts/QueryContextLayout/QueryContextLayout";
+import Searchbar from "@components/searchbar/Searchbar";
+import PersonalFilters from "@components/filters/PersonalFilters/PersonalFilters";
+import {downloadBlob} from '@services/Utils';
 import PersonalCSVImport from "../PersonalCSVImport/PersonalCSVImport";
-
+import AccessControlledComponent from "@security/AccessControlledComponent";
 
 const ProfileList = () => {
 
@@ -37,12 +36,12 @@ const ProfileList = () => {
         queryContext?.fetch().then((profiles: SubmittablePersonal[]) => {
             setProfiles(profiles);
         })
-    }, [queryContext?.page, queryContext?.sortSettings, queryContext?.filters])
+    }, [queryContext?.params])
 
     const onDeleteConfirm = useCallback(async () => {
         if(deletingProfile) {
             await personalApi.delete(deletingProfile.id!);
-            queryContext?.fetch().then(res => setProfiles(res));
+            queryContext?.fetch().then((res: SubmittablePersonal[]) => setProfiles(res));
             setIsDeletePopupOpen(false);
         }
     }, [deletingProfile, profiles])

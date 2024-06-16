@@ -31,17 +31,17 @@ trait FiltersTrait {
                 if($filteredValues[0] === '')
                     return $queryBuilder;
 
-                $field = $currentSettings['field_name'];
 
                 switch($currentSettings['mod']) {
                     case 'default':
-                        $queryBuilder->andWhere($queryBuilder->expr()->in("$alias.$field", ":$key"))->setParameter($key, $filteredValues);
+                        $queryBuilder->andWhere($queryBuilder->expr()->in("$alias.".$currentSettings['field_name'], ":$key"))->setParameter($key, $filteredValues);
                         break;
                     case 'delegate':
-                        $queryBuilder = $this->locator->getService($currentSettings['delegated_service'])->{$currentSettings['delegated_method']}($queryBuilder, $filteredValues);
+                        $queryBuilder = $this->locator->getService($currentSettings['delegated_service'])->{$currentSettings['delegated_method']}($queryBuilder, $filteredValues, $alias);
                         break;
                     default: break;
                 }
+                
             }
         }
 

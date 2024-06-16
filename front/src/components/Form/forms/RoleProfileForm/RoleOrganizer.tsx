@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next";
 import './roleOrganizer.scss'
 
-const RoleOrganizer = ({data, onChange}) => {
+type RoleOrganizerProps = {
+    data: any,
+    onChange: Function
+}
+
+const RoleOrganizer = ({data, onChange}: RoleOrganizerProps) => {
 
     const {t} = useTranslation();
 
@@ -12,11 +17,11 @@ const RoleOrganizer = ({data, onChange}) => {
         onChange(value, role)
     }
 
-    return Object.keys(data).length && (
+    return Object.keys(data).length ? (
         <div className="roleOrganizer">
             <div style={{height: 30}}>
                 <select value={currentTabIndex} onChange={e => setCurrentTabIndex(e.target.value)}>
-                    {Object.keys(data).map((key, index) => <option key={key} value={key}>{t(`roles.${key}`)}</option>)}
+                    {Object.keys(data).map((key) => <option key={key} value={key}>{t(`roles.${key}`)}</option>)}
                 </select>
             </div>
             <div className="roles">
@@ -40,7 +45,7 @@ const RoleOrganizer = ({data, onChange}) => {
                 })}
             </div>
         </div>
-    )
+    ) : null
 }
 
 export default RoleOrganizer

@@ -28,6 +28,9 @@ services:
         tags: ['app.service_auth']
         public: true
 
+    App\Service\TeamService:
+        public: true
+
     App\Listeners\ConnectionHandler:
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onAuthenticationSuccess }
@@ -60,8 +63,15 @@ services:
         tags:
             - {name: doctrine.event_subscriber}
 
+    App\Listeners\OnTeamLoad:
+        tags:
+            - {name: doctrine.event_subscriber}
+
     App\Command\InitProjectCommand:
         tags: ['console.command']
+
+    App\Form\TeamMembersConstraintValidator:
+        tags: {name: validator.constraint_validator}
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

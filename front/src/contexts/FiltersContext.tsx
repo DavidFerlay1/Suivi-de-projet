@@ -1,26 +1,28 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { PaginationContext } from "./PaginationContext";
 
 type FiltersContextValue = {
-    current: object,
+    current: any,
     update: Function
 }
 
-
+type FiltersContextProviderProps = {
+    children: ReactNode
+}
 
 const FiltersContext = createContext<FiltersContextValue>({
     current: {},
     update: () => {}
 });
 
-const FiltersContextProvider = ({children}) => {
+const FiltersContextProvider = ({children}: FiltersContextProviderProps) => {
 
     const [state, setState] = useState({});
 
     const paginationContext = useContext(PaginationContext);
 
-    const update = (value: object) => {
-        const newValue = {};
+    const update = (value: any) => {
+        const newValue = {} as any;
         for(const filter of Object.keys(value)) {
             if(value[filter].length)
                 newValue[filter] = value[filter].join(";");

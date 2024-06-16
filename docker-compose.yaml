@@ -9,9 +9,11 @@ services:
     working_dir: /app
     volumes:
       - ./front:/app
-    command: ['npm', 'start']
+    command: ['npm', 'run', 'start']
     networks:
       - frontend
+    ports:
+      - 3000:3000
   nginx:
     image: nginx:1.25.5-alpine
     container_name: nginx

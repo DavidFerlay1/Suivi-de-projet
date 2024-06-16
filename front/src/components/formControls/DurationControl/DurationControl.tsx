@@ -3,12 +3,15 @@ import { useTranslation } from "react-i18next"
 import Tooltip from "../../tooltip/Tooltip";
 import ToggleDialog from "../../dialogs/toggles/toggleDialog/ToggleDialog";
 
-const DurationControl = ({value, onChange}) => {
+type DurationControlProps = {
+    value: number|undefined,
+    onChange: Function
+}
+
+const DurationControl = ({value, onChange}: DurationControlProps) => {
 
     const [selectValue, setSelectValue] = useState(value !== undefined ? value / 86400000 : undefined);
     const {t} = useTranslation();
-
-    const [test, setTest] = useState(false);
 
     useEffect(() => {
         let rest = 0;

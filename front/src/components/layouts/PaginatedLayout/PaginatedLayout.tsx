@@ -1,12 +1,16 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import './paginatedLayout.scss';
 import Paginator from "../../navigation/Paginator/Paginator";
 
-const PaginatedLayout = ({children}) => {
+type PaginatedLayoutProps = {
+    children: ReactNode
+}
+
+const PaginatedLayout = ({children}: PaginatedLayoutProps) => {
     return (
         <div className="paginated-layout">
             {children}
-            <Paginator data={{loaded: 1, page: 1, perPage: 1, total: 1}} />
+            <Paginator />
         </div>
     )
 }

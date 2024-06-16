@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './header.scss';
-import useApi from '../../../hooks/useApi';
+import useApi from '@hooks/useApi';
 import { useNavigate } from 'react-router';
-import useAuth from '../../../hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 import BreadCrumb from '../BreadCrumb/BreadCrumb';
 
 const Header = () => {
@@ -17,10 +17,12 @@ const Header = () => {
         navigate('/auth');
     }
 
-    const [payload, setPayload] = useState(null);
+    const [payload, setPayload] = useState<any>();
 
     useEffect(() => {
-        setPayload(getPayload());
+        const payload = getPayload();
+        if(payload)
+            setPayload(payload);
     }, [])
 
     return (

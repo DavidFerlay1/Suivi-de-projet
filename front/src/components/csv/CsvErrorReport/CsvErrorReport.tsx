@@ -2,7 +2,11 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import './csvErrorReport.scss'
 
-const CsvErrorReport = ({errors}) => {
+type CsvErrorReportProps = {
+    errors: any
+}
+
+const CsvErrorReport = ({errors}: CsvErrorReportProps) => {
 
     const {t} = useTranslation();
 

@@ -1,10 +1,10 @@
 import React, { ChangeEvent, FormEvent, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
-import { isEmail } from "../../../services/Utils"
-import useApi from "../../../hooks/useApi"
-import useAuth from "../../../hooks/useAuth"
-import Form, { CatchableField } from "../../../components/Form/Form"
+import { isEmail } from "@services/Utils"
+import useApi from "@hooks/useApi"
+import useAuth from "@hooks/useAuth"
+import Form, { CatchableField } from "@components/Form/Form"
 const LoginForm = () => {
 
     const {t} = useTranslation();
@@ -17,10 +17,10 @@ const LoginForm = () => {
         password: ''
     })
 
-    const [errors, setErrors] = useState<object>();
+    const [errors] = useState<object>();
 
     const canSubmit = useMemo(() => {
-        return isEmail(values.username) && values.password;
+        return isEmail(values.username) && values.password ? true : false;
     }, [values])
 
     const onEdit = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ const LoginForm = () => {
     }
 
     return (
-        <Form onSubmit={onSubmit} submitText={t('misc.login')}>
+        <Form onSubmit={onSubmit} canSubmit={canSubmit} submitText={t('misc.login')}>
             <CatchableField label={t('personal.username')}>
                 <input className="field" value={values.username} onChange={onEdit} name="username" />
             </CatchableField>

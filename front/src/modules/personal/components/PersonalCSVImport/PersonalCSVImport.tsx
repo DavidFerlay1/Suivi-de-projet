@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import useApi from "../../../../hooks/useApi";
-import { downloadBlob } from "../../../../services/Utils";
+import useApi from "@hooks/useApi";
+import { downloadBlob } from "@services/Utils";
 import "./personalCsvImport.scss";
 import { toast } from "react-toastify";
-import Dialog from "../../../../components/dialogs/dialog/Dialog";
-import CsvErrorReport from "../../../../components/csv/CsvErrorReport/CsvErrorReport";
-import FileSelector from "../../../../components/formControls/FileSelector/FileSelector";
+import Dialog from "@components/dialogs/dialog/Dialog";
+import CsvErrorReport from "@components/csv/CsvErrorReport/CsvErrorReport";
+import FileSelector from "@components/formControls/FileSelector/FileSelector";
 
-const PersonalCSVImport = ({onImportSuccess}) => {
+type PersonalCSVImportProps = {
+    onImportSuccess: Function
+}
+
+const PersonalCSVImport = ({onImportSuccess}: PersonalCSVImportProps) => {
 
     const {t} = useTranslation();
     const {personalApi} = useApi();
@@ -18,7 +22,7 @@ const PersonalCSVImport = ({onImportSuccess}) => {
     const [processing, setProcessing] = useState(false);
     const [reportPopupOpen, setReportPopupOpen] = useState(false);
     const [importErrors, setImportErrors] = useState<any>({});
-    const onFileChange = e => {
+    const onFileChange = (e: any) => {
         setFile(e.target.files[0]);
         setIsIntegre(false);
     }
@@ -71,7 +75,7 @@ const PersonalCSVImport = ({onImportSuccess}) => {
         if(file) {
             const formData = new FormData();
             formData.append('file', file);
-            personalApi.importCSV(formData).then(res => {
+            personalApi.importCSV(formData).then(() => {
                 onImportSuccess();
             });
         }

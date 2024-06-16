@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useState } from "react"
 import { IoMdHelpCircleOutline } from "react-icons/io";
 import './tooltip.scss';
 

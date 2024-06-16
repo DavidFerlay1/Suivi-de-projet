@@ -16,14 +16,14 @@ const BreadCrumb = () => {
     const breadCrumbData = useMemo<BreadCrumbData[]>(() => {
         if(location.pathname === '/')
             return [{name: t('routes.dashboard.name')}];
-        const splitted = location.pathname.split('/');
+        const splitted = location.pathname.split('/') as string[];
         splitted.shift();
-        const path: string[] = [splitted[0]];
+        const path: string[] = [splitted[0]!];
 
         const data: BreadCrumbData[] = [{name: t(`routes.${splitted[0]}.name`)}];
 
         for(let i = 1; i < splitted.length; i++) {
-            path.push(splitted[i]);
+            path.push(splitted[i]!);
             data.push({name: t(`routes.${path.join('.')}.name`), uri: `/${path.join('/')}`})
         }
 
@@ -35,7 +35,7 @@ const BreadCrumb = () => {
         <div>{breadCrumbData.map((data, index) => (
                 <span key={index}>
                     {data.uri ? <Link to={data.uri}>{data.name}</Link> : <span>{data.name}</span>}
-                    {index < breadCrumbData.length - 1 ? <span className='breadcrumb-separator'>></span> : null}
+                    {index < breadCrumbData.length - 1 ? <span className='breadcrumb-separator'>{'>'}</span> : null}
                 </span>
                 
             ))}

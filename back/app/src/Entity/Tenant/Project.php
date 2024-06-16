@@ -3,6 +3,7 @@
 namespace App\Entity\Tenant;
 
 use App\Repository\Tenant\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +26,17 @@ class Project extends Achievable
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'projects')]
     private Collection $tags;
+
+    #[ORM\Column]
+    private ?bool $enableWorkloadTime = null;
+
+    #[ORM\Column]
+    private ?bool $enableWorkloadWeight = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function getTitle(): ?string
     {
@@ -70,6 +82,30 @@ class Project extends Achievable
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function isEnableWorkloadTime(): ?bool
+    {
+        return $this->enableWorkloadTime;
+    }
+
+    public function setEnableWorkloadTime(bool $enableWorkloadTime): static
+    {
+        $this->enableWorkloadTime = $enableWorkloadTime;
+
+        return $this;
+    }
+
+    public function isEnableWorkloadWeight(): ?bool
+    {
+        return $this->enableWorkloadWeight;
+    }
+
+    public function setEnableWorkloadWeight(bool $enableWorkloadWeight): static
+    {
+        $this->enableWorkloadWeight = $enableWorkloadWeight;
 
         return $this;
     }

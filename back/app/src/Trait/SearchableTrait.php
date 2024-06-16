@@ -16,8 +16,22 @@ trait SearchableTrait {
 
         $orX = $qb->expr()->orX();
 
-        foreach(array_keys($searchSettings[$entityName]) as $property) {
-            $orX->add($qb->expr()->like("$alias.$property", ":pattern"));
+        foreach(array_keys($searchSettings[$entityName]['fields']) as $property) {
+
+            $fieldSettings = $searchSettings[$entityName]['fields'][$property];
+            if($fieldSettings['method'] === 'delegated')
+            dd($fieldSettings);
+
+            switch($fieldSettings['method']) {
+                case 'like':
+                    $orX->add($qb->expr()->like("$alias.$property", ":pattern"));
+                    break;
+                case 'delegate':
+                    $orX->add($this->locator->getService($fieldSettings['delegated_service'])->{$fieldSettings['delegated_method']}($qb, $searchPattern, $alias));
+                    break;
+                default: break;
+            }
+            
         }
         $qb->setParameter('pattern', "%$searchPattern%");
         $qb->andWhere($orX);

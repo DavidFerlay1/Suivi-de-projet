@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react"
-import useApi from "../../../hooks/useApi"
+import useApi from "@hooks/useApi"
 import { useNavigate } from "react-router"
 
 type AuthorizedLayoutProps = {
@@ -24,10 +24,10 @@ const AuthorizedLayout = ({roles, children}: AuthorizedLayoutProps) => {
                 navigate('/auth');
             }
             
-        }).catch(e => navigate('/'))
+        }).catch(() => navigate('/'))
     }, [])
 
-    return access && <>{children}</>
+    return access ? <>{children}</> : null
 }
 
 export default AuthorizedLayout;

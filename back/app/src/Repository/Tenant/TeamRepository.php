@@ -4,11 +4,11 @@ namespace App\Repository\Tenant;
 
 use App\Entity\Tenant\Team;
 use App\Models\QueryFilters;
+use App\Models\QueryFiltersOptions;
 use App\Service\LocatorService;
 use DefaultRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use QueryFiltersOptions;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
@@ -24,6 +24,7 @@ class TeamRepository extends DefaultRepository
     public function __construct(ManagerRegistry $registry, ParameterBagInterface $params, LocatorService $locatorService)
     {
         parent::__construct($registry, Team::class, $params, $locatorService);
+        // $this->maxPerPage = 2;
     }
 
     public function getFilteredList(QueryFilters $queryFilters, QueryFiltersOptions $options = new QueryFiltersOptions()) {

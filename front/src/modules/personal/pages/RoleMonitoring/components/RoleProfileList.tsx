@@ -1,21 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { RoleProfile } from '../../../../../interfaces/Personal';
+import { RoleProfile } from '@interfaces/Personal';
 import './roleProfileList.scss';
-import Paginator from '../../../../../components/navigation/Paginator/Paginator';
-import { QueryContext } from '../../../../../contexts/QueryContext';
-import Sorter from '../../../../../components/queryFilters/Sorter';
+import Paginator from '@components/navigation/Paginator/Paginator';
+import { QueryContext } from '@contexts/QueryContext';
+import Sorter from '@components/queryFilters/Sorter';
 import RoleProfileItem from './RoleProfileItem/RoleProfileItem';
-import AccessControlledComponent from '../../../../../components/accessControledComponent/AccessControlledComponent'
-import Dialog from '../../../../../components/dialogs/dialog/Dialog'
+import AccessControlledComponent from '@components/layouts/security/AccessControlledComponent'
+import Dialog from '@components/dialogs/dialog/Dialog'
 import { useTranslation } from 'react-i18next';
-import ConfirmDialog from '../../../../../components/dialogs/confirmDialog/ConfirmDialog';
-import useApi from '../../../../../hooks/useApi';
-import MenuBar from '../../../../../components/MenuBar/MenuBar';
-import Searchbar from '../../../../../components/searchbar/Searchbar';
-import { LuFilter, LuPlus } from 'react-icons/lu';
-import RoleProfileForm from '../../../forms/PersonalForm/RoleProfileForm/RoleProfileForm';
+import ConfirmDialog from '@components/dialogs/confirmDialog/ConfirmDialog';
+import useApi from '@hooks/useApi';
+import MenuBar from '@components/MenuBar/MenuBar';
+import Searchbar from '@components/searchbar/Searchbar';
+import { LuPlus } from 'react-icons/lu';
+import RoleProfileForm from '@components/Form/forms/RoleProfileForm/RoleProfileForm';
 import { toast } from 'react-toastify';
-import RoleProfileFilters from '../../../../../components/filters/RoleProfileFilters/RoleProfileFilters';
+import RoleProfileFilters from '@components/filters/RoleProfileFilters/RoleProfileFilters';
 
 // type RoleProfileItemProps = {
 //     roleProfile: RoleProfile
@@ -36,7 +36,7 @@ const RoleProfileList = () => {
         queryContext?.fetch().then((res: RoleProfile[]) => {
             setRoleProfiles(res);
         })
-    }, [queryContext?.page, queryContext?.sortSettings, queryContext?.filters])
+    }, [queryContext?.params])
 
     const onRoleProfileDeleteClick = (roleProfile: RoleProfile) => {
         setTargetRoleProfile(roleProfile);
@@ -60,7 +60,7 @@ const RoleProfileList = () => {
     }
 
     const renderSearchbarItem = (item: RoleProfile) => {
-        return <div>{item.name}</div>
+        return <RoleProfileItem onDeleteClick={onRoleProfileEditClick} onEditClick={onRoleProfileEditClick} roleProfile={item} />
     }
 
     const afterCreateEditRoleProfile = () => {

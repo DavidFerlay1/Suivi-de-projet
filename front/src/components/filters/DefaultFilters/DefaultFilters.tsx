@@ -1,13 +1,17 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { ReactNode, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import Dialog from "../../dialogs/dialog/Dialog";
-import { FiltersContext } from "../../../contexts/FiltersContext";
+import Dialog from "@components/dialogs/dialog/Dialog";
+import { FiltersContext } from "@contexts/FiltersContext";
 import { LuFilter } from "react-icons/lu";
 
-const DefaultFilters = ({children, isOpen, setIsOpen}) => {
-    const {t} = useTranslation();
+type DefaultFiltersProps = {
+    children: ReactNode,
+    isOpen: boolean,
+    setIsOpen: Function
+}
 
-    const filters = useState<any>({});
+const DefaultFilters = ({children, isOpen, setIsOpen}: DefaultFiltersProps) => {
+    const {t} = useTranslation();
 
     const filtersContext = useContext(FiltersContext);
 
@@ -15,7 +19,7 @@ const DefaultFilters = ({children, isOpen, setIsOpen}) => {
         let total = 0;
 
         for(const key of Object.keys(filtersContext.current)) {
-            if(filtersContext.current[key])
+            if(typeof key === 'string' && filtersContext.current[key])
                 total++;
         }
 

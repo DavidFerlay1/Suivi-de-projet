@@ -2,7 +2,7 @@ export const isEmail = (value: string|undefined) => {
     if(value === undefined)
         return false;
 
-    return value.match(/[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/);
+    return value.match(/[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/) ? true : false;
 }
 
 export const downloadBlob = (blob: Blob, filename: string) => {

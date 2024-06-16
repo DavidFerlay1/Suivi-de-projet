@@ -53,9 +53,19 @@ class Achievable
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $children;
 
+    /**
+     * @var Collection<int, Team>
+     */
+    #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'affectations')]
+    private Collection $affectedTeams;
+
+    #[ORM\Column(type: Types::ARRAY)]
+    private array $affectedIndividualProfileIds = [];
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->affectedTeams = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,6 +183,42 @@ class Achievable
                 $child->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getAffectedTeams(): Collection
+    {
+        return $this->affectedTeams;
+    }
+
+    public function addAffectedTeam(Team $affectedTeam): static
+    {
+        if (!$this->affectedTeams->contains($affectedTeam)) {
+            $this->affectedTeams->add($affectedTeam);
+        }
+
+        return $this;
+    }
+
+    public function removeAffectedTeam(Team $affectedTeam): static
+    {
+        $this->affectedTeams->removeElement($affectedTeam);
+
+        return $this;
+    }
+
+    public function getAffectedIndividualProfileIds(): array
+    {
+        return $this->affectedIndividualProfileIds;
+    }
+
+    public function setAffectedIndividualProfileIds(array $affectedIndividualProfileIds): static
+    {
+        $this->affectedIndividualProfileIds = $affectedIndividualProfileIds;
 
         return $this;
     }

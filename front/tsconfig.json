@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "resolveJsonModule": true,
     // project options
     "lib": [
@@ -14,7 +15,6 @@
     "baseUrl": "./", // Lets you set a base directory to resolve non-absolute module names.
     "esModuleInterop": true, // fixes some issues TS originally had with the ES6 spec where TypeScript treats CommonJS/AMD/UMD modules similar to ES6 module
     "moduleResolution": "node", // Pretty much always node for modern JS. Other option is "classic"
-    "paths": {}, // A series of entries which re-map imports to lookup locations relative to the baseUrl
 
     // Source Map
     "sourceMap": true, // enables the use of source maps for debuggers and error reporting etc
@@ -30,10 +30,20 @@
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true, // accessing index must always check for undefined
     "noUnusedLocals": true, // Report errors on unused local variables.
-    "noUnusedParameters": true // Report errors on unused parameters in functions
+    "noUnusedParameters": true, // Report errors on unused parameters in functions
+    "paths": {
+      "@modules/*": ["src/modules/*"],
+      "@services/*": ["src/services/*"],
+      "@store/*": ["src/store/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@security/*": ["src/components/layouts/security/*"],
+      "@components/*": ["src/components/*"],
+    },
   },
-  "include": ["./**/*.ts", "src/index.js", "src/index.js", "src/hooks/useAuth.tsx", "src/hooks/usePermissions.tsx", "src/hooks/useApi.tsx", "src/hooks/usePagination.tsx", "src/hooks/useModules.tsx"],
+  "include": ["./**/*.ts", "./**/*.js", "./**/*.tsx"],
   "exclude": [
     "node_modules/**/*"
-  ]
+  ],
 }

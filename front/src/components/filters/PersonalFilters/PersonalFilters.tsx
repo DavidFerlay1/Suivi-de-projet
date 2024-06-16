@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
-import RoleSelector from "../../../modules/personal/pages/RoleMonitoring/components/RoleSelector/RoleSelector"
-import { RoleProfile } from "../../../interfaces/Personal"
-import { FiltersContext } from "../../../contexts/FiltersContext"
+import React, { useContext,useState } from "react"
+import RoleSelector from "@modules/personal/pages/RoleMonitoring/components/RoleSelector/RoleSelector"
+import { RoleProfile } from "@interfaces/Personal"
+import { FiltersContext } from "@contexts/FiltersContext"
 import Select, { MultiValue } from 'react-select';
-import Dialog from '../../dialogs/dialog/Dialog'
 import { useTranslation } from "react-i18next";
-import Form from "../../Form/Form";
-import { LuCross, LuFilter, LuX } from "react-icons/lu";
+import Form from "@components/Form/Form";
 import './personalFilters.scss';
 import DefaultFilters from "../DefaultFilters/DefaultFilters";
 

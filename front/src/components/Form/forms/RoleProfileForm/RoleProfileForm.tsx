@@ -1,12 +1,11 @@
 import React, { ChangeEvent, useEffect, useState } from "react"
-import useApi from "../../../../../hooks/useApi";
-import { RoleProfile, SubmittablePersonal } from "../../../../../interfaces/Personal";
+import useApi from "@hooks/useApi";
+import { RoleProfile } from "@interfaces/Personal";
 import RoleOrganizer from "./RoleOrganizer";
-import Form, { CatchableField } from "../../../../../components/Form/Form";
+import Form, { CatchableField } from "@components/Form/Form";
 import { useTranslation } from "react-i18next";
-import Dialog from "../../../../../components/dialogs/dialog/Dialog";
-import RoleSelector from "../../../pages/RoleMonitoring/components/RoleSelector/RoleSelector";
-import PersonalSelector from "../../../../../components/PersonalSelector/PersonalSelector";
+import Dialog from "@components/dialogs/dialog/Dialog";
+import RoleSelector from "@modules/personal/pages/RoleMonitoring/components/RoleSelector/RoleSelector";
 
 type RoleProfileFormProps = {
     profile?: RoleProfile,
@@ -28,7 +27,7 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
     useEffect(() => {
         personalApi.fetchAllRoles().then(r => {
             const flatRoles = r.data;
-            const arbo = {};
+            const arbo = {} as any;
             for(const flatRole of flatRoles) {
                 const moduleMatch = flatRole.match(/ROLE_MODULE_(\w+)/);
                 if(moduleMatch) {
@@ -65,7 +64,7 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
             roles: value ? [...values.roles, role] : values.roles.filter(r => r !== role)
         })
 
-        const splittedRole = role.split('_');
+        const splittedRole = role.split('_') as any[];
         setRoleForms({
             ...roleForms,
             [splittedRole[1]]: {

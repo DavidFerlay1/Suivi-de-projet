@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, FormEventHandler, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import useApi from "../../../hooks/useApi"
+import useApi from "@hooks/useApi"
 import { useNavigate } from "react-router"
 
 type ResetPasswordFormProps = {
@@ -37,11 +37,11 @@ const ResetPasswordForm = ({token}: ResetPasswordFormProps) => {
 
     const onSubmit: FormEventHandler<HTMLFormElement> = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const body = {...values, token};
-        authApi.resetPassword(body).then(res => navigate('/')).catch(e => console.log(e.response))
+        const body = {...values, token} as any;
+        authApi.resetPassword(body).then(() => navigate('/')).catch(e => console.log(e.response))
     }
 
-    return token && (
+    return token ? (
         <form onSubmit={onSubmit}>
             <div className="form-group">
                 <label>{t('misc.password')}</label>
@@ -53,7 +53,7 @@ const ResetPasswordForm = ({token}: ResetPasswordFormProps) => {
             </div>
             <button type="submit" disabled={!canSubmit}>{t('misc.confirm')}</button>
         </form>
-    )
+    ) : null
 }
 
 export default ResetPasswordForm;

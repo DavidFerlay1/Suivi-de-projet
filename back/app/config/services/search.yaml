@@ -1,8 +1,19 @@
 parameters:
   search:
     App\Entity\Tenant\RoleProfile:
-      name: LIKE
+      fields:
+        name:
+          method: like
     App\Entity\Main\Profile:
-      firstname: LIKE
-      lastName: LIKE
-      username: LIKE
+      fields:
+        firstname:
+          method: like
+        lastName:
+          method: like
+        username:
+          method: like
+    App\Entity\Tenant\Team:
+      fields:
+        name:
+          method: like
+

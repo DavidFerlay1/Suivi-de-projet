@@ -51,7 +51,7 @@ const useAuth = () => {
         const jwt = getJwt();
         if(!jwt)
             return null;
-        return jwtDecode(jwt);
+        return (jwtDecode(jwt)) as any;
     }
     
     const storeTokens = (tokens: AuthTokens) => {

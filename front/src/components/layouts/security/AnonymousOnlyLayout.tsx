@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "@hooks/useAuth";
 
 type AnonymousOnlyLayoutProps = {
     children: ReactNode|ReactNode[]
@@ -22,7 +22,7 @@ const AnonymousOnlyLayout = ({children}: AnonymousOnlyLayoutProps) => {
         controlAccess();
     }, [])
 
-    return canAccess && <>{children}</>
+    return canAccess ? <>{children}</> : null
 }
 
 export default AnonymousOnlyLayout;

@@ -5,7 +5,11 @@ import { SearchContext } from "../../contexts/SearchContext"
 import "./searchbar.scss"
 import { useTranslation } from "react-i18next"
 
-const Searchbar = ({renderItem}) => {
+type Searchbar = {
+    renderItem: Function
+}
+
+const Searchbar = ({renderItem}: Searchbar) => {
     const searchContext = useContext(SearchContext);
     const queryContext = useContext(QueryContext);
     const [focused, setFocused] = useState(false);

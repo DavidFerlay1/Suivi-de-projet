@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import './App.css';
-import ProjectMonitoringHomePage from './modules/projects/pages/ProjectMonitoringHomePage';
+import ProjectMonitoringHomePage from './modules/projects/project/ProjectMonitoringHomePage/ProjectMonitoringHomePage';
 import React from 'react';
 import Store from './store/Store';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';

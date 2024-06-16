@@ -1,16 +1,13 @@
-import { useCallback, useEffect } from "react"
+import { useCallback} from "react"
 import useApi from "./useApi";
 import { useDispatch, useSelector } from "react-redux";
-import { initPermissions, revokePermissions } from "../store/slices/userSlice"
-import { useLocation } from "react-router";
-
+import { initPermissions } from "../store/slices/userSlice"
 
 const  usePermissions = () => {
 
     const {authApi} = useApi();
     const dispatch = useDispatch();
     const {ready, data} = useSelector((state: any) => state.user.permissions);
-    const location = useLocation();
 
     const requirePermissions = useCallback(async (roles: string[], automap: boolean = true) => {
 

@@ -23,8 +23,11 @@ class ProjectController extends DefaultController
     }
 
     #[Route('', methods:['GET'])]
-    public function getAll() {
-        return $this->jsonResponse($this->em->getRepository(Project::class)->findAllPaginated());
+    public function getAll(Request $request) {
+        return $this->jsonResponse($this->em->getRepository(Project::class)->getFilteredList(
+            $this->getQueryFilters($request)
+
+        ));
     }
 
     #[Route('/task', methods:['POST'])]

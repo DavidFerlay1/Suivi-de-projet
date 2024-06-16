@@ -31,6 +31,10 @@ class Task extends Achievable
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'tasks')]
     private Collection $tags;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $rootParent = null;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -80,6 +84,18 @@ class Task extends Achievable
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getRootParent(): ?Project
+    {
+        return $this->rootParent;
+    }
+
+    public function setRootParent(?Project $rootParent): static
+    {
+        $this->rootParent = $rootParent;
 
         return $this;
     }

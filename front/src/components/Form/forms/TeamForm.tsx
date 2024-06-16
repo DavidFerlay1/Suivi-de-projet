@@ -1,12 +1,18 @@
 import React, { useMemo, useState } from "react";
-import {Team} from '../../interfaces/Team';
-import PersonalSelector from "../PersonalSelector/PersonalSelector";
-import { SubmittablePersonal } from "../../interfaces/Personal";
-import Form, { CatchableField } from "../Form/Form";
-import useApi from "../../hooks/useApi";
+import {Team} from '@interfaces/Team';
+import PersonalSelector from "../../PersonalSelector/PersonalSelector";
+import { SubmittablePersonal } from "@interfaces/Personal";
+import Form, { CatchableField } from "../Form";
+import useApi from "@hooks/useApi";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
-const TeamForm = ({value}) => {
+type TeamFormProps = {
+    value: Team,
+    onSuccess: Function
+}
+
+const TeamForm = ({value, onSuccess}: TeamFormProps) => {
 
     const {t} = useTranslation();
 
@@ -20,9 +26,11 @@ const TeamForm = ({value}) => {
 
     const onSubmit = () => {
         teamApi.editOrCreate(values).then(() => {
-            console.log("ok");
-        }).catch(() => {
-
+            onSuccess();
+        }).catch(err => {
+            for(const key of Object.keys(err.response.data)) {
+                toast(t(err.response.data[key]), {type: 'error'});
+            }
         })
     }
 
@@ -38,7 +46,7 @@ const TeamForm = ({value}) => {
             <CatchableField label={t('team.name')}>
                 <input className="field" value={values.name} onChange={e => setValues({...values, name: e.target.value})}/>
             </CatchableField>
-            <PersonalSelector value={values.members} onChange={onMembersChange} />
+            <PersonalSelector value={values.members} onChange={onMembersChange} additionalFilters={{fb_module_access: 'PROJECT'}} />
         </Form>
     )
 }

@@ -1,8 +1,8 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import './roleProfileItem.scss';
-import { RoleProfile } from "../../../../../../interfaces/Personal";
+import { RoleProfile } from "@interfaces/Personal";
 import { LuPen, LuTrash2 } from "react-icons/lu";
-import Tooltip from "../../../../../../components/tooltip/Tooltip";
+import Tooltip from "@components/tooltip/Tooltip";
 import { useTranslation } from "react-i18next";
 
 type RoleProfileItemProps = {

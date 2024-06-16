@@ -1,5 +1,5 @@
 import React from "react";
-import AuthenticatedLayout from "../../../components/layouts/authLayouts/AuthenticatedLayout";
+import AuthenticatedLayout from "@components/layouts/security/AuthenticatedLayout";
 
 const DashboardPage = () => {
     return (

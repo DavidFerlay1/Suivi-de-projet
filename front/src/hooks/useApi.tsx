@@ -1,11 +1,11 @@
 import axios from "axios"
 import { useState } from "react";
-import { Credentials, ResetPasswordFormData } from "../interfaces/FormData";
-import { Project, SubmittableProject } from "../interfaces/Project";
-import { AuthTokens } from "./useAuth";
-import { RoleProfile, SensitiveSafeSubmittablePersonal, SubmittablePersonal } from "../interfaces/Personal";
-import { SortSetting } from "../interfaces/Api/SortSetting";
-import { Team } from "src/interfaces/Team";
+import { Credentials, ResetPasswordFormData } from "@interfaces/FormData";
+import { Project, SubmittableProject } from "@interfaces/Project";
+// import { AuthTokens } from "./useAuth";
+import { RoleProfile, SubmittablePersonal } from "@interfaces/Personal";
+import { Team } from "@interfaces/Team";
+import { QueryParams } from "@interfaces/QueryParams";
 
 export const httpClient = axios.create({
     baseURL: 'http://localhost/api',
@@ -32,7 +32,7 @@ httpClient.interceptors.response.use((response) => {
         const refreshToken = localStorage.getItem('refresh_token');
         if(refreshToken) {
             try {
-                const response = (await axios.post(`${httpClient.defaults.baseURL}/auth/refresh`, {refresh_token: refreshToken})).data as AuthTokens;
+                const response = (await axios.post(`${httpClient.defaults.baseURL}/auth/refresh`, {refresh_token: refreshToken})).data;
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('refresh_token', response.refresh_token);
                 httpClient.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
@@ -51,14 +51,9 @@ httpClient.interceptors.response.use((response) => {
 
 const useApi = () => {
 
-    const [projectApi] = useState({
-        create: (data: Project) => {
-            return httpClient.post('/project', {data: data as SubmittableProject});
-        },
-    })
-
-    const withFilterParams = (uri: string, page: number, sortSetting: SortSetting, searchPattern: string = '', filters = {}) => {
-        let finalUri = `${uri}?sortBy=${sortSetting.sort}&orderBy=${sortSetting.field}&page=${page}&search=${searchPattern}`
+    const withQueryParams = (uri: string, params: QueryParams) => {
+        const {sortSettings, page, search, filters} = params;
+        let finalUri = `${uri}?sortBy=${sortSettings.sort}&orderBy=${sortSettings.field}&page=${page}&search=${search}`
 
         const filterKeys = Object.keys(filters);
         if(filterKeys.length) {
@@ -68,8 +63,18 @@ const useApi = () => {
         }
         
         return finalUri;
-        
     }
+
+    const [projectApi] = useState({
+
+        getList: (params: QueryParams) => {
+            return httpClient.get(withQueryParams('/project', params));
+        },
+
+        createUpdate: (data: Project) => {
+            return httpClient.post('/project', {data: data as SubmittableProject});
+        },
+    })
 
     const [authApi] = useState({
         login: (credentials: Credentials) => {
@@ -107,8 +112,8 @@ const useApi = () => {
 
     const [personalApi] = useState({
 
-        getList : (page: number, sortSetting: SortSetting, search: string, filters: object) => {
-            return httpClient.get(withFilterParams('/personal', page, sortSetting, search, filters));
+        getList : (params: QueryParams) => {
+            return httpClient.get(withQueryParams('/personal', params));
         },
 
         fetchAllRoles: () => {
@@ -119,12 +124,12 @@ const useApi = () => {
             return httpClient.get(`/personal/roleProfiles/getRoles/${roleProfile.id}`);
         },
 
-        getRoleProfileSuggestions: (page: number, sortSetting: SortSetting, search: string, filters: object) => {
-            return httpClient.get(withFilterParams('/personal/roleProfiles/search', page, sortSetting, search, filters))
+        getRoleProfileSuggestions: (params: QueryParams) => {
+            return httpClient.get(withQueryParams('/personal/roleProfiles/search', params))
         },
 
-        getAllRoleProfiles: (page: number, sortSetting: SortSetting, search: string, filters: object) => {
-            return httpClient.get(withFilterParams('/personal/roleProfiles', page, sortSetting, search, filters));
+        getAllRoleProfiles: (params: QueryParams) => {
+            return httpClient.get(withQueryParams('/personal/roleProfiles', params));
         },
 
         createEditProfile: (data: SubmittablePersonal) => {
@@ -136,7 +141,6 @@ const useApi = () => {
         },
 
         createEditRoleProfile: (roleProfile: RoleProfile) => {
-            console.log('PEROFILE', roleProfile)
             return httpClient.post('/personal/roleProfiles', {...roleProfile});
         },
  
@@ -170,8 +174,8 @@ const useApi = () => {
     })
 
     const [teamApi] = useState({
-        getList: (page: number, sortSetting: SortSetting, search: string, filters: object) => {
-            return httpClient.get(withFilterParams('/project/team', page, sortSetting, search, filters));
+        getList: (params: QueryParams) => {
+            return httpClient.get(withQueryParams('/project/team', params));
         },
 
         editOrCreate: (team: Team) => {
@@ -180,6 +184,10 @@ const useApi = () => {
             delete data.members;
 
             return httpClient.post('/project/team', {...data});
+        },
+
+        delete: (team: Team) => {
+            return httpClient.delete(`/project/team/${team.id}`);
         }
     })
 

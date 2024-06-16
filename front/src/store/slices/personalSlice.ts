@@ -40,12 +40,12 @@ const personalSlice = createSlice({
             state.profilesSortSetting = setting;
             const copy = [...state.profiles];
 
-            copy.sort((a: Personal, b: Personal) => {
-                if(action.payload.sort === 'ASC')
-                    return a[setting.field] < b[setting.field] ? -1 : a[setting.field] > b[setting.field] ? 1 : 0;
-                else
-                    return a[setting.field] < b[setting.field] ? 1 : a[setting.field] > b[setting.field] ? -1 : 0;
-            });
+            // copy.sort((a: Personal, b: Personal) => {
+            //     if(action.payload.sort === 'ASC')
+            //         return a[setting.field] < b[setting.field] ? -1 : a[setting.field] > b[setting.field] ? 1 : 0;
+            //     else
+            //         return a[setting.field] < b[setting.field] ? 1 : a[setting.field] > b[setting.field] ? -1 : 0;
+            // });
 
             state.profiles = copy;
         }

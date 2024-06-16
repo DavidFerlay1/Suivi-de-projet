@@ -1,5 +1,5 @@
-import React, { ReactNode, useEffect} from "react";
-import usePermissions from '../../hooks/usePermissions';
+import React, { ReactNode } from "react";
+import usePermissions from '@hooks/usePermissions';
 
 type AccessControlledComponentProps = {
     children: ReactNode|ReactNode[],

@@ -1,7 +1,7 @@
 import React from "react";
 import { LuHome } from "react-icons/lu";
 import { useNavigate } from "react-router";
-import useModules from "../../../hooks/useModules";
+import useModules from "@hooks/useModules";
 import ModuleMenuItem from "./ModuleMenuItem/ModuleMenuItem";
 import './sidebar.scss'
 

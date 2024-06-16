@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 class QueryFiltersOptions {
     private int|null $maxResult = null;
     private array $excludeValues = [];

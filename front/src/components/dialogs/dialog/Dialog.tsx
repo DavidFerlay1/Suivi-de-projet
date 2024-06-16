@@ -1,11 +1,9 @@
-import React, { ReactNode, useEffect, useState } from "react"
+import React, { ReactNode, useState } from "react"
 import './dialog.scss';
-import { CiBoxes } from "react-icons/ci";
-import { IoMdCloseCircle, IoMdCloseCircleOutline, IoMdTime } from "react-icons/io";
 import { createPortal } from 'react-dom';
 import ConfirmDialog from "../confirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
-import { LuCross, LuX } from "react-icons/lu";
+import { LuX } from "react-icons/lu";
 
 type DialogProps = {
     isOpen: boolean,
@@ -37,7 +35,7 @@ const Dialog = ({setIsOpen, isOpen, children, title, isModal, renderFooter, clas
         }
     }
 
-    return isOpen && (
+    return isOpen ? (
             createPortal(
                     <>
                         <div className="dialog-overlay" onClick={() => closePopup(true)}>
@@ -63,7 +61,7 @@ const Dialog = ({setIsOpen, isOpen, children, title, isModal, renderFooter, clas
                     </>
                 , document.body
             )
-    )
+    ) : null
 }
 
 export default Dialog;

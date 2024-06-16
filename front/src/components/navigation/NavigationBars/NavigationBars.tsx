@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo} from "react";
 import { useLocation } from "react-router";
-import AuthenticatedLayout from "../../layouts/authLayouts/AuthenticatedLayout";
+import AuthenticatedLayout from "../../layouts/security/AuthenticatedLayout";
 import Header from "../Header/Header";
 import Sidebar from "../Sidebar/Sidebar";
 
 const NavigationBars = () => {
     const location = useLocation();
-    const [currentModule, setCurrentModule] = useState('');
 
     const shown = useMemo(() => {
         return !location.pathname.startsWith('/auth');

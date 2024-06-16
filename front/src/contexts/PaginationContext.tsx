@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react"
+import React, { ReactNode, createContext, useMemo, useState } from "react"
 
 type PaginationContextValue = {
     page: number,

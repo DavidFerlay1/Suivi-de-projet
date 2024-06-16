@@ -1,7 +1,11 @@
 import './defaultLayout.scss';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const DefaultLayout = ({children}) => {
+type DefaultLayoutProps = {
+    children: ReactNode
+}
+
+const DefaultLayout = ({children}: DefaultLayoutProps) => {
     return (
         <div className="defaultLayout">
             {children}
