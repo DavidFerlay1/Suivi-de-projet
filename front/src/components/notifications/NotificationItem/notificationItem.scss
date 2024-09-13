@@ -1,0 +1,37 @@
+.notification-item {
+    height: 110px;
+    width: 350px;
+    position: relative;
+    border-bottom: 1px solid #666;
+    color: var(--primary);
+    box-sizing: border-box;
+    padding: 8px;
+
+    button.readed {
+        padding: 0;
+        height: 20px;
+        box-sizing: border-box;
+        justify-content: center;
+        background: none;
+        box-shadow: none;
+        color: var(--primary);
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+    }
+
+    .default-presentation-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+
+        .icon-wrapper {
+            font-size: 30px;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+    }
+}

@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/auth')]
 class AuthController extends DefaultController
@@ -158,5 +159,10 @@ class AuthController extends DefaultController
             return new JsonResponse('BAD PARAMS', Response::HTTP_BAD_REQUEST);
 
         return new JsonResponse($authService->getRolesAmong($data), Response::HTTP_OK);
+    }
+
+    #[Route('/getDashboard', methods:['GET'])]
+    public function getDashboardPertinentInfos(AuthService $authService) {
+        // $roles = $authService->isGranted(['ROLE_MODULE_PROJECT', 'ROLE_PROJECT_PROJECT_ACCESS']);
     }
 }

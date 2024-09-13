@@ -20,6 +20,8 @@ class RoleProfileFixtures extends Fixture
             [
                 'name' => 'Ressources humaines',
                 'roles' => [
+                            'ROLE_MODULE_CALENDAR',
+                            'ROLE_CALENDAR_EVENT_ACCESS',
                             'ROLE_MODULE_PERSONAL',
                             'ROLE_PERSONAL_PROFILE_ACCESS', 
                             'ROLE_PERSONAL_PROFILE_CREATE', 
@@ -36,6 +38,13 @@ class RoleProfileFixtures extends Fixture
             [
                 'name' => 'Chef de projet',
                 'roles' => [
+                    'ROLE_MODULE_CALENDAR',
+                    'ROLE_CALENDAR_EVENT_ACCESS',
+                    'ROLE_MODULE_CALENDAR',
+                    'ROLE_CALENDAR_EVENT_CREATE',
+                    'ROLE_CALENDAR_EVENT_ACCESS',
+                    'ROLE_CALENDAR_EVENT_EDIT',
+                    'ROLE_CALENDAR_EVENT_INVIT',
                     'ROLE_MODULE_PROJECT',
                     'ROLE_PROJECT_PROJECT_CREATE', 
                     'ROLE_PROJECT_PROJECT_ACCESS', 

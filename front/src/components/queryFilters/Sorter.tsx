@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import './sorter.scss';
-import { LuArrowBigDown, LuArrowBigUp } from "react-icons/lu";
+import { LuArrowDown, LuArrowUp } from "react-icons/lu";
 import { PaginationContext } from "../../contexts/PaginationContext";
 import { SortContext } from "../../contexts/SortContext";
 
@@ -19,8 +19,8 @@ const Sorter = ({field}: SorterProps) => {
 
     return (
         <div className="sorter">
-            <LuArrowBigUp size={30} onClick={() => onClick('ASC')} className={`icon ${sortingContext?.current.field === field && sortingContext?.current.sort === 'ASC' ? 'selected' : ''}`} />
-            <LuArrowBigDown size={30} className={`icon ${sortingContext?.current.field === field && sortingContext?.current.sort === 'DESC' ? 'selected' : ''}`} onClick={() => onClick('DESC')} />
+            <LuArrowUp size={18} onClick={() => onClick('ASC')} className={`icon ${sortingContext?.current.field === field && sortingContext?.current.sort === 'ASC' ? 'selected' : ''}`} />
+            <LuArrowDown size={18} className={`icon ${sortingContext?.current.field === field && sortingContext?.current.sort === 'DESC' ? 'selected' : ''}`} onClick={() => onClick('DESC')} />
         </div>
     )
 }

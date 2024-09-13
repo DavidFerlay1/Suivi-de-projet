@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Main\TenantDb;
 use App\Models\QueryFilters;
+use App\Normalizers\DateTimeNormalizer\DateTimeNormalizer;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Exception;
 use Hakam\MultiTenancyBundle\Doctrine\ORM\TenantEntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,21 +26,22 @@ use Symfony\Component\Serializer\Serializer;
 
 class DefaultController extends AbstractController
 {
-    private $serializer;
+    public $serializer;
 
     public function __construct(
         protected EntityManagerInterface $mainEm,
         protected TenantEntityManager $em,
         protected EventDispatcherInterface $dispatcher,
+        protected Security $security
     ){
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer(new ClassMetadataFactory(new AttributeLoader(new AnnotationReader())))];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer(new ClassMetadataFactory(new AttributeLoader(new AnnotationReader())), null)];
 
         $this->serializer = new Serializer($normalizers, $encoders);
     }
 
     protected function jsonize(mixed $data, array $groups = []) {
-        return json_decode($this->serializer->serialize($data, 'json', ['groups' => $groups]));
+        return json_decode($this->serializer->serialize($data, 'json', ['groups' => $groups, 'name_converter' => null]));
     }
 
     protected function jsonResponse(mixed $data, int $status_code = Response::HTTP_OK, array $groups = []) {
@@ -63,7 +66,6 @@ class DefaultController extends AbstractController
 
         $status = isset($data['id']) ? Response::HTTP_OK : Response::HTTP_CREATED;
         $entity = $this->createSubmittable($entityType, $data, $em);
-
         $form = $this->createForm($formType, $entity);
         $form->submit($data);
 

@@ -4,6 +4,8 @@ namespace App\Listeners;
 
 use App\Entity\Main\Account;
 use App\Entity\Tenant\AccountRoleProfiles;
+use App\Entity\Tenant\CalendarEventInvitation;
+use App\Entity\Tenant\Notification;
 use App\Entity\Tenant\Team;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
@@ -38,6 +40,18 @@ class OnAccountDeleteSubscriber implements EventSubscriber {
         if($roleProfileSet) {
             $this->em->remove($roleProfileSet);
         }
+
+        $this->em->createQueryBuilder()->delete(CalendarEventInvitation::class, 'cei')
+            ->where('cei.memberId = :userId')
+            ->setParameter('userId', $entity->getId())
+            ->getQuery()
+            ->execute();
+
+        $this->em->createQueryBuilder()->delete(Notification::class, 'n')
+            ->where('n.recipientId = :userId')
+            ->setParameter('userId', $entity->getId())
+            ->getQuery()
+            ->execute();
 
         $this->em->flush();
     }

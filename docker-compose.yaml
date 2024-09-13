@@ -35,7 +35,8 @@ services:
       context: .
       dockerfile: dockerfile.php
     ports:
-      - 9000
+      - 9000:9000
+      - 8080:8080
     tty: true
     volumes:
       - ./back:/home/symf
@@ -44,6 +45,7 @@ services:
     depends_on:
       - mysql
     working_dir: /home/symf/app
+    command: sh -c "php-fpm & php bin/console app:websocket:run"
   mysql:
     container_name: mysql
     image: mysql:8.3.0

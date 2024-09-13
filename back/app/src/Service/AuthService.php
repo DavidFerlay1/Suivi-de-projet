@@ -139,6 +139,10 @@ class AuthService {
         return $accesses;
     }   
 
+    public function getMyProfile(): Account {
+        return $this->tokenStorage->getToken()->getUser();
+    }
+
     protected function getSelfRoleProfiles() {
         /** @var \App\Entity\Main\Account $account */
         $account = $this->tokenStorage->getToken()->getUser();

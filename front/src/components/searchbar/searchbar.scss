@@ -1,13 +1,23 @@
 .searchbar-wrapper {
     position: relative;
 
+    .searchIcon {
+        color: var(--primary);
+        position: absolute;
+        top: 50%;
+        left: 8px;
+        transform: translateY(-50%);
+        pointer-events: none;
+
+    }
+
     .searchbar {
         outline: none;
         height: 40px;
         border-radius: 8px;
-        border: 2px solid var(--primary);
+        border: 1px solid var(--border);
         box-sizing: border-box;
-        padding: 5px;
+        padding: 5px 5px 5px 30px;
         width: 20vw;
     }
 

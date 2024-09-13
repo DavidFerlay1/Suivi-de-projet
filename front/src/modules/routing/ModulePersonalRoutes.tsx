@@ -1,6 +1,7 @@
-import React, { Route, Routes } from "react-router"
-import PersonalMonitoringHomePage from "../pages/home/PersonalMonitoringHomePage"
-import RoleMonitoringHomePage from "../pages/RoleMonitoring/RoleMonitoringHomePage";
+import { Route, Routes } from "react-router"
+import PersonalMonitoringHomePage from "@modules/personal/pages/home/PersonalMonitoringHomePage"
+import RoleMonitoringHomePage from "@modules/personal/pages/RoleMonitoring/RoleMonitoringHomePage"
+import React from "react"
 
 const ModulePersonalRoutes = () => {
     return (

@@ -73,6 +73,9 @@ services:
     App\Form\TeamMembersConstraintValidator:
         tags: {name: validator.constraint_validator}
 
+    App\Service\WebsocketClient:
+        shared: true
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 

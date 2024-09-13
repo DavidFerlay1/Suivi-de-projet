@@ -1,7 +1,7 @@
 import React from "react"
-import TeamMonitoringHomePage from "../team/TeamMonitoringHomePage/TeamMonitoringHomePage"
+import TeamMonitoringHomePage from "@modules/projects/team/TeamMonitoringHomePage/TeamMonitoringHomePage"
 import { Route, Routes } from "react-router"
-import ProjectMonitoringHomePage from "../project/ProjectMonitoringHomePage/ProjectMonitoringHomePage"
+import ProjectMonitoringHomePage from "@modules/projects/project/ProjectMonitoringHomePage/ProjectMonitoringHomePage"
 
 const ModuleProjectRoutes = () => {
     return (

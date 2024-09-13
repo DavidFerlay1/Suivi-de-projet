@@ -1,10 +1,12 @@
 :root {
   --primary: rgb(19, 76, 151);
+  --primary-lite: rgb(81, 112, 151);
   --primary-dark: rgb(12, 50, 100);
   --success: #4cc948;
   --warning: #f1da71;
   --alert: #e79536;
   --danger: #d14545;
+  --border: #adadad;
 }
 
 body {
@@ -31,12 +33,12 @@ span.alert {
 button {
   background: transparent;
   height: 40px;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 10px 20px;
   border: none;
   color: white;
   background-color: var(--primary);
-  box-shadow: 0 1px 2px #333;
+  box-shadow: 0 1px 2px #999;
   transition: all .2s;
   cursor: pointer;
   font-weight: 600;
@@ -73,7 +75,7 @@ button {
 
   &.secondary {
     background: transparent;
-    border: 2px solid var(--primary);
+    // border: 2px solid var(--primary);
     color: var(--primary);
 
     &:disabled {
@@ -116,8 +118,8 @@ button {
 
   &.icon-button {
     background-color: white;
-    height: 26px;
-    width: 26px;
+    height: 30px;
+    width: 30px;
     padding: 4px;
     font-size: 24px;
     box-shadow: 0 1px 2px #999;
@@ -183,7 +185,7 @@ form {
       height: 40px;
       box-sizing: border-box;
       padding: 10px;
-      border: 1px solid var(--primary);
+      border: 1px solid var(--border);
       border-radius: 6px;
       outline: none;
 

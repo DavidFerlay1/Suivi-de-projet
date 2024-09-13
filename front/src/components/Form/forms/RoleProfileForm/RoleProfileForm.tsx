@@ -32,7 +32,7 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
                 const moduleMatch = flatRole.match(/ROLE_MODULE_(\w+)/);
                 if(moduleMatch) {
                     if(!(moduleMatch[1] in arbo))
-                        arbo[moduleMatch[1]] = {};
+                        arbo[moduleMatch[1]] = {[flatRole]: profile?.roles.includes(flatRole)};
                 } else {
                     const featureRegex = /ROLE_(\w+)_(.*?)_(CREATE|EDIT|ACCESS|DELETE|ASSIGN)/;
                     const matches = flatRole.match(featureRegex);
@@ -44,11 +44,10 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
                         //SPECIFIC ROLES
                     }
     
-                    console.log(values);
                     try {
-                        arbo[matches[1]][matches[2]][matches[3]] = values.roles.includes(flatRole);
+                        arbo[matches[1]][matches[2]][matches[3]] = profile?.roles.includes(flatRole) || false;
                     } catch {
-                        console.log(values);
+                        console.log(profile);
                     }
                     
                 }            
@@ -56,13 +55,9 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
             setRoleForms(arbo);
 
         }).catch(e => console.log(e));
-    }, [profile, values.roles])
+    }, [profile])
 
     const onRoleChange = (value: boolean, role: string) => {
-        setValues({
-            ...values,
-            roles: value ? [...values.roles, role] : values.roles.filter(r => r !== role)
-        })
 
         const splittedRole = role.split('_') as any[];
         setRoleForms({
@@ -76,6 +71,32 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
             }
         })
     }   
+
+    useEffect(() => {
+        const formValues = getRolesRecursively(roleForms).filter(v => v.value);
+        setValues({...values, roles: formValues.map(v => v.key)})
+    }, [roleForms])
+
+    const getRolesRecursively = (form: any, newRoles: any[] = [], previousKeys: string[] = []): ({key: string, value: boolean})[] => {
+        const keys = Object.keys(form);
+        for(const key of keys) {
+            if(key.match(/ROLE_MODULE_(\w+)/)){
+                newRoles.push({key, value: form[key]})
+            }
+            else if(typeof form[key] === 'boolean') {
+                newRoles.push({key: `ROLE_${previousKeys.join('_')}_${key}`, value: form[key]});
+                    
+            } else {
+                getRolesRecursively(form[key], newRoles, [...previousKeys, key]);
+            }
+        }
+
+        return newRoles;
+    }
+
+    const onMultipleRoleChange = (newRoles: any[]) => {
+        setRoleForms(newRoles);
+    }
 
     const setRolesFromModel = async (roleProfile: RoleProfile) => {
         if(roleProfile.id == '0') {
@@ -105,6 +126,7 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
         personalApi.createEditRoleProfile(values).then(() => {
             onSuccess();
         })
+        console.log(values);
     }
 
     return (
@@ -116,7 +138,7 @@ const RoleProfileForm = ({profile, onSuccess}: RoleProfileFormProps) => {
             <Dialog title={t('roleProfile.fromModel')} isModal={false} isOpen={fromModelPopupOpen} setIsOpen={setFromModelPopupOpen}>
                 <RoleSelector onChange={setRolesFromModel} value={{name: 'Test', id: '0', roles: []}} />
             </Dialog>
-            <RoleOrganizer data={roleForms} onChange={onRoleChange} />
+            <RoleOrganizer data={roleForms} onMultipleChange={onMultipleRoleChange} onChange={onRoleChange} />
         </Form>
     )
 }

@@ -6,6 +6,7 @@ import { Project, SubmittableProject } from "@interfaces/Project";
 import { RoleProfile, SubmittablePersonal } from "@interfaces/Personal";
 import { Team } from "@interfaces/Team";
 import { QueryParams } from "@interfaces/QueryParams";
+import { CalendarEvent } from "@interfaces/CalendarEvent";
 
 export const httpClient = axios.create({
     baseURL: 'http://localhost/api',
@@ -191,7 +192,35 @@ const useApi = () => {
         }
     })
 
-    return {projectApi, authApi, personalApi, teamApi};
+    const [calendarApi] = useState({
+        getForMonthRange: (begin: Date, end: Date) => {
+            return httpClient.get(`/calendar/events`, {params: {begin: begin.getTime(), end: end.getTime()}})
+        },
+
+        createUpdate: (data: CalendarEvent) => {
+            return httpClient.post('/calendar/events', {...data, invitations: data.invitations.map(v => v.id)})
+        },
+
+        answer: (invitationId: number, answer: 1|-1) => {
+            return httpClient.post(`/calendar/invitationAnswer/${invitationId}`, {answer})
+        }
+    })
+
+    const [notificationApi] = useState({
+        getNotifications: () => {
+            return httpClient.get('/notifications');
+        },
+
+        setAsReaded: (notificationId: number) => {
+            return httpClient.put(`/notifications/${notificationId}`);
+        },
+
+        setAllReaded: () => {
+            return httpClient.put('/notifications');
+        }
+    })
+
+    return {projectApi, authApi, personalApi, teamApi, calendarApi, notificationApi};
 }
 
 export default useApi;

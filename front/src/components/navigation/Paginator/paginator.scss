@@ -1,13 +1,24 @@
 .paginator {
     
     display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+    // background: red;
 
     .pageLog {
         width: 5ch;
-        height: 25px;
+        height: 20px;
+        width: 30px;
         text-align: center;
         outline: none;
-        border: 1px solid va(--primary);
+        border: 1px solid var(--primary);
+        border-radius: 5px;
+    }
+
+    .pageContainer {
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
 
     .chevron {

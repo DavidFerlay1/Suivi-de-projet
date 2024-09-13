@@ -4,6 +4,10 @@ import useApi from '@hooks/useApi';
 import { useNavigate } from 'react-router';
 import useAuth from '@hooks/useAuth';
 import BreadCrumb from '../BreadCrumb/BreadCrumb';
+import { LuLogOut} from 'react-icons/lu';
+import { useSelector } from 'react-redux';
+import { IoMdAlert, IoMdNotifications } from 'react-icons/io';
+import NotificationDropDown from '@components/notifications/NotificationDropDown/NotificationDropDown';
 
 const Header = () => {
 
@@ -21,6 +25,7 @@ const Header = () => {
 
     useEffect(() => {
         const payload = getPayload();
+        console.log(payload)
         if(payload)
             setPayload(payload);
     }, [])
@@ -28,9 +33,10 @@ const Header = () => {
     return (
         <header>
             <BreadCrumb />
-            <div>
+            <div className='headerUserContext'>
+                <NotificationDropDown />
                 {payload && payload.username}
-                <button onClick={onLogout}>Log out</button>
+                <button className='icon-button' onClick={onLogout}><LuLogOut /></button>
             </div>
         </header>
     )

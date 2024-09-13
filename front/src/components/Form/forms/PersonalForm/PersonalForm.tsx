@@ -5,7 +5,6 @@ import Form, { CatchableField } from "@components/Form/Form"
 import SwitchControl from "@components/formControls/SwitchControl/SwitchControl"
 import useApi from "@hooks/useApi"
 import { useDispatch } from "react-redux"
-import { updateProfile } from "@store/slices/personalSlice"
 import RoleSelector from "@modules/personal/pages/RoleMonitoring/components/RoleSelector/RoleSelector"
 
 
@@ -51,11 +50,9 @@ const PersonalForm = ({target, handleParentPopupEndEvent}: PersonalFormProps) =>
     const onSubmit = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            console.log(values)
             const data = (await personalApi.createEditProfile(values)).data;
             const isNew = values.id === undefined;
             const transformId = values.id && values.createAccount ? values.id : undefined;
-            dispatch(updateProfile({data, isNew, transformId}));
             if(handleParentPopupEndEvent)
                 handleParentPopupEndEvent();
         } catch(e) {

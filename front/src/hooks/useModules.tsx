@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from "react"
-import {LuGraduationCap, LuUser2, LuUsers, LuBoxes, LuList} from 'react-icons/lu';
+import {LuGraduationCap, LuUser2, LuUsers, LuBoxes, LuList, LuCalendar} from 'react-icons/lu';
 import useApi from "./useApi";
 
 export type ModuleData = {
@@ -61,6 +61,13 @@ const useModules = () => {
                     icon: <LuUsers />
                 }
             ]
+        },
+        {
+            title: 'routes.calendar.name',
+            icon: <LuCalendar size={26} color='white'/>,
+            baseUri: '/calendar',
+            requiredRoles: ['ROLE_MODULE_CALENDAR'],
+            submodules: []
         }
     ])
 

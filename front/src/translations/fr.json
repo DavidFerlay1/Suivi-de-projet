@@ -32,7 +32,13 @@
         "withoutAccount": "Pas de compte",
         "reinit": "Réinitialiser",
         "member": "membre",
-        "configure": "Configurer"
+        "configure": "Configurer",
+        "search": "Rechercher...",
+        "setAllReaded": "Tout marquer comme lu",
+        "readed": "Lu",
+        "setAsReaded": "Marquer comme lu",
+        "accept": "Accepter",
+        "decline": "Décliner"
     },
 
     "filters": {
@@ -51,11 +57,15 @@
     },
 
     "roles": {
+
+        "module_access": "Activer le module",
+
         "EDIT": "Modification",
         "ACCESS": "Consultation",
         "DELETE": "Suppression",
         "CREATE": "Création",
         "ASSIGN": "Assignation",
+        "INVIT": "Envoyer des invitations",
 
         "PERSONAL": "Gestion du personnel",
         "PROFILE": "Gestion des profils",
@@ -63,7 +73,10 @@
 
         "PROJECT": "Gestion de projets",
         "TASK": "Gestion des tâches",
-        "TEAM": "Gestion des équipes"
+        "TEAM": "Gestion des équipes",
+
+        "CALENDAR": "Accès au calendrier",
+        "EVENT": "Gestion des évênements"
     },
 
 
@@ -88,6 +101,9 @@
         },
         "dashboard": {
             "name": "Tableau de bord"
+        },
+        "calendar": {
+            "name": "Agenda"
         }
     },
 
@@ -133,6 +149,24 @@
         }
     },
 
+    "calendar": {
+        "event": {
+            "create": "Création d'un évènement",
+            "title": "Titre de l'évènement",
+            "beginDate": "Début",
+            "endDate": "Fin",
+            "description": "Description (optionnelle)",
+            "invitations": "Inviter des membres",
+            "created": "Création terminée. Les invités seront notifiés.",
+            "edited": "Modification terminée. Les nouveaux invités seront notifiés."
+        },
+
+        "invitation": {
+            "title": "Invitation à un évênement",
+            "noDescription": "Aucune description pour cet évênement"
+        }
+    },
+
     "team": {
         "name": "Nom de l'équipe"
     },
@@ -164,5 +198,33 @@
         "invalidValue": "ne correspond pas au format de données attendu",
         "emptyValue": "Cette valeur ne doit pas être vide",
         "illegalMember": "Un des compte assigné à l'équipe n'est pas valide. Assurez vous que les comptes sélectionnés aient l'accès au module \"Gestion des Projet\""
+    },
+
+    "date": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche",
+
+        "january": "Janvier",
+        "february": "Février",
+        "march": "Mars",
+        "april": "Avril",
+        "may": "Mai",
+        "june": "Juin",
+        "july": "Juillet",
+        "august": "Août",
+        "september": "Septembre",
+        "october": "Octobre",
+        "november": "Novembre",
+        "december": "Décembre",
+
+        "at": "à",
+        "from": "du",
+        "From": "Du",
+        "to": "au"
     }
 }

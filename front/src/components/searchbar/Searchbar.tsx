@@ -4,6 +4,7 @@ import { QueryContext } from "../../contexts/QueryContext"
 import { SearchContext } from "../../contexts/SearchContext"
 import "./searchbar.scss"
 import { useTranslation } from "react-i18next"
+import { LuSearch } from "react-icons/lu"
 
 type Searchbar = {
     renderItem: Function
@@ -43,7 +44,8 @@ const Searchbar = ({renderItem}: Searchbar) => {
 
     return (
         <div ref={searchWrapperRef} className="searchbar-wrapper">
-            <input type="text" className="searchbar" onChange={onChange} />
+            <LuSearch className="searchIcon" />
+            <input type="text" className="searchbar" onChange={onChange} placeholder={t('misc.search')} />
             {focused && 
                 <ul className="suggestions" tabIndex={0}>
                     {!suggestions.length && <span className="emptyMessage">{!searchContext.current ? t('searchbar.typeToSearch') : t('searchbar.noResult')}</span>}

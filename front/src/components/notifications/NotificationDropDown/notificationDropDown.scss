@@ -1,0 +1,39 @@
+.notification-dropdown-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .notification-count {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        font-size: 0.8em;
+        border-radius: 50%;
+        background: red;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0px;
+        right: 0px;
+        pointer-events: 0;
+    }
+
+    .notification-dropdown {
+        position: absolute;
+        width: 350px;
+        top: 100%;
+        right: 0;
+        max-height: 300px;
+        overflow-y: auto;
+        // padding-bottom: 50px;
+        border: 1px solid #666;
+        background: white;
+        border-radius: 6px;
+
+        &> button {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+    }
+}

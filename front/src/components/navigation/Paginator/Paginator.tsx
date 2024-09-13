@@ -28,10 +28,14 @@ const Paginator = () => {
         <div className='paginator'>
             <div className='chevron'>
                 {paginationContext!.page > 1 && <a onClick={previous}><LuChevronLeft /></a>}
+                <a onClick={previous}><LuChevronLeft /></a>
             </div>
-            <input onFocus={onFocus} className='pageLog' value={paginationContext?.page} onChange={onPageChange} /> / {paginationContext?.maxPage}
+            <div className='pageContainer'>
+                <input onFocus={onFocus} className='pageLog' value={paginationContext?.page} onChange={onPageChange} /> / {paginationContext?.maxPage}
+            </div>
             <div className='chevron' onClick={next}>
                 {paginationContext!.status === 'available' && <a onClick={next}><LuChevronRight /></a>}
+                <a onClick={next}><LuChevronRight /></a>
             </div>
             
         </div>

@@ -21,3 +21,5 @@ php bin/console d:m:m
 php bin/console app:init-project
 exi
 exit
+exit
+exit

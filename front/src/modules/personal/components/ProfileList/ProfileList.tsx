@@ -116,13 +116,13 @@ const ProfileList = () => {
                 
                 <div className="menuBar-content">
                     <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_CREATE', 'ROLE_PERSONAL_PROFILE_EDIT']}>
-                        <button className="icon-attached" onClick={() => setIsCSVImportOpen(true)}><LuFileUp />{t('csv.import')}</button>
+                        <button className="icon-attached secondary" onClick={() => setIsCSVImportOpen(true)}><LuFileUp />{t('csv.import')}</button>
                     </AccessControlledComponent>
                     <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_ACCESS']}>
-                        <button className="icon-attached" onClick={onCsvExportClick}><LuFileDown />{t('csv.export')}</button>
+                        <button className="icon-attached secondary" onClick={onCsvExportClick}><LuFileDown />{t('csv.export')}</button>
                     </AccessControlledComponent>
                     <AccessControlledComponent roles={['ROLE_PERSONAL_PROFILE_CREATE']}>
-                        <button className="icon-attached" onClick={onCreateClick}><LuPlus/>{t('personal.createProfile.title')}</button>
+                        <button className="icon-attached secondary" onClick={onCreateClick}><LuPlus/>{t('personal.createProfile.title')}</button>
                     </AccessControlledComponent>
                 </div>
             </MenuBar>
