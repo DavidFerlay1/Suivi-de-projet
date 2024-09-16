@@ -38,6 +38,7 @@ const InvitationDialog = ({event, isOpen, setIsOpen, invitationId, onResponse}: 
 
     return (
         <Dialog isModal={false} isOpen={isOpen} setIsOpen={setIsOpen} title={t('calendar.invitation.title')}>
+            <h2 style={{padding: 0, margin: 0}}>{event.title}</h2>
             <p className="event-description">{event.description ?? t('calendar.invitation.noDescription')}</p>
             <p className="begin">{`Début: ${litteralDateMillis(event.beginDate)}`}</p>
             <p>{`Fin: ${litteralDateMillis(event.endDate)}`}</p>

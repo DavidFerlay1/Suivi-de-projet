@@ -30,7 +30,7 @@ const NotificationDropDown = () => {
 
     return (
         <div className="notification-dropdown-wrapper">
-            <IoMdNotifications onClick={() => notifications.length && setOpen(prev => !prev)} size={20} style={{padding: 8}} />
+            <IoMdNotifications onClick={() => notifications.length && setOpen(prev => !prev)} size={24} />
             {notifications.length > 0 && <span className="notification-count">{notifications.length > 9 ? '9+' : notifications.length}</span>}
             {open && (
                 <div className="notification-dropdown">

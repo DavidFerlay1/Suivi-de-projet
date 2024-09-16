@@ -8,12 +8,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/project/team')]
 class TeamController extends DefaultController
 {
     #[Route('', methods:['POST'])]
     public function createUpdate(Request $request) {
+        dd(json_decode($request->getContent(), true));
         return $this->autoSubmitWithBehavior(
             $request,
             TeamType::class,

@@ -5,6 +5,7 @@ import AccessControlledLayout from "@components/layouts/security/AccessControlle
 import QueryContextLayout from '@components/layouts/QueryContextLayout/QueryContextLayout';
 import './roleMonitoringHomePage.scss'
 import RoleProfileList from "./components/RoleProfileList";
+import { AccessContextProvider } from "@contexts/AccessContext";
 
 const RoleMonitoringHomePage = () => {
 
@@ -21,9 +22,11 @@ const RoleMonitoringHomePage = () => {
 
     return (
         <AccessControlledLayout roles={['ROLE_MODULE_PERSONAL', 'ROLE_PERSONAL_ROLE_ACCESS']}>
-            <QueryContextLayout defaultSortSetting={{field: 'name', sort: 'ASC'}} apiFetchCallback={personalApi.getAllRoleProfiles}>
-                <RoleProfileList />
-            </QueryContextLayout>
+            <AccessContextProvider required={['ROLE_PERSONAL_ROLE_CRUD']}>
+                <QueryContextLayout defaultSortSetting={{field: 'name', sort: 'ASC'}} apiFetchCallback={personalApi.getAllRoleProfiles}>
+                    <RoleProfileList />
+                </QueryContextLayout>
+            </AccessContextProvider>
         </AccessControlledLayout>
     )
 }

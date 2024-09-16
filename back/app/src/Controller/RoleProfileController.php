@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Tenant\AccountRoleProfiles;
 use App\Entity\Tenant\RoleProfile;
 use App\Form\RoleProfileType;
-use App\Models\QueryFilters;
 use App\Service\AuthService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -158,12 +158,15 @@
             "description": "Description (optionnelle)",
             "invitations": "Inviter des membres",
             "created": "Création terminée. Les invités seront notifiés.",
-            "edited": "Modification terminée. Les nouveaux invités seront notifiés."
+            "edited": "Modification terminée. Les nouveaux invités seront notifiés.",
+            "pendingInvitation": "Invitations en attente"
         },
 
         "invitation": {
             "title": "Invitation à un évênement",
-            "noDescription": "Aucune description pour cet évênement"
+            "noDescription": "Aucune description pour cet évênement",
+            "noInvitation": "Aucune invitation en attente",
+            "invitationSummary": "Invitations en attente de réponse"
         }
     },
 

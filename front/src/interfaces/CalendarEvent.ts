@@ -17,3 +17,9 @@ export interface ApiCalendarEvent {
     endDate: number,
     invitations: SubmittablePersonal[]
 }
+
+export interface CalendarEventInvitation {
+    id: number,
+    calendarEvent: ApiCalendarEvent,
+    status: -1|0|1
+}

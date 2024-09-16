@@ -5,23 +5,19 @@ import AccessControlledLayout from "@components/layouts/security/AccessControlle
 import ProfileList from "../../components/ProfileList/ProfileList";
 import usePermissions from "@hooks/usePermissions";
 import QueryContextLayout from "@components/layouts/QueryContextLayout/QueryContextLayout";
+import { AccessContextProvider } from "@contexts/AccessContext";
 
 const PersonalMonitoringHomePage = () => {
     const {personalApi} = useApi();
-    const {requirePermissions} = usePermissions();
-
-    useEffect(() => {
-        const init = async () => {
-            await requirePermissions(['ROLE_PERSONAL_PROFILE']);
-        }
-        init();
-    }, [])
-
+    
     return (
-        <AccessControlledLayout roles={['ROLE_MODULE_PERSONAL', 'ROLE_PERSONAL_PERSONAL_ACCESS']}>
-            <QueryContextLayout apiFetchCallback={personalApi.getList} defaultSortSetting={{field: 'lastName', sort: 'ASC'}}>
-                <ProfileList />
-            </QueryContextLayout>         
+        <AccessControlledLayout roles={['ROLE_MODULE_PERSONAL']}>
+            <AccessContextProvider required={['ROLE_PERSONAL_PROFILE_CRUD']}>
+                <QueryContextLayout apiFetchCallback={personalApi.getList} defaultSortSetting={{field: 'lastName', sort: 'ASC'}}>
+                    <ProfileList />
+                </QueryContextLayout>  
+            </AccessContextProvider>
+                   
         </AccessControlledLayout>
         
     )

@@ -35,6 +35,8 @@ const ProfileList = () => {
     useEffect(() => {
         queryContext?.fetch().then((profiles: SubmittablePersonal[]) => {
             setProfiles(profiles);
+        }).catch(() => {
+            
         })
     }, [queryContext?.params])
 

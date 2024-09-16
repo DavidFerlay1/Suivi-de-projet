@@ -16,16 +16,16 @@ class CalendarEvent
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get'])]
+    #[Groups(['get', 'getinvitations'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank()]
-    #[Groups(['get'])]
+    #[Groups(['get', 'getinvitations'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['get'])]
+    #[Groups(['get', 'getinvitations'])]
     private ?string $description = null;
 
     /**
@@ -37,12 +37,12 @@ class CalendarEvent
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\NotBlank()]
-    #[Groups(['get'])]
+    #[Groups(['get', 'getinvitations'])]
     private ?\DateTimeInterface $beginDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\NotBlank()]
-    #[Groups(['get'])]
+    #[Groups(['get', 'getinvitations'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column]

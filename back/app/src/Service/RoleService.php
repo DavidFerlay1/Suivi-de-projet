@@ -55,4 +55,29 @@ class RoleService {
 
         return $roleSet->getRoleProfiles();
     }
+
+    public function hasRequiredRoles(Account $user, array $roles) {
+        foreach($user->getRoleProfiles() as $roleProfile) {
+
+            $roles = $this->validRoles($roles, $roleProfile->getRoles());
+
+            if(count($roles) === 0)
+                return true;
+        }
+
+        return count($roles) === 0;
+    }
+
+    private function validRoles(array $required, array $owned) {
+        if(in_array('ROLE_SUPERADMIN', $owned))
+            return [];
+
+        foreach($owned as $ownedRole) {
+            if(in_array($ownedRole, $required)) {
+                $required = array_filter($required, fn($role) => $role !== $ownedRole);
+            }
+        }
+
+        return $required;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\PermissionAnnotation;
 use App\Entity\Main\Account;
 use App\Entity\Tenant\CalendarEvent;
 use App\Entity\Tenant\CalendarEventInvitation;
@@ -11,7 +12,6 @@ use App\Service\AuthService;
 use App\Service\WebsocketClient;
 use DateTime;
 use DateTimeImmutable;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,11 +62,13 @@ class CalendarController extends DefaultController
         $qb->innerJoin('entity.invitations', 'invitation')
                     ->where('invitation.memberId = :userId')->setParameter('userId', $user->getId())
                     ->andWhere('entity.beginDate >= :begin')->setParameter('begin', $begin)
-                    ->andWhere('entity.beginDate <= :end')->setParameter('end', $end);
+                    ->andWhere('entity.beginDate <= :end')->setParameter('end', $end)
+                    ->andWhere('invitation.status = :accepted')->setParameter('accepted', CalendarEventInvitation::ACCEPTED)
+                    ->orWhere('entity.authorId = :userId');
 
-        $orX = $qb->expr()->orX();
-        $orX->add('invitation.status = :accepted')->add('invitation.status = :pending');
-        $qb->andWhere($orX)->setParameter('accepted', CalendarEventInvitation::ACCEPTED)->setParameter('pending', CalendarEventInvitation::PENDING);
+        // $orX = $qb->expr()->orX();
+        // $orX->add('invitation.status = :accepted')->add('invitation.status = :pending');
+        // $qb->andWhere($orX)->setParameter('accepted', CalendarEventInvitation::ACCEPTED)->setParameter('pending', CalendarEventInvitation::PENDING);
 
         $data = $qb->getQuery()->getResult();
 
@@ -74,6 +76,7 @@ class CalendarController extends DefaultController
     }
 
     #[Route('/events', methods:['POST'])]
+    #[PermissionAnnotation(['ROLE_CALENDAR_EVENT_CREATE'])]
     public function createUpdateEvent(Request $request, AuthService $authService) {
 
         $myProfile = $authService->getMyProfile();
@@ -145,5 +148,17 @@ class CalendarController extends DefaultController
                 $websocket->sendNotifications(array_map(fn($pair) => $pair['notification'], $inviationNotifications));
             }
         );
+    }
+
+    #[Route('/invitations', methods: ['GET'])]
+    public function getPendingInvitations() {
+
+        /** @var App\Entity\Main\Account $account */
+        $account = $this->security->getUser();
+
+        return $this->jsonResponse($this->em->getRepository(CalendarEventInvitation::class)->findBy([
+            'memberId' => $account->getId(),
+            'status' => CalendarEventInvitation::PENDING
+        ]), Response::HTTP_OK, ['getinvitations']);
     }
 }

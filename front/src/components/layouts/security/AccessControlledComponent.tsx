@@ -1,5 +1,6 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import usePermissions from '@hooks/usePermissions';
+import { AccessContext } from "@contexts/AccessContext";
 
 type AccessControlledComponentProps = {
     children: ReactNode|ReactNode[],
@@ -7,9 +8,9 @@ type AccessControlledComponentProps = {
 }
 
 const AccessControlledComponent = ({children, roles}: AccessControlledComponentProps) => {
-    const {hasPermissions} = usePermissions();
+    const accessContext = useContext(AccessContext);
 
-    return hasPermissions(roles) ? <>{children}</> : null
+    return accessContext.hasRoles(roles) ? <>{children}</> : null
 }
 
 export default AccessControlledComponent;

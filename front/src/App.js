@@ -66,7 +66,6 @@ const WebsocketStack = ({children}) => {
   useEffect(() => {
     if(authenticated)
       notificationApi.getNotifications().then(response => {
-        console.log(response.data)
         dispatch(addNotifications(response.data));
       })
   }, [authenticated])

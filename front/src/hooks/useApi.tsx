@@ -203,6 +203,10 @@ const useApi = () => {
 
         answer: (invitationId: number, answer: 1|-1) => {
             return httpClient.post(`/calendar/invitationAnswer/${invitationId}`, {answer})
+        },
+
+        getInvitations: () => {
+            return httpClient.get('/calendar/invitations');
         }
     })
 

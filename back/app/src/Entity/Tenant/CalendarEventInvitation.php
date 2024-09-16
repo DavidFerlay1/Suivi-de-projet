@@ -16,7 +16,7 @@ class CalendarEventInvitation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get'])]
+    #[Groups(['get', 'getinvitations'])]
     private ?int $id = null;
 
     #[ORM\Column]
@@ -24,11 +24,12 @@ class CalendarEventInvitation
     private ?int $memberId = null;
 
     #[ORM\Column]
-    #[Groups(['get'])]
+    #[Groups(['get', 'getinvitations'])]
     private ?int $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'invitations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(('getinvitations'))]
     private ?CalendarEvent $calendarEvent = null;
 
     public function __construct()

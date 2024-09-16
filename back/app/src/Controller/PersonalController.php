@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\PermissionAnnotation;
 use App\Entity\Main\Account;
 use App\Entity\Main\Profile;
 use App\Entity\Tenant\AccountRoleProfiles;
@@ -22,13 +23,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Encoder\CsvEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/personal')]
 class PersonalController extends DefaultController
 {
     #[Route('', methods:['POST'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_PROFILE_CREATE'])]
     public function createUpdate(Request $request, AuthService $authService, RoleService $roleService)
     {
         $payload = $this->getPayload($request);
@@ -92,6 +92,7 @@ class PersonalController extends DefaultController
     }
 
     #[Route('', methods:['GET'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_PROFILE_ACCESS'])]
     public function getAll(Request $request): JsonResponse {
         /** @var \App\Entity\Main\Account $currentUser */
         $currentUser = $this->getUser();
@@ -106,6 +107,7 @@ class PersonalController extends DefaultController
     }
 
     #[Route('/{id}', methods:['delete'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_PROFILE_DELETE'])]
     public function delete(Profile $profile): JsonResponse {
         $this->mainEm->remove($profile);
         $this->mainEm->flush();
@@ -113,6 +115,7 @@ class PersonalController extends DefaultController
     }
 
     #[Route('/roleProfiles', methods:['GET'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_ROLE_ACCESS'])]
     public function getAllRoleProfiles(Request $request): JsonResponse {
         return $this->jsonResponse(
             $this->em->getRepository(RoleProfile::class)
@@ -121,6 +124,7 @@ class PersonalController extends DefaultController
     }
 
     #[Route('/roleProfiles/search', methods:['GET'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_ROLE_ACCESS'])]
     public function getRoleProfilesSuggestions(Request $request): JsonResponse {
         $search = $this->getSearch($request);
         $queryFilters = new QueryFilters(1, ['sortBy' => 'ASC', 'orderBy' => 'name'], $search);
@@ -135,22 +139,26 @@ class PersonalController extends DefaultController
     }
 
     #[Route('/roles', methods:['GET'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_ROLE_ACCESS'])]
     public function getAllRoles(RoleService $roleService): JsonResponse {
         return $this->jsonResponse($roleService->getRoles());
     }
 
     #[Route('/csv', methods: ['GET'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_PROFILE_ACCESS'])]
     public function exportAsCSV(CsvService $csvService) {
         $personal = $this->mainEm->getRepository(Profile::class)->findAll();
         return $csvService->export(Profile::class, $personal);
     }
 
     #[Route('/csv/model', methods: ['GET'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_PROFILE_CREATE'])]
     public function getCSVModel(CsvService $csvService) {
         return $csvService->generateCSV($csvService->createModel(Profile::class, 'import'));
     }
 
     #[Route('/csv/import/integrity', methods: ['POST'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_PROFILE_CREATE'])]
     public function checkCSVIntegrity(Request $request, CsvService $csvService) {
 
         $file = $request->files->get('file');
@@ -171,6 +179,7 @@ class PersonalController extends DefaultController
     }
 
     #[Route('/csv', methods: ['POST'])]
+    #[PermissionAnnotation(['ROLE_PERSONAL_PROFILE_CREATE'])]
     public function importFromCsv(Request $request, CsvService $csvService, AuthService $authService, MailService $mailService) {
         $file = $request->files->get('file');
 

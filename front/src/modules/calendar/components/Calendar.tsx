@@ -1,4 +1,4 @@
-import React,{ useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React,{ useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import './calendar.scss'
 import { useTranslation } from "react-i18next"
 import { CalendarEvent } from "@interfaces/CalendarEvent"
@@ -6,6 +6,7 @@ import Dialog from "@components/dialogs/dialog/Dialog"
 import CalendarEventForm from "../../../components/Form/forms/CalendarEventForm"
 import useApi from "@hooks/useApi"
 import CalendarEventItem from "./CalendarEventItem"
+import { CalendarContext } from "@contexts/CalendarContext"
 // import CalendarEventItem from "./CalendarEventItem"
 
 type CalendarProps = {
@@ -33,23 +34,14 @@ const emptyEventForm: CalendarEvent = {
 }
 
 const Calendar = ({referenceDate}: CalendarProps) => {
-    const [period, setPeriod] = useState<Date[]>([]);
     const {t} = useTranslation();
-    const [periodEvents, setPeriodEvents] = useState<CalendarEvent[]>([]);
 
+    const context = useContext(CalendarContext);
     const today = new Date();
 
     const [targetEvent, setTargetEvent] = useState(emptyEventForm);
     const [eventPopupOpen, setEventPopupOpen] = useState(false);
-    const {calendarApi} = useApi();
-
-    const getEvents = useCallback(async () => {
-        if(period.length) {
-            setPeriodEvents((await calendarApi.getForMonthRange(period[0]!, period[period.length - 1]!)).data.map((event: any) => (
-                {...event, beginDateMillis: event.beginDate, endDateMillis: event.endDate}
-            )));
-        }
-    }, [period])
+    const {authApi} = useApi();
 
     const isToday = useCallback((date: Date, ref: Date|undefined = undefined) => {
         if(!ref)
@@ -57,6 +49,12 @@ const Calendar = ({referenceDate}: CalendarProps) => {
 
         return ref.getFullYear() === date.getFullYear() && ref.getDate() === date.getDate() && ref.getMonth() === date.getMonth();
     }, [today])
+
+    const [canCreate, setCanCreate] = useState<string[]>([]);
+
+    useEffect(() => {
+        authApi.requirePermissions(['ROLE_CALENDAR_EVENT_CREATE']).then(res => setCanCreate(res.data))
+    }, [])
 
     const weekDays = [
         t('date.monday'),
@@ -89,26 +87,25 @@ const Calendar = ({referenceDate}: CalendarProps) => {
 
         dayCounter = step.getDay() === 0 ? 6 : step.getDay() - 1;
 
-        setPeriod(days);
+        context.updatePeriod(days);
     }, [referenceDate]);
 
-    useEffect(() => {
-        getEvents()
-    }, [period])
+    const onCellClick = async (date: Date) => {
 
-    const onCellClick = (date: Date) => {
-        setTargetEvent({
-            ...emptyEventForm,
-            beginDateMillis: date.getTime(),
-            endDateMillis: date.getTime()
-        })
-
-        setEventPopupOpen(true)
+        if(canCreate.length) {
+            setTargetEvent({
+                ...emptyEventForm,
+                beginDateMillis: date.getTime(),
+                endDateMillis: date.getTime()
+            })
+    
+            setEventPopupOpen(true)
+        }
     }
 
     const afterSubmit = () => {
         setEventPopupOpen(false);
-        getEvents()
+        context.refresh()
     }
 
     const onEventClick = (event: CalendarEvent) => {
@@ -124,7 +121,7 @@ const Calendar = ({referenceDate}: CalendarProps) => {
                 ))}
             </div>
             <div className="calendar">
-                {period.map(date => <CalendarCell events={periodEvents.filter(event => isToday(new Date(event.beginDateMillis), date))} today={isToday(date)} className={date.getMonth() !== referenceDate.getMonth() ? 'out' : ''} onEventClick={onEventClick} onClick={onCellClick} date={date} />)}
+                {context.period.map(date => <CalendarCell events={context.periodEvents.filter(event => isToday(new Date(event.beginDateMillis), date))} today={isToday(date)} className={date.getMonth() !== referenceDate.getMonth() ? 'out' : ''} onEventClick={onEventClick} onClick={onCellClick} date={date} />)}
             </div>
             <Dialog className="huge" isModal={true} isOpen={eventPopupOpen} setIsOpen={setEventPopupOpen} title={t('calendar.event.create')}>
                 <CalendarEventForm afterSubmit={afterSubmit} target={targetEvent} />
